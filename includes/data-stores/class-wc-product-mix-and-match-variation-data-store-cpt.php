@@ -1,0 +1,170 @@
+<?php
+/**
+ * Class WC_Product_Mix_and_Match_Variation_Data_Store_CPT file.
+ *
+ * @package WooCommerce Mix and Match Products/Data
+ * @since    3.0.0
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Mix and Match Variation Product Data Store: Stored in CPT.
+ *
+ * @version  3.0.0
+ */
+class WC_Product_Mix_and_Match_Variation_Data_Store_CPT extends WC_Product_Variation_Data_Store_CPT {
+
+	use WC_MNM_Container_Data_Store;
+
+	/**
+	 * Data stored in meta keys, but not considered "meta" for the MnM type.
+	 *
+	 * @var array
+	 */
+	protected $extended_internal_meta_keys = array(
+		'_mnm_base_price',
+		'_mnm_base_regular_price',
+		'_mnm_base_sale_price',
+		'_mnm_max_price',
+		'_mnm_max_regular_price',
+		'_mnm_min_container_size',
+		'_mnm_max_container_size',
+		'_mnm_per_product_discount',
+	);
+
+
+	/**
+	 * Maps extended properties to meta keys.
+	 *
+	 * @var array
+	 */
+	protected $props_to_meta_keys = array(
+	//	'min_raw_price'             => '_price',
+	//	'min_raw_regular_price'     => '_regular_price',
+	//	'max_raw_price'             => '_mnm_max_price',
+	//	'max_raw_regular_price'     => '_mnm_max_regular_price',
+	//	'price'                     => '_mnm_base_price',
+	//	'regular_price'             => '_mnm_base_regular_price',
+	//	'sale_price'                => '_mnm_base_sale_price',
+		'min_container_size'        => '_mnm_min_container_size',
+		'max_container_size'        => '_mnm_max_container_size',
+		'discount'                  => '_mnm_per_product_discount',
+	);
+
+
+	/**
+	 * Maps extended parent_data to meta keys.
+	 *
+	 * @var array
+	 */
+	protected $parent_props_to_meta_keys = array(
+		'layout_override'           => '_mnm_layout_override',
+		'layout'                    => '_mnm_layout_style',
+		'add_to_cart_form_location' => '_mnm_add_to_cart_form_location',
+		'priced_per_product'        => '_mnm_per_product_pricing',
+		'packing_mode'              => '_mnm_packing_mode',
+		'weight_cumulative'         => '_mnm_weight_cumulative',
+		'share_content'             => '_mnm_share_content',
+	);
+
+	/**
+	 * __construct function.
+	 */
+	public function __construct() {
+		$this->extended_internal_meta_keys = array_merge( $this->shared_extended_internal_meta_keys, $this->extended_internal_meta_keys, $this->parent_props_to_meta_keys );
+		$this->props_to_meta_keys          = array_merge( $this->shared_props_to_meta_keys, $this->props_to_meta_keys );
+	}
+
+
+	/**
+	 * Always read certain data from parent product.
+	 * 
+	 * NB: This must happen before WC_Product_Variation_Data_Store_CPT::read_product_data as $product->is_on_sale() is called there (Which calls $product->get_priced_per_product() )and the parent_data array won't be set yet.
+	 *
+	 * @param WC_Product_Variation $product Product object.
+	 * @throws WC_Data_Exception If WC_Product::set_tax_status() is called with an invalid tax status.
+	 */
+	protected function read_product_data( &$product ) {
+
+		$parent_id = $product->get_parent_id();
+
+		foreach ( $this->parent_props_to_meta_keys as $property => $meta_key ) {
+
+			// Get meta value.
+			$function = 'set_' . $property;
+
+			if ( is_callable( array( $product, $function ) ) ) {
+
+				// Get a global value for layout/location props (always use global options in customizer).
+				if ( $this->is_global_prop( $product, $property ) ) {
+					$value = get_option( $this->global_props[$property] );
+				} else {
+					$value = get_post_meta( $parent_id, $meta_key, true );
+				}
+
+				$product->{$function}( $value );
+			}
+
+		}
+
+		// Now we can read the core data.
+		parent::read_product_data( $product );
+
+	}
+
+
+	/**
+	 * Reads all MnM-specific post meta.
+	 *
+	 * @param  WC_Product_Mix_and_Match  $product
+	 */
+	protected function read_extra_data( &$product ) {
+
+		foreach ( $this->get_props_to_meta_keys() as $property => $meta_key ) {
+
+			// Get meta value.
+			$function = 'set_' . $property;
+
+			if ( is_callable( array( $product, $function ) ) ) {
+				$value = get_post_meta( $product->get_id(), $meta_key, true );
+				$product->{$function}( $value );
+			}
+		}
+
+		// Add content source/category IDs as additional parent data.
+		$parent_data = $product->get_parent_data();
+		$parent_id   = $product->get_parent_id();
+
+		// need content_source and cat IDs in the parent data
+		foreach ( $this->shared_props_to_meta_keys as $property => $meta_key ) {
+			$value = get_post_meta( $parent_id, $meta_key, true );
+			$parent_data[ $property ] = $value;
+		}
+
+		$product->set_parent_data( $parent_data );
+
+		// Base prices are overridden by NYP min price.
+		if ( ! $product->is_priced_per_product() && $product->is_nyp() ) {
+			$min_price = $product->get_meta( '_min_price', true, 'edit' );
+			$product->set_price( $min_price );
+			$product->set_regular_price( $min_price );
+			$product->set_sale_price( '' );
+		}
+
+	}
+
+
+	/**
+	 * Writes all MnM-specific post meta. @todo - the trait it messing up the price and we're currently only doing static prices anyway.
+	 *
+	 * @param  WC_Product_Mix_and_Match_Variation  $product
+	 * @param  bool                   $force
+	 */
+	public function update_post_meta( &$product, $force = false ) {
+		parent::update_post_meta( $product, $force );
+	}
+
+}

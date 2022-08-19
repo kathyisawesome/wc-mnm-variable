@@ -1,0 +1,42 @@
+{
+  "title": "WooCommerce Mix and Match Products - Variable Mix and Match",
+  "name": "wc-mnm-variable",
+  "version": "1.0.0-alpha-1",
+  "description": "Require Mix and Match child items to be in quantity multiples, ie: 6,12,18,etc.",
+  "main": "Gruntfile.js",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kathyisawesome/wc-mnm-variable"
+  },
+  "bugs": {
+    "url": "https://github.com/kathyisawesome/wc-mnm-variable/issues"
+  },
+  "author": "helgatheviking",
+  "devDependencies": {
+    "autoprefixer": "^10.4.7",
+    "@lodder/grunt-postcss": "^3.1.1",
+    "grunt": "~1.5.3",
+    "grunt-contrib-clean": "^2.0.1",
+    "grunt-contrib-compress": "^2.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-cssmin": "^4.0.0",
+    "grunt-contrib-jshint": "~3.2.0",
+    "grunt-contrib-uglify": "~5.2.2",
+    "grunt-contrib-watch": "~1.1.0",
+    "grunt-newer": "~1.3.0",
+    "grunt-rtlcss": "^2.0.2",
+    "grunt-sass": "^3.1.0",
+    "grunt-text-replace": "^0.4.0",
+    "grunt-wp-i18n": "~1.0.3",
+    "jshint-stylish": "~2.2.1",
+    "load-grunt-tasks": "~5.1.0",
+    "node-sass": "^7.0.1",
+    "postcss": "^8.4.14"
+  },
+  "scripts": {
+    "build": "grunt build",
+    "dev": "grunt dev",
+    "release": "grunt release"
+  }
+}
