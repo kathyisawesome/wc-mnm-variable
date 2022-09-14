@@ -53,7 +53,7 @@ if ( ! class_exists( 'WC_MNM_Variable_APFS_Switching_Compatibility' ) ) :
 
 			$data[] = array(
 				'id'    => 'mnm_variations',
-				'label' => __( 'Between Mix and Match Variations', 'wc-mnm-satt-bridge', 'woocommerce-mix-and-match-products' )
+				'label' => __( 'Between Mix and Match Variations', 'wc-mnm-satt-bridge', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' )
 			);
 
 			return $data;

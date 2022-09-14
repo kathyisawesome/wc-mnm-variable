@@ -32,7 +32,6 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 		// Creates the panel for selecting product options.
 		add_action( 'woocommerce_product_data_panels', [ __CLASS__, 'product_data_panel' ] );
 
-
 		// Adds the vmnm product options.
 		add_action( 'wc_mnm_admin_variable_product_options', [ __CLASS__, 'container_layout_options' ], 10, 2 );
 		add_action( 'wc_mnm_admin_variable_product_options', [ __CLASS__, 'share_content_options' ], 20, 2 );
@@ -41,7 +40,6 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 		
 		// Add fields to variation.
 		add_action( 'woocommerce_product_after_variable_attributes', [ __CLASS__, 'add_to_variations' ], 10, 3 );
-		
 
 	//	add_action( 'wc_mnm_variation_options', [ __CLASS__, 'variation_discount_options' ], 10, 3 );
 		add_action( 'wc_mnm_variation_options', [ __CLASS__, 'variation_size_options' ], 20, 3 );
@@ -103,7 +101,7 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 		}
 
 		$tabs[ 'vmnm_options' ] = array(
-			'label'    => __( 'Mix and Match', 'wc-mnm-variable-mix-and-match' ),
+			'label'    => __( 'Mix and Match', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
 			'target'   => 'variable_mix_and_match_product_data',
 			'class'    => array( 'show_if_variable-mix-and-match', 'vmnm_product_tab', 'vmnm_product_options', 'mnm_product_options' ),
 			'priority' => 46,
@@ -160,7 +158,7 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 				'id'            => 'wc_mnm_variable_layout_override',
 				'wrapper_class' => 'wc_mnm_display_toggle',
 				'value'         => wc_bool_to_string( $vmnm_product_object->get_layout_override( 'edit' ) ),
-				'label'         => esc_html__( 'Override global layout', 'woocommerce-mix-and-match-products' ),
+				'label'         => esc_html__( 'Override global layout', 'wc-mnm-variable' ),
 			)
 		);
 
@@ -169,7 +167,7 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 			array(
 				'id'      => 'wc_mnm_variable_layout',
 				'wrapper_class' => 'mnm_container_layout_options show_if_wc_mnm_layout_override_yes hide_if_wc_mnm_layout_override_no hidden',
-				'label'   => esc_html__( 'Layout', 'woocommerce-mix-and-match-products' ),
+				'label'   => esc_html__( 'Layout', 'wc-mnm-variable' ),
 				'value'	  => $vmnm_product_object->get_layout( 'edit' ),
 				'options' => WC_Product_Mix_and_Match::get_layout_options(),
 			)
@@ -183,7 +181,7 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 			array(
 				'id'      => 'wc_mnm_variable_form_location',
 				'wrapper_class' => 'mnm_container_layout_options show_if_wc_mnm_layout_override_yes hide_if_wc_mnm_layout_override_no hidden',
-				'label'   => esc_html__( 'Layout', 'woocommerce-mix-and-match-products' ),
+				'label'   => esc_html__( 'Layout', 'wc-mnm-variable' ),
 				'value'	  => $vmnm_product_object->get_add_to_cart_form_location( 'edit' ),
 				'options' => WC_Product_Mix_and_Match::get_add_to_cart_form_location_options(),
 			)
@@ -205,7 +203,7 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 				'id'            => 'wc_mnm_variable_share_content',
 				'wrapper_class' => 'show_if_variable-mix-and-match wc_mnm_display_toggle',
 				'value'         => wc_bool_to_string( $vmnm_product_object->is_sharing_content( 'edit' ) ),
-				'label'         => esc_html__( 'Share contents across variations', 'wc-mnm-variable-mix-and-match' ),
+				'label'         => esc_html__( 'Share contents across variations', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
 			)
 		);
 
@@ -228,11 +226,11 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 					'id'      => 'wc_mnm_variable_content_source',
 					'class'   => 'select short wc_mnm_content_source',
 					'wrapper_class' => 'wc_mnm_display_toggle',
-					'label'   => __( 'Allowed content', 'wc-mnm-variable-mix-and-match' ),
+					'label'   => __( 'Allowed content', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
 					'value'	  => 'categories' === $vmnm_product_object->get_content_source( 'edit' ) ? 'categories' : 'products',
 					'options' => array(
-						'products'   => __( 'Select individual products', 'wc-mnm-variable-mix-and-match' ),
-						'categories' => __( 'Select product categories', 'wc-mnm-variable-mix-and-match' ),
+						'products'   => __( 'Select individual products', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
+						'categories' => __( 'Select product categories', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
 					)
 				)
 			);
@@ -259,13 +257,13 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 				'name'               => 'wc_mnm_variable_allowed_products[]',
 				'class'              => 'wc-product-search wc-mnm-enhanced-select',
 				'wrapper_class'      => 'form-field wc_mnm_source_products_field show_if_wc_mnm_variable_content_source_products hide_if_wc_mnm_variable_content_source_categories',
-				'label'              => __( 'Select products', 'woocommerce-mix-and-match-products' ),
+				'label'              => __( 'Select products', 'wc-mnm-variable' ),
 				'options'            => $options,
 				'style'              => 'width: 400px',
 				'custom_attributes'  => array(
 					'multiple'          => 'multiple',
 					'data-sortable'     => 'sortable',
-					'data-placeholder'  => __( 'Search for a product&hellip;', 'woocommerce-mix-and-match-products' ),
+					'data-placeholder'  => __( 'Search for a product&hellip;', 'wc-mnm-variable' ),
 					'data-action'       => 'woocommerce_json_search_products_and_variations',
 					'data-exclude_type' => join( ",", $product_types ),
 				),
@@ -293,13 +291,13 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 				'name'              => 'wc_mnm_variable_allowed_categories[]',
 				'class'             => 'wc-mnm-enhanced-select wc-mnm-category-search',
 				'wrapper_class'     => 'form-field wc_mnm_source_categories_field show_if_wc_mnm_variable_content_source_categories hide_if_wc_mnm_variable_content_source_products',
-				'label'             => __( 'Select categories', 'woocommerce-mix-and-match-products' ),
+				'label'             => __( 'Select categories', 'wc-mnm-variable' ),
 				'options'           => $options,
 				'style'             => 'width: 400px',
 				'custom_attributes' => array(
 					'multiple'         => 'multiple',
 					'data-sortable'    => 'sortable',
-					'data-placeholder' => __( 'Search for a category&hellip;', 'woocommerce-mix-and-match-products' ),
+					'data-placeholder' => __( 'Search for a category&hellip;', 'wc-mnm-variable' ),
 					'data-action'      => 'woocommerce_json_search_categories',
 					'data-allow_clear' => true,
 					'data-return_id'   => true,
@@ -329,11 +327,11 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 				'id'      => 'wc_mnm_variable_per_product_pricing',
 				'class'   => 'wc_mnm_per_product_pricing wc_mnm_variable_per_product_pricing',
 				'wrapper_class' => 'wc_mnm_display_toggle',
-				'label'   => esc_html__( 'Pricing mode', 'wc-mnm-variable-mix-and-match' ),
+				'label'   => esc_html__( 'Pricing mode', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
 				'value'	  => $vmnm_product_object->get_priced_per_product( 'edit' ) ? 'yes' : 'no',
 				'options' => array(
-					'no'  => esc_html__( 'Fixed &mdash; the price never changes', 'wc-mnm-variable-mix-and-match' ),
-					'yes' => esc_html__( 'Per-item &mdash; the price depends on the selections', 'wc-mnm-variable-mix-and-match' )
+					'no'  => esc_html__( 'Fixed &mdash; the price never changes', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
+					'yes' => esc_html__( 'Per-item &mdash; the price depends on the selections', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' )
 				)
 			)
 		);
@@ -392,9 +390,9 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 			array(
 				'id'            => 'wc_mnm_variation_per_product_discount[' . $loop . ']',
 				'wrapper_class' => 'show_if_wc_mnm_variable_per_product_pricing_yes hide_if_wc_mnm_variable_per_product_pricing_no',
-				'label'         => __( 'Per-Item Discount (%)', 'wc-mnm-variable-mix-and-match' ),
+				'label'         => __( 'Per-Item Discount (%)', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
 				'value'         => $variation_object->get_discount( 'edit' ),
-				'description'   => __( 'Discount applied to each item when in per-item pricing mode. This discount applies only to this variation and whenever the quantity restrictions are satisfied.', 'wc-mnm-variable-mix-and-match' ),
+				'description'   => __( 'Discount applied to each item when in per-item pricing mode. This discount applies only to this variation and whenever the quantity restrictions are satisfied.', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
 				'desc_tip'      => true,
 				'data_type'     => 'decimal',
 			)
@@ -414,9 +412,9 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 		woocommerce_wp_text_input(
 			array(
 				'id'            => 'wc_mnm_variation_min_container_size[' . $loop . ']',
-				'label'         => __( 'Minimum Container Size', 'wc-mnm-variable-mix-and-match' ),
+				'label'         => __( 'Minimum Container Size', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
 				'wrapper_class' => 'mnm_container_size_options form-row form-row-first',
-				'description'   => __( 'Minimum quantity for Mix and Match containers.', 'wc-mnm-variable-mix-and-match' ),
+				'description'   => __( 'Minimum quantity for Mix and Match containers.', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
 				'type'          => 'number',
 				'value'         => $variation_object->get_min_container_size( 'edit' ),
 				'desc_tip'      => true
@@ -425,9 +423,9 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 		woocommerce_wp_text_input(
 			array(
 				'id'            => 'wc_mnm_variation_max_container_size[' . $loop . ']',
-				'label'         => __( 'Maximum Container Size', 'wc-mnm-variable-mix-and-match' ),
+				'label'         => __( 'Maximum Container Size', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
 				'wrapper_class' => 'mnm_container_size_options form-row form-row-last',
-				'description'   => __( 'Maximum quantity for Mix and Match containers. Leave blank to not enforce an upper quantity limit.', 'wc-mnm-variable-mix-and-match' ),
+				'description'   => __( 'Maximum quantity for Mix and Match containers. Leave blank to not enforce an upper quantity limit.', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
 				'type'          => 'number',
 				'value'         => $variation_object->get_max_container_size( 'edit' ),
 				'desc_tip'      => true
@@ -453,11 +451,11 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 				'id'            => 'wc_mnm_variation_content_source[' . $loop . ']',
 				'class'         => 'select short wc_mnm_content_source',
 				'wrapper_class' => 'wc_mnm_display_toggle',
-				'label'         => __( 'Allowed content', 'wc-mnm-variable-mix-and-match' ),
+				'label'         => __( 'Allowed content', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
 				'value'	        => 'categories' === $variation_object->get_content_source( 'edit' ) ? 'categories': 'products',
 				'options'       => array(
-					'products'     => __( 'Select individual products', 'wc-mnm-variable-mix-and-match' ),
-					'categories'   => __( 'Select product categories', 'wc-mnm-variable-mix-and-match' ),
+					'products'     => __( 'Select individual products', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
+					'categories'   => __( 'Select product categories', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
 				)
 			)
 		);
@@ -484,13 +482,13 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 			'name'               => 'wc_mnm_variation_products[' . $loop . '][]',
 			'class'              => 'wc-product-search wc-mnm-enhanced-select',
 			'wrapper_class'      => 'form-field wc_mnm_variation_allowed_products_field show_if_wc_mnm_variation_content_source_products hide_if_wc_mnm_variation_content_source_categories',
-			'label'              => __( 'Select products', 'woocommerce-mix-and-match-products' ),
+			'label'              => __( 'Select products', 'wc-mnm-variable' ),
 			'options'            => $options,
 			'style'              => 'width: 400px',
 			'custom_attributes'  => array(
 				'multiple'          => 'multiple',
 				'data-sortable'     => 'sortable',
-				'data-placeholder'  => __( 'Search for a product&hellip;', 'woocommerce-mix-and-match-products' ),
+				'data-placeholder'  => __( 'Search for a product&hellip;', 'wc-mnm-variable' ),
 				'data-action'       => 'woocommerce_json_search_products_and_variations',
 				'data-exclude_type' => join( ",", $product_types ),
 			),
@@ -518,13 +516,13 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 			'name'              => 'wc_mnm_variation_categories[' . $loop . '][]',
 			'class'             => 'wc-mnm-enhanced-select wc-mnm-category-search',
 			'wrapper_class'     => 'form-field wc_mnm_variable_allowed_categories_field show_if_wc_mnm_variation_content_source_categories hide_if_wc_mnm_variation_content_source_products',
-			'label'             => __( 'Select categories', 'woocommerce-mix-and-match-products' ),
+			'label'             => __( 'Select categories', 'wc-mnm-variable' ),
 			'options'           => $options,
 			'style'             => 'width: 400px',
 			'custom_attributes' => array(
 				'multiple'         => 'multiple',
 				'data-sortable'    => 'sortable',
-				'data-placeholder' => __( 'Search for a category&hellip;', 'woocommerce-mix-and-match-products' ),
+				'data-placeholder' => __( 'Search for a category&hellip;', 'wc-mnm-variable' ),
 				'data-action'      => 'woocommerce_json_search_categories',
 				'data-allow_clear' => true,
 				'data-return_id'   => true,
@@ -603,7 +601,7 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 				$product->set_props( $props );
 
 			} else {
-				WC_Admin_Meta_Boxes::add_error( __( 'Your changes have not been saved &ndash; please wait for the <strong>WooCommerce Mix and Match Data Update</strong> routine to complete before creating new Mix and Match products or making changes to existing ones.', 'woocommerce-mix-and-match-products' ) );
+				WC_Admin_Meta_Boxes::add_error( __( 'Your changes have not been saved &ndash; please wait for the <strong>WooCommerce Mix and Match Data Update</strong> routine to complete before creating new Mix and Match products or making changes to existing ones.', 'wc-mnm-variable' ) );
 			}
 		}
 	}

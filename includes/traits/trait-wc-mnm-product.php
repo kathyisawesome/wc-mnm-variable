@@ -337,13 +337,13 @@ trait WC_MNM_Product {
 
 			self::$layout_locations_data = array(
 				'default'      => array(
-					'label'       => __( 'Inline', 'woocommerce-mix-and-match-products' ),
-					'description' => __( 'The add-to-cart form is displayed inside the single-product summary.', 'woocommerce-mix-and-match-products' ),
+					'label'       => __( 'Inline', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
+					'description' => __( 'The add-to-cart form is displayed inside the single-product summary.', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
 					'image'       => WC_Mix_and_Match()->plugin_url() . '/assets/images/location-inline.svg',
 				),
 				'after_summary' => array(
-					'label'       => __( 'Full-width', 'woocommerce-mix-and-match-products' ),
-					'description' => __( 'The add-to-cart form is displayed after the single-product summary. Usually allocates the entire page width for displaying form content. Note that some themes may not support this option.', 'woocommerce-mix-and-match-products' ),
+					'label'       => __( 'Full-width', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
+					'description' => __( 'The add-to-cart form is displayed after the single-product summary. Usually allocates the entire page width for displaying form content. Note that some themes may not support this option.', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
 					'image'       => WC_Mix_and_Match()->plugin_url() . '/assets/images/location-full.svg',
 				)
 			);
@@ -370,14 +370,14 @@ trait WC_MNM_Product {
 
 			self::$layout_options_data = array(
 				'tabular' => array(
-					'label'       => esc_html__( 'List', 'woocommerce-mix-and-match-products' ),
-					'description' => esc_html__( 'The allowed contents are displayed as a list.', 'woocommerce-mix-and-match-products' ),
+					'label'       => esc_html__( 'List', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
+					'description' => esc_html__( 'The allowed contents are displayed as a list.', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
 					'image'       => WC_Mix_and_Match()->plugin_url() . '/assets/images/layout-list.svg',
 					'mb_display'  => false, // In the product metabox, this icon is in the admin font. Set to true to print the svg directly.
 				),
 				'grid' => array(
-					'label'       => esc_html__( 'Grid', 'woocommerce-mix-and-match-products' ),
-					'description' => esc_html__( 'The allowed contents are displayed as a grid.', 'woocommerce-mix-and-match-products' ),
+					'label'       => esc_html__( 'Grid', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
+					'description' => esc_html__( 'The allowed contents are displayed as a grid.', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
 					'image'       => WC_Mix_and_Match()->plugin_url() . '/assets/images/layout-grid.svg',
 					'mb_display'  => false,
 				)
