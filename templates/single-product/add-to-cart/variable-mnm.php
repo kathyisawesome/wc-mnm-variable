@@ -2,7 +2,7 @@
 /**
  * Variable product add to cart
  *
- * This template can be overridden by copying it to yourtheme/woocommerce/single-product/add-to-cart/variable.php.
+ * This template can be overridden by copying it to yourtheme/woocommerce/single-product/add-to-cart/variable-mnm.php.
  *
  * HOWEVER, on occasion WooCommerce will need to update template files and you
  * (the theme developer) will need to copy the new files to your theme to
@@ -11,8 +11,8 @@
  * the readme will list any important changes.
  *
  * @see https://docs.woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates
- * @version 6.1.0
+ * @package WC Variable Mix and Match\Templates
+ * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;

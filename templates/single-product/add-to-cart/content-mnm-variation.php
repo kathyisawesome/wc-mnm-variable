@@ -1,8 +1,8 @@
 <?php
 /**
- * The template for displaying product content within loops
+ * The template for displaying mix and match allowed pproduct content within loops for variations.
  *
- * This template can be overridden by copying it to yourtheme/woocommerce/content-product.php.
+ * This template can be overridden by copying it to yourtheme/woocommerce/content-mnm-variation.php.
  *
  * HOWEVER, on occasion WooCommerce will need to update template files and you
  * (the theme developer) will need to copy the new files to your theme to
@@ -11,8 +11,8 @@
  * the readme will list any important changes.
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates
- * @version 3.6.0
+ * @package WC Variable Mix and Match\Templates
+ * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;

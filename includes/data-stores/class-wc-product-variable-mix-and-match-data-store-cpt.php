@@ -3,7 +3,7 @@
  * Variable Mix and Match Product Data Store
  *
  * @package  WooCommerce Mix and Match Products/Data
- * @since    3.0.0
+ * @since    1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * WC_Product_MNM_Data_Store_CPT Class: Stored in CPT.
  *
- * @version 3.0.0
+ * @version 1.0.0
  */
 class WC_Product_Variable_Mix_and_Match_Data_Store_CPT extends WC_Product_Variable_Data_Store_CPT {
 

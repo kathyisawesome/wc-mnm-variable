@@ -6,8 +6,8 @@
  * The values will be dynamically replaced after selecting attributes.
  *
  * @see https://docs.woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates
- * @version 2.5.0
+ * @package Variable Mix and Match\Templates
+ * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;

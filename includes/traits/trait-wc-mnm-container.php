@@ -3,7 +3,7 @@
  * This ongoing trait will have shared calculation logic between WC_Product_Mix_and_Match and WC_Product_Mix_and_Match_Variation classes.
  *
  * @package WooCommerce Mix and Match Products\Traits
- * @version 3.0.0
+ * @version 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Trait WC_MNM_Container.
  *
- * @since 3.0.0
+ * @since 1.0.0
  */
 trait WC_MNM_Container {
 
@@ -801,7 +801,7 @@ trait WC_MNM_Container {
 				 * @param  str $free_string
 				 * @param  obj WC_Product_Mix_and_Match $this
 				 */
-				$free_string = apply_filters( 'wc_mnm_container_show_free_string', false, $this ) ? _x( 'Free!', '[Frontend]', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ) : $price;
+				$free_string = apply_filters( 'wc_mnm_container_show_free_string', false, $this ) ? _x( 'Free!', '[Frontend]', 'wc-mnm-variable' ) : $price;
 
 				/**
 				 * Free price html.
@@ -827,7 +827,7 @@ trait WC_MNM_Container {
 					}
 				} else {
 					$price = sprintf(
-                        _x( 'Starting at %s', '[Frontend]Price range, ex:  Starting at $99', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
+                        _x( 'Starting at %s', '[Frontend]Price range, ex:  Starting at $99', 'wc-mnm-variable' ),
 						wc_format_sale_price( $this->get_container_regular_price( 'min' ), $this->get_container_price( 'min' ) )
 					);
 				}
@@ -853,7 +853,7 @@ trait WC_MNM_Container {
 					$price = wc_format_price_range( $this->get_container_price( 'min' ), $this->get_container_price( 'max' ) );
 				} else {
 					$price = sprintf(
-                        _x( 'Starting at %s', '[Frontend]Price range, ex:  Starting at $99', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
+                        _x( 'Starting at %s', '[Frontend]Price range, ex:  Starting at $99', 'wc-mnm-variable' ),
 						wc_price( $this->get_container_price( 'min' ) )
 					);
 				}
@@ -943,13 +943,13 @@ trait WC_MNM_Container {
 			// If a child does not have enough stock, let people know.
 			if ( 'outofstock' === $get_child_items_stock_status ) {
 
-				$availability[ 'availability' ] = _x( 'Insufficient stock', '[Frontend]', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' );
+				$availability[ 'availability' ] = _x( 'Insufficient stock', '[Frontend]', 'wc-mnm-variable' );
 				$availability[ 'class' ]        = 'out-of-stock';
 
 			// If a child is on backorder, the parent should appear to be on backorder, too.
 			} elseif ( parent::is_in_stock() && 'onbackorder' === $get_child_items_stock_status ) {
 
-				$availability[ 'availability' ] = _x( 'Available on backorder', '[Frontend]', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' );
+				$availability[ 'availability' ] = _x( 'Available on backorder', '[Frontend]', 'wc-mnm-variable' );
 				$availability[ 'class' ]        = 'available-on-backorder';
 
 			}
@@ -1609,13 +1609,13 @@ trait WC_MNM_Container {
 
 			self::$layout_locations_data = array(
 				'default'      => array(
-					'label'       => __( 'Inline', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
-					'description' => __( 'The add-to-cart form is displayed inside the single-product summary.', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
+					'label'       => __( 'Inline', 'wc-mnm-variable' ),
+					'description' => __( 'The add-to-cart form is displayed inside the single-product summary.', 'wc-mnm-variable' ),
 					'image'       => WC_Mix_and_Match()->plugin_url() . '/assets/images/location-inline.svg',
 				),
 				'after_summary' => array(
-					'label'       => __( 'Full-width', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
-					'description' => __( 'The add-to-cart form is displayed after the single-product summary. Usually allocates the entire page width for displaying form content. Note that some themes may not support this option.', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
+					'label'       => __( 'Full-width', 'wc-mnm-variable' ),
+					'description' => __( 'The add-to-cart form is displayed after the single-product summary. Usually allocates the entire page width for displaying form content. Note that some themes may not support this option.', 'wc-mnm-variable' ),
 					'image'       => WC_Mix_and_Match()->plugin_url() . '/assets/images/location-full.svg',
 				)
 			);
@@ -1643,14 +1643,14 @@ trait WC_MNM_Container {
 
 			self::$layout_options_data = array(
 				'tabular' => array(
-					'label'       => esc_html__( 'List', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
-					'description' => esc_html__( 'The allowed contents are displayed as a list.', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
+					'label'       => esc_html__( 'List', 'wc-mnm-variable' ),
+					'description' => esc_html__( 'The allowed contents are displayed as a list.', 'wc-mnm-variable' ),
 					'image'       => WC_Mix_and_Match()->plugin_url() . '/assets/images/layout-list.svg',
 					'mb_display'  => false, // In the product metabox, this icon is in the admin font. Set to true to print the svg directly.
 				),
 				'grid' => array(
-					'label'       => esc_html__( 'Grid', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
-					'description' => esc_html__( 'The allowed contents are displayed as a grid.', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
+					'label'       => esc_html__( 'Grid', 'wc-mnm-variable' ),
+					'description' => esc_html__( 'The allowed contents are displayed as a grid.', 'wc-mnm-variable' ),
 					'image'       => WC_Mix_and_Match()->plugin_url() . '/assets/images/layout-grid.svg',
 					'mb_display'  => false,
 				)

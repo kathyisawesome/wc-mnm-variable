@@ -5,8 +5,8 @@
  * The WooCommerce product variation class handles product variation data.
  *
  * @package Mix and Match Products\Classes
- * @since 3.0.0
- * @version 3.0.0
+ * @since 1.0.0
+ * @version 1.0.0
  */
 
 defined( 'ABSPATH' ) || exit;

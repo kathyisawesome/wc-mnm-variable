@@ -3,8 +3,8 @@
  * This ongoing trait will have shared logic between WC_Product_Mix_and_Match and WC_Product_Mix_and_Match_Variation classes.
  *
  * @package WooCommerce Mix and Match Products\Traits
- * @since 3.0.0
- * @version 3.0.0
+ * @since 1.0.0
+ * @version 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -410,7 +410,7 @@ trait WC_MNM_Container_Child_Items {
 
 		} catch ( Exception $e ) {
 			wc_get_logger()->error(
-				esc_html__( 'Error saving Mix and Match product child items.', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' ),
+				esc_html__( 'Error saving Mix and Match product child items.', 'wc-mnm-variable' ),
 				array(
 					'source' => 'wc-mix-and-match-product-save',
 					'product' => $this,

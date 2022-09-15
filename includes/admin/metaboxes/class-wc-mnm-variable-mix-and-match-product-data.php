@@ -3,8 +3,8 @@
  * Variable Mix and Match Product Data Metabox Class
  *
  * @package  WooCommerce Mix and Match Products/Admin/Meta-Boxes/Product
- * @since    3.0.0
- * @version  3.0.0
+ * @since    1.0.0
+ * @version  1.0.0
  */
 
 // Exit if accessed directly.
@@ -165,11 +165,11 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 		// Layout option.
 		wc_mnm_wp_radio_images(
 			array(
-				'id'      => 'wc_mnm_variable_layout',
+				'id'            => 'wc_mnm_variable_layout',
 				'wrapper_class' => 'mnm_container_layout_options show_if_wc_mnm_layout_override_yes hide_if_wc_mnm_layout_override_no hidden',
-				'label'   => esc_html__( 'Layout', 'wc-mnm-variable' ),
-				'value'	  => $vmnm_product_object->get_layout( 'edit' ),
-				'options' => WC_Product_Mix_and_Match::get_layout_options(),
+				'label'         => esc_html__( 'Layout', 'wc-mnm-variable' ),
+				'value'	        => $vmnm_product_object->get_layout( 'edit' ),
+				'options'       => WC_Product_Mix_and_Match::get_layout_options(),
 			)
 		);
 		?>
@@ -179,11 +179,11 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 		// Add to cart form location option.
 		wc_mnm_wp_radio_images(
 			array(
-				'id'      => 'wc_mnm_variable_form_location',
+				'id'            => 'wc_mnm_variable_form_location',
 				'wrapper_class' => 'mnm_container_layout_options show_if_wc_mnm_layout_override_yes hide_if_wc_mnm_layout_override_no hidden',
-				'label'   => esc_html__( 'Layout', 'wc-mnm-variable' ),
-				'value'	  => $vmnm_product_object->get_add_to_cart_form_location( 'edit' ),
-				'options' => WC_Product_Mix_and_Match::get_add_to_cart_form_location_options(),
+				'label'         => esc_html__( 'Layout', 'wc-mnm-variable' ),
+				'value'	        => $vmnm_product_object->get_add_to_cart_form_location( 'edit' ),
+				'options'       => WC_Product_Mix_and_Match::get_add_to_cart_form_location_options(),
 			)
 		);
 	}
@@ -217,7 +217,7 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 	 */
 	public static function allowed_contents_options( $post_id, $vmnm_product_object ) { ?>
 
-		<div class="show_if_wc_mnm_variable_share_content_yes hide_if_wc_mnm_variable_share_content_no">
+		<div class="form-row form-row-full show_if_wc_mnm_variable_share_content_yes hide_if_wc_mnm_variable_share_content_no">
 
 			<?php
 
@@ -308,7 +308,7 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 			wc_mnm_wp_enhanced_select( $args );
 
 			?>
-			</div>
+		</div>
 		<?php
 	}
 
@@ -442,7 +442,7 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 	 */
 	public static function variation_content_options( $variation_object, $loop ) { ?>
 
-		<div class="show_if_wc_mnm_variable_share_content_no hide_if_wc_mnm_variable_share_content_yes">
+		<div class="form-row form-row-full show_if_wc_mnm_variable_share_content_no hide_if_wc_mnm_variable_share_content_yes">
 
 		<?php
 
@@ -461,7 +461,7 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 		);
 
 		// Generate some data for the select2 input.
-		$child_items = 'products' === $variation_object->get_content_source( 'edit' )  ? $variation_object->get_child_items( 'edit' ) : [];
+		$child_items = 'products' === $variation_object->get_content_source( 'edit' ) ? $variation_object->get_child_items( 'edit' ) : [];
 
 		// Exclude all but simple and variation products.
 		$product_types = wc_get_product_types();

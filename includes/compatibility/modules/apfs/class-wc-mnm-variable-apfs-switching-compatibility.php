@@ -3,8 +3,8 @@
  * All Products for Subscriptions - Handles subscription contents switching
  *
  * @package  WooCommerce Mix and Match Products/Compatibility
- * @since    2.0.0
- * @version  2.0.9
+ * @since    1.0.0
+ * @version  1.0.0
  */
 
 // Exit if accessed directly.
@@ -53,7 +53,7 @@ if ( ! class_exists( 'WC_MNM_Variable_APFS_Switching_Compatibility' ) ) :
 
 			$data[] = array(
 				'id'    => 'mnm_variations',
-				'label' => __( 'Between Mix and Match Variations', 'wc-mnm-satt-bridge', 'woocommerce-mix-and-match-products', 'wc-mnm-variable' )
+				'label' => __( 'Between Mix and Match Variations', 'wc-mnm-variable' ),
 			);
 
 			return $data;

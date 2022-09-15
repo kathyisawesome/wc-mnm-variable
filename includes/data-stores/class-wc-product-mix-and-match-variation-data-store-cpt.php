@@ -3,7 +3,7 @@
  * Class WC_Product_Mix_and_Match_Variation_Data_Store_CPT file.
  *
  * @package WooCommerce Mix and Match Products/Data
- * @since    3.0.0
+ * @since    1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Mix and Match Variation Product Data Store: Stored in CPT.
  *
- * @version  3.0.0
+ * @version  1.0.0
  */
 class WC_Product_Mix_and_Match_Variation_Data_Store_CPT extends WC_Product_Variation_Data_Store_CPT {
 

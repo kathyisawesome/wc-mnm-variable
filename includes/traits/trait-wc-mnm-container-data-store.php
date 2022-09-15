@@ -3,8 +3,8 @@
  * Shared logic for data stores
  *
  * @package  WooCommerce Mix and Match Products/Data
- * @since    3.0.0
- * @version  3.0.0
+ * @since    1.0.0
+ * @version  1.0.0
  */
 
 // Exit if accessed directly.
@@ -113,15 +113,11 @@ trait WC_MNM_Container_Data_Store {
 	public function update_post_meta( &$product, $force = false ) {
 
 		$this->extra_data_saved = true;
-
-		error_log("in trait container store update post meta");
-
 		parent::update_post_meta( $product, $force );
 
 		$id                 = $product->get_id();
 		$meta_keys_to_props = array_flip( array_diff_key( $this->get_props_to_meta_keys(), array( 'price' => 1, 'min_raw_price' => 1, 'min_raw_regular_price' => 1 ) ) );
 
-	error_log("update postmeta" . json_encode($meta_keys_to_props));
 		$props_to_update    = $force ? $meta_keys_to_props : $this->get_props_to_update( $product, $meta_keys_to_props );
 
 		foreach ( $props_to_update as $meta_key => $property ) {

@@ -11,7 +11,8 @@
  * the readme will list any important changes.
  *
  * @see     https://woocommerce.com/document/template-structure/
- * @package WooCommerce Mix and Match/Templates
+ * @package Variable Mix and Match\Templates
+ * @version 1.0.0
  */
 
 // Exit if accessed directly.
