@@ -112,8 +112,6 @@ class WC_Product_Variable_Mix_and_Match_Data_Store_CPT extends WC_Product_Variab
 	 */
 	protected function update_post_meta( &$product, $force = false ) {
 
-		$this->extra_data_saved = true;
-
 		parent::update_post_meta( $product, $force );
 
 		$id                 = $product->get_id();

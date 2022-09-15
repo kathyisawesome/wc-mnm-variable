@@ -17,14 +17,6 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	use WC_MNM_Container_Child_Items;
 
 	/**
-	 *  Define type-specific properties.
-	 * @var array
-	 */
-	protected $extra_data = array(
-		'share_content' => false,
-	);
-
-	/**
 	 * Inherited parent properties.
 	 * 
 	 * @todo - should this be inherited here? Or should we use get_layout() and read from parent_data array? These aren't props we can change at the variation level
@@ -48,7 +40,8 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 * @param  mixed $product
 	 */
 	public function __construct( $product ) {
-		$this->extra_data = array_merge( $this->container_props, $this->extra_data, $this->parent_data );
+		// @todo: Do we need to merge parent_data here.
+		$this->data = array_merge( $this->data, $this->container_props, $this->parent_data );
 		parent::__construct( $product );
 	}
 

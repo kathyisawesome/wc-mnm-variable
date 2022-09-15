@@ -20,7 +20,7 @@ class WC_Product_Variable_Mix_and_Match extends WC_Product_Variable {
 	 *  Define type-specific properties.
 	 * @var array
 	 */
-	protected $extra_data = array(
+	protected $extended_data = array(
 		'share_content' => false,
 	);
 
@@ -31,10 +31,9 @@ class WC_Product_Variable_Mix_and_Match extends WC_Product_Variable {
 	 * @param  mixed $product
 	 */
 	public function __construct( $product ) {
-		$this->extra_data = array_merge( $this->extra_data, $this->shared_props, $this->container_contents_props );
+		$this->data = array_merge( $this->data, $this->extended_data, $this->shared_props, $this->contents_props );
 		parent::__construct( $product );
 	}
-
 
 	
 	/*
