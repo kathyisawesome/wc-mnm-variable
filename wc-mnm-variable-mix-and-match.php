@@ -85,8 +85,8 @@ class WC_MNM_Variable_Mix_and_Match {
 		// Product data stores.
 		add_filter( 'woocommerce_data_stores', [ $this, 'data_stores' ] );
 
-		// Set and cache the type, which in turn loads the correct class.
-		add_filter( 'woocommerce_product_type_query', [ $this, 'product_type_query' ], 10, 2 );
+		// Set and cache the correct product class for mix and match variations.
+		add_filter( 'woocommerce_product_class', [ $this, 'set_variation_class' ], 10, 4 );
 
 		/**
 		 * Front end
@@ -266,69 +266,29 @@ class WC_MNM_Variable_Mix_and_Match {
 	 */
 	public static function set_variation_class( $classname, $product_type, $post_type, $product_id ) {
 
-		if ( 'product_variation' === $post_type && 'variation' === $product_type ) {
-			$post = get_post( $product_id );
+		$cache_key           = WC_Cache_Helper::get_cache_prefix( 'product_' . $product_id ) . '_parent_type_' . $product_id;
+		$parent_product_type = wp_cache_get( $cache_key, 'products' );
 
-			if ( $post ) {
-				$terms = get_the_terms( $post->post_parent, 'product_type' );
+		if ( false === $parent_product_type ) {
 
-				$parent_product_type = ! empty( $terms ) && isset( current( $terms )->slug ) ? current( $terms )->slug : '';
+			if ( 'product_variation' === $post_type && 'variation' === $product_type ) {
+				$post = get_post( $product_id );
 
-				if ( 'variable-mix-and-match' === $parent_product_type ) {
-					$classname = 'WC_Product_Mix_and_Match_Variation';
+				if ( $post ) {
+					$terms = get_the_terms( $post->post_parent, 'product_type' );
+					$parent_product_type = ! empty( $terms ) && ! is_wp_error( $terms ) ? sanitize_title( current( $terms )->name ) : '';
+					wp_cache_set( $cache_key, $parent_product_type, 'products' );	
 				}
 			}
+		}
+
+		if ( 'variable-mix-and-match' === $parent_product_type ) {
+			$classname = 'WC_Product_Mix_and_Match_Variation';
 		}
 
 		return $classname;
 	}
 
-
-	/**
-	 * Switch variation type.
-	 * 
-	 * Checks the classname being used for a product variation to see if it should be a mix and match product
-	 * variation, and if so, returns this as the class which should be instantiated (instead of the default
-	 * WC_Product_Variation class).
-	 *
-	 * @param  mixed false|string $product_type Product type.
-	 * @param int $product_id
-	 * @return string $type Will be mapped to the name of the WC_Product_* class which should be instantiated to create an instance of this product.
-	 */
-	public static function product_type_query( $product_type, $product_id ) {
-
-		$cache_key    = WC_Cache_Helper::get_cache_prefix( 'product_' . $product_id ) . '_type_' . $product_id;
-		$product_type = wp_cache_get( $cache_key, 'products' );
-
-		if ( $product_type ) {
-			return $product_type;
-		}
-
-		$post = get_post( $product_id );
-
-		if ( $post instanceof WP_Post ) {
-
-			if ( 'product_variation' === $post->post_type ) {
-
-				$terms = get_the_terms( $post->post_parent, 'product_type' );
-
-				$parent_product_type = ! empty( $terms ) && ! is_wp_error( $terms ) ? sanitize_title( current( $terms )->name ) : 'simple';
-	
-				if ( 'variable-mix-and-match' === $parent_product_type ) {
-					$product_type = 'mix-and-match-variation';
-				}
-
-			}
-			
-		}
-
-		wp_cache_set( $cache_key, $product_type, 'products' );
-
-		return $product_type;		
-
-	}
-
-	
 
 	/*
 	|--------------------------------------------------------------------------
