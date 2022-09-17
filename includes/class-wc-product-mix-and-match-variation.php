@@ -27,10 +27,13 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 		'layout_override'           => false,
 		'layout'                    => 'tabular',
 		'add_to_cart_form_location' => 'default',
+		'share_content'             => false,
 		'priced_per_product'        => false,
 		'discount'                  => 0,
 		'packing_mode'              => 'together',
 		'weight_cumulative'         => false,
+		'content_source'            => 'products',
+		'child_category_ids'        => [],
 	);
 
 
@@ -41,7 +44,7 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 */
 	public function __construct( $product ) {
 		// @todo: Do we need to merge parent_data here.
-		$this->data = array_merge( $this->data, $this->container_props, $this->parent_data );
+		$this->data = array_merge( $this->data, $this->container_props );
 		parent::__construct( $product );
 	}
 
@@ -60,10 +63,11 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 * Share content getter.
 	 *
 	 * @param  string $context
-	 * @return string
+	 * @return bool
 	 */
 	public function get_share_content( $context = 'view' ) {
-		return $this->get_prop( 'share_content', $context );
+		$value = wc_string_to_bool( $this->parent_data[ 'share_content' ] );
+		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'share_content', $value, $this ) : $value;
 	}
 
 
