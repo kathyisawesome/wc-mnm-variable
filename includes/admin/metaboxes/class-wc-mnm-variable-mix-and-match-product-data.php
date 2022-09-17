@@ -244,10 +244,10 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 			unset( $product_types[ 'variation' ] );
 			$product_types = array_keys( $product_types );
 	
-			$options = array();
+			$values = array();
 			foreach ( $child_items as $child_item ) {
 				if ( $child_item->get_product() ) {
-					$options[ $child_item->get_product()->get_id() ] = $child_item->get_product()->get_formatted_name();
+					$values[ $child_item->get_product()->get_id() ] = $child_item->get_product()->get_formatted_name();
 				}
 			}
 			
@@ -258,7 +258,7 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 				'class'              => 'wc-product-search wc-mnm-enhanced-select',
 				'wrapper_class'      => 'form-field wc_mnm_source_products_field show_if_wc_mnm_variable_content_source_products hide_if_wc_mnm_variable_content_source_categories',
 				'label'              => __( 'Select products', 'wc-mnm-variable' ),
-				'options'            => $options,
+				'value'              => $values,
 				'style'              => 'width: 400px',
 				'custom_attributes'  => array(
 					'multiple'          => 'multiple',
@@ -275,13 +275,13 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 			// Generate some data for the select2 input.
 			$selected_cats = $vmnm_product_object->get_child_category_ids( 'edit' );
 
-			$options = [];
+			$values = [];
 	
 			foreach ( $selected_cats as $cat_id ) {
 				$current_cat = get_term_by( 'term_id', $cat_id, 'product_cat' );
 	
 				if ( $current_cat instanceof WP_Term ) {
-					$options[$current_cat->term_id] = $current_cat->name;
+					$values[$current_cat->term_id] = $current_cat->name;
 				}
 			}
 	
@@ -292,7 +292,7 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 				'class'             => 'wc-mnm-enhanced-select wc-mnm-category-search',
 				'wrapper_class'     => 'form-field wc_mnm_source_categories_field show_if_wc_mnm_variable_content_source_categories hide_if_wc_mnm_variable_content_source_products',
 				'label'             => __( 'Select categories', 'wc-mnm-variable' ),
-				'options'           => $options,
+				'value'             => $values,
 				'style'             => 'width: 400px',
 				'custom_attributes' => array(
 					'multiple'         => 'multiple',
@@ -469,21 +469,21 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 		unset( $product_types[ 'variation' ] );
 		$product_types = array_keys( $product_types );
 
-		$options = array();
+		$values = array();
 		foreach ( $child_items as $child_item ) {
 			if ( $child_item->get_product() ) {
-				$options[ $child_item->get_product()->get_id() ] = $child_item->get_product()->get_formatted_name();
+				$values[ $child_item->get_product()->get_id() ] = $child_item->get_product()->get_formatted_name();
 			}
 		}
 
 		// Search args.
 		$args = array(
-			'id'                 => 'wc_mnm_variation_products[' . $loop . ']',
-			'name'               => 'wc_mnm_variation_products[' . $loop . '][]',
+			'id'                 => 'wc_mnm_variation_allowed_products[' . $loop . ']',
+			'name'               => 'wc_mnm_variation_allowed_products[' . $loop . '][]',
 			'class'              => 'wc-product-search wc-mnm-enhanced-select',
 			'wrapper_class'      => 'form-field wc_mnm_variation_allowed_products_field show_if_wc_mnm_variation_content_source_products hide_if_wc_mnm_variation_content_source_categories',
 			'label'              => __( 'Select products', 'wc-mnm-variable' ),
-			'options'            => $options,
+			'value'              => $values,
 			'style'              => 'width: 400px',
 			'custom_attributes'  => array(
 				'multiple'          => 'multiple',
@@ -500,13 +500,13 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 		// Generate some data for the select2 input.
 		$selected_cats = $variation_object->get_child_category_ids( 'edit' );
 
-		$options = array();
+		$values = array();
 
 		foreach ( $selected_cats as $cat_id ) {
 			$current_cat = get_term_by( 'term_id', $cat_id, 'product_cat' );
 
 			if ( $current_cat instanceof WP_Term ) {
-				$options[$current_cat->term_id] = $current_cat->name;
+				$values[$current_cat->term_id] = $current_cat->name;
 			}
 		}
 
@@ -517,7 +517,7 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 			'class'             => 'wc-mnm-enhanced-select wc-mnm-category-search',
 			'wrapper_class'     => 'form-field wc_mnm_variable_allowed_categories_field show_if_wc_mnm_variation_content_source_categories hide_if_wc_mnm_variation_content_source_products',
 			'label'             => __( 'Select categories', 'wc-mnm-variable' ),
-			'options'           => $options,
+			'value'             => $values,
 			'style'             => 'width: 400px',
 			'custom_attributes' => array(
 				'multiple'         => 'multiple',
@@ -580,22 +580,16 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 				// Set child items.
 				$props['child_items'] = WC_MNM_Meta_Box_Product_Data::process_child_items_data( $product, ! empty( $_POST['wc_mnm_variable_allowed_products'] ) ? $_POST['wc_mnm_variable_allowed_products'] : [] );
 
-
-				// @todo some kind of error notice if no contents.
-				/*
-
 				// Show a notice if the user hasn't selected any items for the container.
-				if ( apply_filters( 'wc_mnm_display_empty_container_error', true, $product ) ) {
+				if ( 'yes' === $props[ 'share_content' ] && apply_filters( 'wc_mnm_display_empty_container_error', true, $product ) ) {
 
 					if ( 'categories' === $props['content_source'] && empty( $props['child_category_ids' ] ) ) {
-						WC_Admin_Meta_Boxes::add_error( __( 'Please select at least one category to use for this Mix and Match product.', 'woocommerce-mix-and-match-products' ) );
+						WC_Admin_Meta_Boxes::add_error( __( 'Please select at least one category to use for this Variable Mix and Match product.', 'woocommerce-mix-and-match-products' ) );
 					} elseif ( 'products' === $props['content_source'] && empty( $props['child_items'] ) ) {
-						WC_Admin_Meta_Boxes::add_error( __( 'Please select at least one product to use for this Mix and Match product.', 'woocommerce-mix-and-match-products' ) );
+						WC_Admin_Meta_Boxes::add_error( __( 'Please select at least one product to use for this Variable Mix and Match product.', 'woocommerce-mix-and-match-products' ) );
 					}
 
 				}
-
-				*/
 
 				// Finally, set the properties for saving.
 				$product->set_props( $props );
