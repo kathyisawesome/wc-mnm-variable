@@ -32,22 +32,30 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 		<p class="stock out-of-stock"><?php echo esc_html( apply_filters( 'woocommerce_out_of_stock_message', __( 'This product is currently out of stock and unavailable.', 'woocommerce', 'wc-mnm-variable' ) ) ); ?></p>
 	<?php else : ?>
 
-		<?php if ( count( $available_variations ) < apply_filters( 'wc_mnm_variable_swatches_threshold', 0, $product ) ) :?>
+		<?php if ( count( $attributes ) === 1 && count( $available_variations ) < apply_filters( 'wc_mnm_variation_swatches_threshold', 3, $product ) ) :?>
 
-			<div class="wc-mnm-variation-selector">
+			<div class="variations wc-mnm-variations">
 
 				<?php wc_setup_loop( ['columns' => 3 ] ); ?>
 				<?php woocommerce_product_loop_start(); ?>
 
 				<?php foreach ( $product->get_available_variations( 'objects' ) as $variation ) : ?>
 					
-					<li class="product product-type-mix-and-match-variation">
-						<input id="<?php echo esc_attr( 'mnm-variable-' . $product->get_id() . '-' . $variation->get_id() ); ?>" type="radio" name="variation_selector" value="<?php echo esc_attr( $variation->get_id() ); ?>" />
-						<label for="<?php echo esc_attr( 'mnm-variable-' . $product->get_id() . '-' . $variation->get_id() ); ?>">
-						<?php // @todo - move to a template with hook? ?>
-						<?php if ( $variation->get_image_id() ) : ?>
-							<?php woocommerce_template_loop_product_thumbnail(); ?>
-						<?php endif; ?>
+					<li class="product product-type-mix-and-match-variation <?php echo esc_attr( wc_get_loop_class() );?>">
+
+						<?php  // @todo - move to a template with hook?
+						$attributes = $variation->get_variation_attributes( false ); 
+						$value = reset( $attributes );
+						$attribute = key( $attributes );						
+						?>
+
+						<input id="<?php echo esc_attr( sanitize_title( $attribute . '-' . $value ) ); ?>" type="radio" name="attribute_<?php echo esc_attr( $attribute ) ?>" data-attribute_name="attribute_<?php echo esc_attr( sanitize_title( $attribute ) );?>" value="<?php echo esc_attr( $value ); ?>" />
+						<label for="<?php echo esc_attr( sanitize_title( $attribute . '-' . $value ) ); ?>">
+						
+						<?php if ( $variation->get_image_id() ) {
+								$image_size = apply_filters( 'single_product_archive_thumbnail_size', 'woocommerce_thumbnail' );
+								echo $variation->get_image( $image_size );
+						} ?>
 
 						<?php echo wp_kses_post( wc_get_formatted_variation( $variation ) ); ?>
 
@@ -60,6 +68,8 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 				<?php endforeach; ?>
 
 				<?php woocommerce_product_loop_end(); ?>
+
+				<?php echo wp_kses_post( apply_filters( 'woocommerce_reset_variations_link', '<a class="reset_variations" href="#">' . esc_html__( 'Clear', 'woocommerce', 'wc-mnm-variable' ) . '</a>' ) ); ?>
 
 			</div>
 

@@ -108,13 +108,6 @@ class WC_MNM_Variable_Mix_and_Match {
 		add_action( 'wc_quick_view_enqueue_scripts', [ $this, 'load_scripts' ] );
 
 		/**
-		 * Ajax
-		 */
-		// Fetch MNM form via ajax @todo - currently not using?
-		add_action( 'wc_ajax_get_mix_and_match_variation', [ $this, 'get_mix_and_match_variation' ] );
-
-
-		/**
 		 * Cart
 		 */
 		// Register mix-and-match-variation as supported type.
@@ -416,35 +409,6 @@ class WC_MNM_Variable_Mix_and_Match {
 	| Ajax callbacks.
 	|--------------------------------------------------------------------------
 	*/
-
-	/**
-	 * Get a matching variation based on posted attributes.
-	 */
-	public static function get_mix_and_match_variation() {
-		ob_start();
-
-		// phpcs:disable WordPress.Security.NonceVerification.Missing
-		if ( empty( $_POST['product_id'] ) ) {
-			wp_die();
-		}
-
-		// phpcs:disable WordPress.Security.NonceVerification.Missing
-		if ( empty( $_POST['variation_id'] ) ) {
-			wp_die();
-		}
-
-		$variable_product = wc_get_product( absint( $_POST['product_id'] ) );
-
-		if ( ! $variable_product ) {
-			wp_die();
-		}
-
-		$variation_id = absint( $_POST['variation_id'] );
-
-		$variation    = $variation_id ? $variable_product->get_available_variation( $variation_id ) : false;
-		wp_send_json( $variation );
-		// phpcs:enable
-	}
 	
 	/**
 	 * Return the specific MNM variation template

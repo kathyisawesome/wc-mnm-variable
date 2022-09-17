@@ -7,7 +7,7 @@
 		var self = this;
 
     self.$form         = $form;
-    self.$selector    = $form.find( '.wc-mnm-variation-selector :input' );
+    self.$selectors    = $form.find( '.wc-mnm-variations :radio' );
     self.$mnmVariation = $form.find( '.single_mnm_variation' );
     
     self.variationData = $form.data( 'product_variations' );
@@ -21,209 +21,129 @@
     $form.on( 'found_variation', self.onFoundVariation );
     $form.on( 'reset_image', self.resetVariations );
     $form.on( 'reset_data', self.resetVariations );
+    $form.on( 'check_radio_variations', { mnmVariationForm: self }, self.checkRadioVariation );
 
-    self.$selector.on( 'change', { mnmVariationForm: self }, this.findVariation );
+    $form.on( 'reset_data', { mnmVariationForm: self }, self.onReset );
+    $form.on( 'reload_product_variations', { mnmVariationForm: self }, self.onReload );
 
-    self.$selector.filter( ':checked' ).trigger( 'change' );
+    $form.on( 'wc_variation_form',  function( event, form ) {
+      $form.trigger( 'check_radio_variations' );
+    } );
 
-  }
 
+    self.$selectors.on( 'change', { mnmVariationForm: self }, this.onChange );
+
+  };
+
+  /**
+	 * Triggered when an attribute field changes.
+	 */
+  WC_MNM_Variation_Form.prototype.onChange = function( event ) {
+
+		let form = event.data.mnmVariationForm;
+
+		form.$form.find( 'input[name="variation_id"], input.variation_id' ).val( '' ).trigger( 'change' );
+		form.$form.find( '.wc-no-matching-variations' ).remove();
+
+		if ( form.useAjax ) {
+			form.$form.trigger( 'check_radio_variations' );
+		} else {
+			form.$form.trigger( 'woocommerce_variation_select_change' );
+			form.$form.trigger( 'check_radio_variations' );
+		}
+
+		// Custom event for when variation selection has been changed
+		form.$form.trigger( 'woocommerce_variation_has_changed' );
+	};
+
+  /**
+   * Custom callback to tell Woo to check variations with our radio attributes.
+   */
+  WC_MNM_Variation_Form.prototype.checkRadioVariation = function( event ) {
+    let form = event.data.mnmVariationForm;
+    let chosenAttributes = form.radioGetChosenAttributes( form.$form );
+    form.$form.trigger( 'check_variations', chosenAttributes );
+  };
 
   // When variation is found, load the MNM form.
   WC_MNM_Variation_Form.prototype.onFoundVariation = function( event, variation ) {
 
-    $target = $( event.target ).find( '.single_mnm_variation' );
+    var $target = $( event.target ).find( '.single_mnm_variation' );
 
     // @todo - how to preload a variation if radio is checked? Currently seems to slideUp()
     if ( variation.variation_is_visible && variation.mix_and_match_html ) {
 
-      template     = wp.template( 'mnm-variation-template' );
-      variation_id = variation.variation_id;
+      let template = wp.template( 'mnm-variation-template' );
 
-      $template_html = template( {
+      let $template_html = template( {
         variation: variation
       } );
       $template_html = $template_html.replace( '/*<![CDATA[*/', '' );
       $template_html = $template_html.replace( '/*]]>*/', '' );
-  
-      $target.html( $template_html ).show();
+
+      // HTML must be loaded first for MNM scripts to catch the container ID.
+      $target.html( $template_html );
 
       // Fire MNM scripts.
-      $( event.target ).wc_mnm_form();
-
-    }
-
-  };
-
-  // Hide errors when attributes are reset.
-  WC_MNM_Variation_Form.prototype.resetVariations = function( event ) {
-    $target = $( event.target ).find( '.single_mnm_variation' ).hide();
-  }; 
-
-
-  // When variation is selected, mimic Woo's VariationForm.prototype.onFindVariation.
-  WC_MNM_Variation_Form.prototype.findVariation = function( event ) {
-
-    var form    = event.data.mnmVariationForm,
-    variationID = parseInt( $(this).val(), 10 ),
-    data = { variation_id: variationID };
-
-    console.debug('happening', variationID);
-
-    if ( variationID ) {
-      if ( form.useAjax ) {
-        if ( form.xhr ) {
-          form.xhr.abort();
-        }
-        form.$form.block( { message: null, overlayCSS: { background: '#fff', opacity: 0.6 } } );
-        data.product_id  = parseInt( form.$form.data( 'product_id' ), 10 );
-        data.custom_data = form.$form.data( 'custom_data' );
-
-        form.xhr                      = $.ajax( {
-          url: wc_add_to_cart_variation_params.wc_ajax_url.toString().replace( '%%endpoint%%', 'get_mix_and_match_variation' ),
-          type: 'POST',
-          data: data,
-          success: function( variation ) {
-            if ( variation ) {
-              form.$form.trigger( 'found_variation', [ variation ] );
-            } else {
-              form.$form.trigger( 'reset_data' );
-              attributes.chosenCount = 0;
-
-              if ( ! form.loading ) {
-                form.$form
-                  .find( '.single_variation' )
-                  .after(
-                    '<p class="wc-no-matching-variations woocommerce-info">' +
-                    wc_add_to_cart_variation_params.i18n_no_matching_variations_text +
-                    '</p>'
-                  );
-                form.$form.find( '.wc-no-matching-variations' ).slideDown( 200 );
-              }
-            }
-          },
-          complete: function() {
-            form.$form.unblock();
-          }
-        } );
+      if ( wc_mnm_scripts && wc_mnm_scripts[ variation.variation_id ] ) {
+        // Reset container instead of re-initializing as MNM will call .shutdown() (a wrapper for .off()) and that is killing the variable MNM variation swatch selector.
+        wc_mnm_scripts[ variation.variation_id ].reset();
       } else {
-        form.$form.trigger( 'update_variation_values' );
-
-        var variation = form.findMatchingVariationByID( form.variationData, variationID );
-
-        if ( variation ) {
-          form.$form.trigger( 'found_variation', [ variation ] );
-        } else {
-          form.$form.trigger( 'reset_data' );
-          attributes.chosenCount = 0;
-
-          if ( ! form.loading ) {
-            form.$form
-              .find( '.single_variation' )
-              .after(
-                '<p class="wc-no-matching-variations woocommerce-info">' +
-                wc_add_to_cart_variation_params.i18n_no_matching_variations_text +
-                '</p>'
-              );
-            form.$form.find( '.wc-no-matching-variations' ).slideDown( 200 );
-          }
-        }
+        $( event.target ).wc_mnm_form();
       }
-    } else {
-      form.$form.trigger( 'update_variation_values' );
-      form.$form.trigger( 'reset_data' );
+
+      // Finally, show the elements.
+      $target.show();
+
     }
 
   };
 
+  // Uncheeck all radio buttons when reset.
+  WC_MNM_Variation_Form.prototype.onReset = function( event ) {
+    let form = event.data.mnmVariationForm;
+    $( event.target ).find( '.single_mnm_variation' ).hide();
+    form.$selectors.prop( 'checked', false );
+
+    form.$form.find( '.reset_variations' ).css( 'visibility', 'hidden' );
+  };
+
+  
+  // Uncheeck all radio buttons when reset.
+  WC_MNM_Variation_Form.prototype.onReload = function( event ) {
+    let form = event.data.mnmVariationForm;
+    form.$form.trigger( 'check_radio_variations' );
+  };
+
   /**
-	 * Find matching variation by ID.
-	 */
-   WC_MNM_Variation_Form.prototype.findMatchingVariationByID = function( variations, variationID ) {
-		var match = [];
-		for ( var i = 0; i < variations.length; i++ ) {
-			var variation = variations[i];
+  * Get chosen attributes from form.
+  * @return array
+  */ 
+  WC_MNM_Variation_Form.prototype.radioGetChosenAttributes = function( $form ) {
+    var data   = {};
+    var count  = 0;
+    var chosen = 0;
 
-			if ( variationID === variation.variation_id ) {
-				match = variation;
-        break;
-			}
-		}
-		return match;
-	};
+    $form.find( '.wc-mnm-variations' ).each( function() {
+        var attribute_name = $( this ).find( 'input:radio' ).first().attr( 'name' );
+        var value          = $( this ).find( 'input:checked' ).val() || '';
 
-
-  /**
-   * Load the selected MNM product.
-   */
-
-  WC_MNM_Variation_Form.prototype.loadAjax = function(e) {
-
-    e.preventDefault();
-
-    var current_selection = self.$selector.data( 'current_selection' );
-    var product_id = $(this).data( 'product_id' );
-    var security   = self.$form.data( 'security' );
-    var target_url = $(this).attr( 'href' );
-
-    // If currently processing... or clicking on same item, quit now.
-    if ( self.$form.is( '.processing' ) || product_id === current_selection ) {
-      return false;
-    } else if ( ! self.$form.is( '.processing' ) ) {
-      self.$form.addClass( 'processing' ).block( {
-        message: null,
-        overlayCSS: {
-          background: '#fff',
-          opacity: 0.6
+        if ( value.length > 0 ) {
+            chosen ++;
         }
-      } );
-    }
 
-    self.$form.addClass( 'has-selection' ).find( '.product' ).removeClass( 'selected' );
+        count ++;
+        data[ attribute_name ] = value;
+    });
 
-    $(this).closest( '.product' ).addClass( 'selected' );
-
-    self.$selector.data('current_selection', product_id);
-
-    $.ajax( {
-        url: WC_MNM_VARIATION_ADD_TO_CART_PARAMS.wc_ajax_url.toString().replace( '%%endpoint%%', 'get_mix_and_match_variation' ),
-        type: 'POST',
-        data: { 
-          product_id: product_id,
-          security: security
-        },
-        success: function( data ) {
-          if ( data && 'success' === data.result && data.fragments ) {
-              
-              $.each( data.fragments, function( key, value ) {
-                  $( key ).replaceWith( value );
-              });
-
-              // Initilize MNM scripts.
-              if ( data.fragments[ 'div.wc-grouped-mnm-result' ] ) {
-                  // Re-attach the replaced result div.
-                  self.$result = self.$form.find( '.wc-grouped-mnm-result' );
-                  self.$result.find( '.mnm_form' ).each( function() {
-                      $(this).wc_mnm_form();
-                  } );
-              }
-
-              $( document.body ).trigger( 'wc_mnm_grouped_fragments_refreshed', [ data.fragments ] );
-
-          } else {
-              location.href = target_url;
-          }
-          
-        },
-        complete: function() {
-          self.$form.removeClass( 'processing' ).unblock();
-        },
-        fail: function() {
-          location.href = target_url;
-        }
-    } );     
+    return {
+        'count'      : count,
+        'chosenCount': chosen,
+        'data'       : data
+    };
 
   };
+
 
   /*-----------------------------------------------------------------*/
   /*  Initialization.                                                */
