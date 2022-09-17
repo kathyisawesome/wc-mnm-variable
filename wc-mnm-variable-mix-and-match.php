@@ -372,18 +372,30 @@ class WC_MNM_Variable_Mix_and_Match {
 	 * Load the script anywhere the MNN add to cart button is displayed
 	 */
 	public function load_scripts() {
+
 		wp_enqueue_script( 'jquery-blockui' );
 		wp_enqueue_script( 'wc-add-to-cart-variation' );
         wp_enqueue_script( 'wc-add-to-cart-mnm' );
         wp_enqueue_script( 'wc-mnm-add-to-cart-variation' );
 
 		// We also need the wp.template for this script :).
+		add_action( 'wp_print_footer_scripts', [ $this, 'print_script_template' ] );
+
+	}
+
+
+	/**
+	 * Load the script template once.
+	 */
+	public function print_script_template() {
+
 		wc_get_template(
             'single-product/add-to-cart/mnm-variation.php',
             array(),
             '',
             WC_MNM_Variable_Mix_and_Match::get_instance()->get_plugin_path() . 'templates/'
         );
+
 	}
 
 
