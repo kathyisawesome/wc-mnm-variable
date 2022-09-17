@@ -23,11 +23,3 @@ add_action( 'woocommerce_single_variation', 'wc_mnm_template_single_variation', 
 add_action( 'wc_mnm_variation_content_loop', 'wc_mnm_content_loop' );
 add_action( 'wc_mnm_variation_content_loop', 'wc_mnm_template_reset_link', 20 );
 add_action( 'wc_mnm_variation_content_loop', 'wc_mnm_template_add_to_cart_status', 30 );
-
-
-//add_action( 'wc_mnm_variation_loop_item', 'woocommerce_show_product_loop_sale_flash', 10 );
-//add_action( 'wc_mnm_variation_loop_item', 'woocommerce_template_loop_product_thumbnail', 20 );
-//add_action( 'wc_mnm_variation_loop_item', 'woocommerce_template_loop_product_title', 30 );
-//add_action( 'wc_mnm_variation_loop_item', 'woocommerce_template_loop_price', 40 );
-//add_action( 'wc_mnm_variation_loop_item', 'woocommerce_template_loop_add_to_cart', 50 );
-
