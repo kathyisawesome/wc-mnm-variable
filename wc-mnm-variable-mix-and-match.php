@@ -26,7 +26,7 @@ use Automattic\Jetpack\Constants;
 
 class WC_MNM_Variable_Mix_and_Match {
 
-	const VERSION = '1.0.0';
+	const VERSION = '1.0.0-beta-1';
 	const REQ_MNM_VERSION = '2.2.0-beta-1';
 	const REQ_WC_VERSION  = '6.9.0'; // @todo -check this.
 
