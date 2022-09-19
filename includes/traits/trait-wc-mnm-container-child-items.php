@@ -39,7 +39,7 @@ trait WC_MNM_Container_Child_Items {
 	 *  Define type-specific properties.
 	 * @var array
 	 */
-	protected $container_contents_props = array(
+	protected $contents_props = array(
 		'content_source'            => 'products',
 		'child_category_ids'        => array(),
 		'child_items_stock_status'  => 'outofstock', // 'instock' | 'onbackorder' | 'outofstock' - This prop is not saved as meta.

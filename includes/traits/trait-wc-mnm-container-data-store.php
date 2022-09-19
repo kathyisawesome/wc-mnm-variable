@@ -112,7 +112,6 @@ trait WC_MNM_Container_Data_Store {
 	 */
 	public function update_post_meta( &$product, $force = false ) {
 
-		$this->extra_data_saved = true;
 		parent::update_post_meta( $product, $force );
 
 		$id                 = $product->get_id();

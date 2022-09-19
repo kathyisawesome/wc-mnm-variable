@@ -42,13 +42,13 @@ class WC_Product_Mix_and_Match_Variation_Data_Store_CPT extends WC_Product_Varia
 	 * @var array
 	 */
 	protected $props_to_meta_keys = array(
-	//	'min_raw_price'             => '_price',
-	//	'min_raw_regular_price'     => '_regular_price',
-	//	'max_raw_price'             => '_mnm_max_price',
-	//	'max_raw_regular_price'     => '_mnm_max_regular_price',
-	//	'price'                     => '_mnm_base_price',
-	//	'regular_price'             => '_mnm_base_regular_price',
-	//	'sale_price'                => '_mnm_base_sale_price',
+		'min_raw_price'             => '_price',
+		'min_raw_regular_price'     => '_regular_price',
+		'max_raw_price'             => '_mnm_max_price',
+		'max_raw_regular_price'     => '_mnm_max_regular_price',
+		'price'                     => '_mnm_base_price',
+		'regular_price'             => '_mnm_base_regular_price',
+		'sale_price'                => '_mnm_base_sale_price',
 		'min_container_size'        => '_mnm_min_container_size',
 		'max_container_size'        => '_mnm_max_container_size',
 		'discount'                  => '_mnm_per_product_discount',
@@ -68,7 +68,10 @@ class WC_Product_Mix_and_Match_Variation_Data_Store_CPT extends WC_Product_Varia
 		'packing_mode'              => '_mnm_packing_mode',
 		'weight_cumulative'         => '_mnm_weight_cumulative',
 		'share_content'             => '_mnm_share_content',
+		'content_source'            => '_mnm_content_source',
+		'child_category_ids'        => '_mnm_child_category_ids',
 	);
+
 
 	/**
 	 * __construct function.
@@ -138,8 +141,8 @@ class WC_Product_Mix_and_Match_Variation_Data_Store_CPT extends WC_Product_Varia
 		$parent_data = $product->get_parent_data();
 		$parent_id   = $product->get_parent_id();
 
-		// need content_source and cat IDs in the parent data
-		foreach ( $this->shared_props_to_meta_keys as $property => $meta_key ) {
+		// Need content_source and cat IDs in the parent data.
+		foreach ( $this->parent_props_to_meta_keys as $property => $meta_key ) {
 			$value = get_post_meta( $parent_id, $meta_key, true );
 			$parent_data[ $property ] = $value;
 		}
@@ -164,7 +167,48 @@ class WC_Product_Mix_and_Match_Variation_Data_Store_CPT extends WC_Product_Varia
 	 * @param  bool                   $force
 	 */
 	public function update_post_meta( &$product, $force = false ) {
+
 		parent::update_post_meta( $product, $force );
+
+		$id = $product->get_id();
+
+		/**
+		 * @todo- While per-item pricing is not, supported we can set the min/max prices manually as they are the same as the base price.
+		 */
+
+		//$meta_keys_to_props = array_flip( array_diff_key( $this->get_props_to_meta_keys(), array( 'price' => 1, 'min_raw_price' => 1, 'min_raw_regular_price' => 1 ) ) );
+		$meta_keys_to_props = array_flip( $this->get_props_to_meta_keys() );
+
+		$min_raw_price                      = $product->get_price( 'sync' );
+		$max_raw_price                      = $product->get_price( 'sync' );
+		$min_raw_regular_price              = $product->get_regular_price( 'sync' );
+		$max_raw_regular_price              = $product->get_regular_price( 'sync' );
+
+		$product->set_min_raw_price( $min_raw_price );
+		$product->set_min_raw_regular_price( $min_raw_regular_price );
+		$product->set_max_raw_price( $max_raw_price );
+		$product->set_max_raw_regular_price( $max_raw_regular_price );
+
+		// End manual price setting, eventually this should be synced somehow.
+		
+		$props_to_update    = $force ? $meta_keys_to_props : $this->get_props_to_update( $product, $meta_keys_to_props );
+
+		foreach ( $props_to_update as $meta_key => $property ) {
+
+			$property_get_fn = 'get_' . $property;
+
+			// Get meta value.
+			$meta_value = $product->$property_get_fn( 'edit' );
+
+			// Sanitize bool for storage.
+			if ( is_bool( $meta_value ) ) {
+				$meta_value = wc_bool_to_string( $meta_value );
+			}
+
+			if ( update_post_meta( $id, $meta_key, $meta_value ) && ! in_array( $property, $this->updated_props ) ) {
+				$this->updated_props[] = $meta_key;
+			}
+		}
 	}
 
 }
