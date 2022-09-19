@@ -26,7 +26,7 @@
     $form.on( 'reset_data', { mnmVariationForm: self }, self.onReset );
     $form.on( 'reload_product_variations', { mnmVariationForm: self }, self.onReload );
 
-    $form.on( 'wc_variation_form',  function( event, form ) {
+    $form.on( 'wc_variation_form',  function() {
       $form.trigger( 'check_radio_variations' );
     } );
 
@@ -40,7 +40,7 @@
 	 */
   WC_MNM_Variation_Form.prototype.onChange = function( event ) {
 
-		let form = event.data.mnmVariationForm;
+		var form = event.data.mnmVariationForm;
 
 		form.$form.find( 'input[name="variation_id"], input.variation_id' ).val( '' ).trigger( 'change' );
 		form.$form.find( '.wc-no-matching-variations' ).remove();
@@ -60,8 +60,8 @@
    * Custom callback to tell Woo to check variations with our radio attributes.
    */
   WC_MNM_Variation_Form.prototype.checkRadioVariation = function( event ) {
-    let form = event.data.mnmVariationForm;
-    let chosenAttributes = form.radioGetChosenAttributes( form.$form );
+    var form = event.data.mnmVariationForm;
+    var chosenAttributes = form.radioGetChosenAttributes( form.$form );
     form.$form.trigger( 'check_variations', chosenAttributes );
   };
 
@@ -73,9 +73,9 @@
     // @todo - how to preload a variation if radio is checked? Currently seems to slideUp()
     if ( variation.variation_is_visible && variation.mix_and_match_html ) {
 
-      let template = wp.template( 'mnm-variation-template' );
+      var template = wp.template( 'mnm-variation-template' );
 
-      let $template_html = template( {
+      var $template_html = template( {
         variation: variation
       } );
       $template_html = $template_html.replace( '/*<![CDATA[*/', '' );
@@ -101,7 +101,7 @@
 
   // Uncheeck all radio buttons when reset.
   WC_MNM_Variation_Form.prototype.onReset = function( event ) {
-    let form = event.data.mnmVariationForm;
+    var form = event.data.mnmVariationForm;
     $( event.target ).find( '.single_mnm_variation' ).hide();
     form.$selectors.prop( 'checked', false );
 
@@ -111,7 +111,7 @@
   
   // Uncheeck all radio buttons when reset.
   WC_MNM_Variation_Form.prototype.onReload = function( event ) {
-    let form = event.data.mnmVariationForm;
+    var form = event.data.mnmVariationForm;
     form.$form.trigger( 'check_radio_variations' );
   };
 
