@@ -329,6 +329,9 @@ class WC_MNM_Variable_Mix_and_Match {
 				border-color: var( --wc-highligh-text, #ccc );
 				padding: .5em;
 			}
+			.variable_mnm_form .product-type-mix-and-match-variation label:hover {
+				cursor: pointer;
+			}
 			.variable_mnm_form .product-type-mix-and-match-variation input:checked + label {
 				border-color: var( --wc-primary, #a46497 );
 			}
