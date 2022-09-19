@@ -8,8 +8,13 @@
  * Author URI: http://kathyisawesome.com/
  * Text Domain: wc-mnm-variable-mix-and-match
  * Domain Path: /languages
+ * 
+ * WC requires at least: 6.9.0
+ * WC tested up to: 6.9.0
+ * Requires at least: 5.9.0
+ * Requires PHP: 7.4
  *
- * Copyright: © 2021 Kathy Darling
+ * Copyright: © 2022 Kathy Darling
  * License: GNU General Public License v3.0
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  */
@@ -22,8 +27,8 @@ use Automattic\Jetpack\Constants;
 class WC_MNM_Variable_Mix_and_Match {
 
 	const VERSION = '1.0.0';
-	const REQ_MNM_VERSION = '2.1.0'; // @todo 2.2.0
-	const REQ_WC_VERSION = '4.0.0'; // @todo -check this.
+	const REQ_MNM_VERSION = '2.2.0-beta-1';
+	const REQ_WC_VERSION  = '6.9.0'; // @todo -check this.
 
 	/**
 	 * The single instance of the class.
