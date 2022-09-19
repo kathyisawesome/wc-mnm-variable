@@ -3,5 +3,5 @@ build/
 deploy/
 package-lock.json
 assets/js/frontend/*.min.js
-assets/js/backend/*.min.js
+assets/js/admin/*.min.js
 languages/
