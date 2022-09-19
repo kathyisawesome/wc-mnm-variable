@@ -23,7 +23,7 @@ jQuery( function( $ ) {
 	});
 
 	// Hide/Show variation discount and NYP fields.
-	$( '#woocommerce-product-data' ).on( 'wc_mnm_per_product_pricing_changed', function( e, value ) {
+	$( '#woocommerce-product-data' ).on( 'wc_mnm_per_product_pricing_changed', function( event, mode ) {
 
 		var $variation_nyp = $( '#variable_product_options .woocommerce_variations' ).find( '.variation_is_nyp' ).parent();
 
@@ -36,6 +36,10 @@ jQuery( function( $ ) {
 
 	// Hide/Show variation dimension fields.
 	$( '#shipping_product_data' ).on( 'wc_mnm_packing_mode_changed', function( event, mode ) {
+
+		if ( 'undefined' === mode ) {
+			mode = event.target.value;
+		}
 
 		var $variations = $( '#variable_product_options .woocommerce_variations' );
 
