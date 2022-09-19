@@ -23,7 +23,7 @@
 		"JSON": false,
 		"wp": false,
 		"wc_mnm_params": false,
-		"wc_mnm_admin_order_params": false,
+		"wc_add_to_cart_variation_params": false,
 		"woocommerce_admin_meta_boxes": false
 	}
 }
