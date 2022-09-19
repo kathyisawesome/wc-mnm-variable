@@ -485,10 +485,8 @@ class WC_MNM_Variable_Mix_and_Match {
 			// Validate the variation as a container.
 			$container = wc_get_product( $variation_id );
 
-			if ( false === WC_Mix_and_Match()->cart->validate_container_add_to_cart( $container, $quantity, $cart_item_data ) ) {
-				$passed_validation = false;
-			}
-			wp_die(var_dump($passed_validation));
+			$passed_validation = WC_Mix_and_Match()->cart->validate_container_add_to_cart( $container, $quantity, $cart_item_data );
+
 		}
 
 		return $passed_validation;
