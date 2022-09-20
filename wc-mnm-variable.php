@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce Mix and Match - Variable Mix and Match
  * Plugin URI: 
  * Description: Variable mix and match product type
- * Version: 1.0.0-beta-1
+ * Version: 1.0.0-beta-2
  * Author: Kathy Darling
  * Author URI: http://kathyisawesome.com/
  * Text Domain: wc-mnm-variable-mix-and-match
