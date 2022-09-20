@@ -32,7 +32,7 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 		<p class="stock out-of-stock"><?php echo esc_html( apply_filters( 'woocommerce_out_of_stock_message', __( 'This product is currently out of stock and unavailable.', 'woocommerce', 'wc-mnm-variable' ) ) ); ?></p>
 	<?php else : ?>
 
-		<?php if ( count( $attributes ) === 1 && count( $available_variations ) < apply_filters( 'wc_mnm_variation_swatches_threshold', 3, $product ) ) :?>
+		<?php if ( count( $attributes ) === 1 && count( $available_variations ) <= apply_filters( 'wc_mnm_variation_swatches_threshold', 3, $product ) ) :?>
 
 			<div class="variations wc-mnm-variations">
 
