@@ -13,11 +13,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * WC_MNM_Variable_Mix_and_Match_Product_Data Class.
+ * WC_MNM_Variable_Product_Data Class.
  *
  * Adds and save product meta.
  */
-class WC_MNM_Variable_Mix_and_Match_Product_Data {
+class WC_MNM_Variable_Product_Data {
 
 	/**
 	 * Bootstraps the class and hooks required.
@@ -659,4 +659,4 @@ class WC_MNM_Variable_Mix_and_Match_Product_Data {
 }
 
 // Launch the admin class.
-WC_MNM_Variable_Mix_and_Match_Product_Data::init();
+WC_MNM_Variable_Product_Data::init();

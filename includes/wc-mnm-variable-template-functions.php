@@ -43,7 +43,7 @@ if ( ! function_exists( 'wc_mnm_variable_template_add_to_cart' ) ) {
         }
 
         // Enqueue variation scripts.
-        WC_MNM_Variable_Mix_and_Match::get_instance()->load_scripts();
+        WC_MNM_Variable::get_instance()->load_scripts();
 
         // Get Available variations?
         $get_variations = count( $product->get_children() ) <= apply_filters( 'woocommerce_ajax_variation_threshold', 30, $product );
@@ -75,7 +75,7 @@ if ( ! function_exists( 'wc_mnm_variable_template_add_to_cart' ) ) {
 				'classes'              => $classes,
             ),
             '',
-            WC_MNM_Variable_Mix_and_Match::get_instance()->get_plugin_path() . 'templates/'
+            WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
         );
 
         // Restore product object.
@@ -134,10 +134,10 @@ if ( ! function_exists( 'wc_mnm_variation_add_to_cart' ) ) {
             //    'available_variations' =>false, // @todo for testing
             //    'attributes'           => $product->get_variation_attributes(),
             //    'selected_attributes'  => $product->get_default_attributes(),
-            //    'mix_and_match_html'   => $product->is_sharing_content() ? WC_MNM_Variable_Mix_and_Match::get_instance()->get_template_html( $product ) : '', // @todo fetch form if sharing contents.
+            //    'mix_and_match_html'   => $product->is_sharing_content() ? WC_MNM_Variable::get_instance()->get_template_html( $product ) : '', // @todo fetch form if sharing contents.
             ),
             '',
-            WC_MNM_Variable_Mix_and_Match::get_instance()->get_plugin_path() . 'templates/'
+            WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
         );
 
     }
@@ -168,7 +168,7 @@ if ( ! function_exists( 'wc_mnm_template_variation_add_to_cart_button' ) ) {
 				'variation' => $variation,
 			),
             '',
-            WC_MNM_Variable_Mix_and_Match::get_instance()->get_plugin_path() . 'templates/'
+            WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
         );
 	}
 }

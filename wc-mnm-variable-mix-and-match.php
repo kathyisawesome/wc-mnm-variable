@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Automattic\Jetpack\Constants;
 
-class WC_MNM_Variable_Mix_and_Match {
+class WC_MNM_Variable {
 
 	const VERSION = '1.0.0-beta-1';
 	const REQ_MNM_VERSION = '2.2.0-beta-1';
@@ -33,16 +33,16 @@ class WC_MNM_Variable_Mix_and_Match {
 	/**
 	 * The single instance of the class.
 	 *
-	 * @var obj The WC_Mix_and_Match object
+	 * @var obj The WC_MNM_Variable object
 	 */
 	protected static $_instance = null;
 
 	/**
-	 * Main WC_MNM_Variable_Mix_and_Match instance.
+	 * Main WC_MNM_Variable instance.
 	 *
-	 * Ensures only one instance of WC_Mix_and_Match is loaded or can be loaded.
+	 * Ensures only one instance of WC_MNM_Variable is loaded or can be loaded.
 	 *
-	 * @return WC_Mix_and_Match Single instance.
+	 * @return WC_MNM_Variable Single instance.
 	 */
 	public static function get_instance() {
 		if ( is_null( self::$_instance ) ) {
@@ -394,7 +394,7 @@ class WC_MNM_Variable_Mix_and_Match {
             'single-product/add-to-cart/mnm-variation.php',
             array(),
             '',
-            WC_MNM_Variable_Mix_and_Match::get_instance()->get_plugin_path() . 'templates/'
+            $this->get_plugin_path() . 'templates/'
         );
 
 	}
@@ -550,4 +550,4 @@ class WC_MNM_Variable_Mix_and_Match {
 | Launch the whole plugin.
 |--------------------------------------------------------------------------
 */
-add_action( 'plugins_loaded', [ WC_MNM_Variable_Mix_and_Match::get_instance(), 'attach_hooks_and_filters' ], 20 );
+add_action( 'plugins_loaded', [ WC_MNM_Variable::get_instance(), 'attach_hooks_and_filters' ], 20 );
