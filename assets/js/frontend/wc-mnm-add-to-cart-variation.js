@@ -79,10 +79,12 @@
       // HTML must be loaded first for MNM scripts to catch the container ID.
       $target.html( $template_html );
 
+      // Clear out the script ID to bypass shutdown() (a wrapper for .off()) and that is killing the variable MNM variation swatch selector.
+      form.$form.removeData( 'script_id' );
+
       // Fire MNM scripts.
-      if ( wc_mnm_scripts && wc_mnm_scripts[ variation.variation_id ] ) {
-        // Reset container instead of re-initializing as MNM will call .shutdown() (a wrapper for .off()) and that is killing the variable MNM variation swatch selector.
-        wc_mnm_scripts[ variation.variation_id ].reset();
+      if ( wc_mnm_scripts.length && 'undefined' !== typeof ( wc_mnm_scripts[ variation.variation_id ] ) ) {
+        wc_mnm_scripts[ variation.variation_id ].api.reinitialize();
       } else {
         $( event.target ).wc_mnm_form();
       }
