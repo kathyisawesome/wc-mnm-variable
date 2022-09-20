@@ -159,7 +159,7 @@ class WC_MNM_Variable {
 	 * Include admin files.
 	 */
 	public function admin_includes() {
-		include_once 'includes/admin/metaboxes/class-wc-mnm-variable-mix-and-match-product-data.php';	
+		include_once 'includes/admin/metaboxes/class-wc-mnm-variable-product-data.php';	
 	}
 
 
