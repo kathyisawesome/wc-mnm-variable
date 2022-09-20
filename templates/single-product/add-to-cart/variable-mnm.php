@@ -46,10 +46,16 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 						<?php  // @todo - move to a template with hook?
 						$attributes = $variation->get_variation_attributes( false ); 
 						$value = reset( $attributes );
-						$attribute = key( $attributes );						
+						$attribute = key( $attributes );
+						
+						// Get selected value.
+						$checked_key = 'attribute_' . sanitize_title( $attribute );
+						// phpcs:disable WordPress.Security.NonceVerification.Recommended
+						$checked = isset( $_REQUEST[ $checked_key ] ) ? wc_clean( wp_unslash( $_REQUEST[ $checked_key ] ) ) : $product->get_variation_default_attribute( $attribute );
+						// phpcs:enable WordPress.Security.NonceVerification.Recommended					
 						?>
 
-						<input id="<?php echo esc_attr( sanitize_title( $attribute . '-' . $value ) ); ?>" type="radio" name="attribute_<?php echo esc_attr( $attribute ) ?>" data-attribute_name="attribute_<?php echo esc_attr( sanitize_title( $attribute ) );?>" value="<?php echo esc_attr( $value ); ?>" />
+						<input id="<?php echo esc_attr( sanitize_title( $attribute . '-' . $value ) ); ?>" type="radio" name="attribute_<?php echo esc_attr( $attribute ) ?>" data-attribute_name="attribute_<?php echo esc_attr( sanitize_title( $attribute ) );?>" value="<?php echo esc_attr( $value ); ?>" <?php checked( sanitize_title( $checked ), $value ); ?> />
 						<label for="<?php echo esc_attr( sanitize_title( $attribute . '-' . $value ) ); ?>">
 						
 						<?php if ( $variation->get_image_id() ) {

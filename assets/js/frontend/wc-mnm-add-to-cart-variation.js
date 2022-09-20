@@ -13,23 +13,17 @@
     self.variationData = $form.data( 'product_variations' );
 		self.useAjax       = false === self.variationData;
 		self.xhr           = false;
-		self.loading       = true;
+		self.initialized   = false;
 
     /**
      * Bind event handlers.
      */
-    $form.on( 'found_variation', self.onFoundVariation );
-    $form.on( 'reset_image', self.resetVariations );
-    $form.on( 'reset_data', self.resetVariations );
+    $form.on( 'found_variation', { mnmVariationForm: self }, self.onFoundVariation );
     $form.on( 'check_radio_variations', { mnmVariationForm: self }, self.checkRadioVariation );
 
+    // Catch initial reset and re-run findVariations with data from radio inputs.
     $form.on( 'reset_data', { mnmVariationForm: self }, self.onReset );
     $form.on( 'reload_product_variations', { mnmVariationForm: self }, self.onReload );
-
-    $form.on( 'wc_variation_form',  function() {
-      $form.trigger( 'check_radio_variations' );
-    } );
-
 
     self.$selectors.on( 'change', { mnmVariationForm: self }, this.onChange );
 
@@ -68,9 +62,10 @@
   // When variation is found, load the MNM form.
   WC_MNM_Variation_Form.prototype.onFoundVariation = function( event, variation ) {
 
+    var form = event.data.mnmVariationForm;
+
     var $target = $( event.target ).find( '.single_mnm_variation' );
 
-    // @todo - how to preload a variation if radio is checked? Currently seems to slideUp()
     if ( variation.variation_is_visible && variation.mix_and_match_html ) {
 
       var template = wp.template( 'mnm-variation-template' );
@@ -101,7 +96,17 @@
 
   // Uncheeck all radio buttons when reset.
   WC_MNM_Variation_Form.prototype.onReset = function( event ) {
+
     var form = event.data.mnmVariationForm;
+
+    // Woo core's first pass at checking variations will not find the match because it is looking specifically for its <select> elements.
+    if ( ! form.initialized ) {
+      form.initialized = true;
+      form.$form.trigger( 'check_radio_variations' );
+      return false;
+    }
+
+    
     $( event.target ).find( '.single_mnm_variation' ).hide();
     form.$selectors.prop( 'checked', false );
 
