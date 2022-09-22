@@ -295,6 +295,31 @@ module.exports = function(grunt) {
 						to: "define( 'WC_MNM_GROUPED_VERSION', '<%= pkg.version %>' );"
 					}
 				]
+			},
+			prerelease: {
+				src: [
+				'readme.txt',
+				'<%= pkg.name %>.php',
+				],
+				overwrite: true,
+				replacements: [
+					{
+						from: /Stable tag:.*$/m,
+						to: "Stable tag: <%= pkg.version %>"
+					},
+					{
+						from: /Version:.*$/m,
+						to: "Version: <%= pkg.version %>"
+					},
+					{
+						from: /public \$version = \'.*.'/m,
+						to: "public $version = '<%= pkg.version %>'"
+					},
+					{
+						from: /public \$version      = \'.*.'/m,
+						to: "public $version      = '<%= pkg.version %>'"
+					}
+				]
 			}
 		}
 
@@ -344,8 +369,9 @@ module.exports = function(grunt) {
         ]
     );
 
-	grunt.registerTask( 'dev', [ 'jshint', 'uglify', 'sass' ] );
-	grunt.registerTask( 'build', [ 'replace', 'assets', 'addtextdomain', 'makepot' ] );
-	grunt.registerTask( 'release', [ 'build', 'zip', 'clean' ] );
+	grunt.registerTask( 'dev', [ 'replace:prerelease', 'assets' ] );
+	grunt.registerTask( 'build', [ 'dev', 'addtextdomain', 'makepot' ] );
+	grunt.registerTask( 'prerelease', [ 'build', 'zip', 'clean' ] );
+	grunt.registerTask( 'release', [ 'replace:version', 'assets', 'addtextdomain', 'makepot', 'build', 'zip', 'clean' ] );
 
 };
