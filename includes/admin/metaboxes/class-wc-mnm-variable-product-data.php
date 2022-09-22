@@ -101,7 +101,7 @@ class WC_MNM_Variable_Product_Data {
 		}
 
 		$tabs[ 'vmnm_options' ] = array(
-			'label'    => __( 'Mix and Match', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
+			'label'    => __( 'Mix and Match','wc-mnm-variable' ),
 			'target'   => 'variable_mix_and_match_product_data',
 			'class'    => array( 'show_if_variable-mix-and-match', 'vmnm_product_tab', 'vmnm_product_options', 'mnm_product_options' ),
 			'priority' => 46,
@@ -203,7 +203,7 @@ class WC_MNM_Variable_Product_Data {
 				'id'            => 'wc_mnm_variable_share_content',
 				'wrapper_class' => 'show_if_variable-mix-and-match wc_mnm_display_toggle',
 				'value'         => wc_bool_to_string( $vmnm_product_object->is_sharing_content( 'edit' ) ),
-				'label'         => esc_html__( 'Share contents across variations', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
+				'label'         => esc_html__( 'Share contents across variations','wc-mnm-variable' ),
 			)
 		);
 
@@ -226,11 +226,11 @@ class WC_MNM_Variable_Product_Data {
 					'id'      => 'wc_mnm_variable_content_source',
 					'class'   => 'select short wc_mnm_content_source',
 					'wrapper_class' => 'wc_mnm_display_toggle',
-					'label'   => __( 'Allowed content', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
+					'label'   => __( 'Allowed content','wc-mnm-variable' ),
 					'value'	  => 'categories' === $vmnm_product_object->get_content_source( 'edit' ) ? 'categories' : 'products',
 					'options' => array(
-						'products'   => __( 'Select individual products', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
-						'categories' => __( 'Select product categories', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
+						'products'   => __( 'Select individual products','wc-mnm-variable' ),
+						'categories' => __( 'Select product categories','wc-mnm-variable' ),
 					)
 				)
 			);
@@ -327,11 +327,11 @@ class WC_MNM_Variable_Product_Data {
 				'id'      => 'wc_mnm_variable_per_product_pricing',
 				'class'   => 'wc_mnm_per_product_pricing wc_mnm_variable_per_product_pricing',
 				'wrapper_class' => 'wc_mnm_display_toggle',
-				'label'   => esc_html__( 'Pricing mode', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
+				'label'   => esc_html__( 'Pricing mode','wc-mnm-variable' ),
 				'value'	  => $vmnm_product_object->get_priced_per_product( 'edit' ) ? 'yes' : 'no',
 				'options' => array(
-					'no'  => esc_html__( 'Fixed &mdash; the price never changes', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
-					'yes' => esc_html__( 'Per-item &mdash; the price depends on the selections', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' )
+					'no'  => esc_html__( 'Fixed &mdash; the price never changes','wc-mnm-variable' ),
+					'yes' => esc_html__( 'Per-item &mdash; the price depends on the selections','wc-mnm-variable' )
 				)
 			)
 		);
@@ -390,9 +390,9 @@ class WC_MNM_Variable_Product_Data {
 			array(
 				'id'            => 'wc_mnm_variation_per_product_discount[' . $loop . ']',
 				'wrapper_class' => 'show_if_wc_mnm_variable_per_product_pricing_yes hide_if_wc_mnm_variable_per_product_pricing_no',
-				'label'         => __( 'Per-Item Discount (%)', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
+				'label'         => __( 'Per-Item Discount (%)','wc-mnm-variable' ),
 				'value'         => $variation_object->get_discount( 'edit' ),
-				'description'   => __( 'Discount applied to each item when in per-item pricing mode. This discount applies only to this variation and whenever the quantity restrictions are satisfied.', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
+				'description'   => __( 'Discount applied to each item when in per-item pricing mode. This discount applies only to this variation and whenever the quantity restrictions are satisfied.','wc-mnm-variable' ),
 				'desc_tip'      => true,
 				'data_type'     => 'decimal',
 			)
@@ -412,9 +412,9 @@ class WC_MNM_Variable_Product_Data {
 		woocommerce_wp_text_input(
 			array(
 				'id'            => 'wc_mnm_variation_min_container_size[' . $loop . ']',
-				'label'         => __( 'Minimum Container Size', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
+				'label'         => __( 'Minimum Container Size','wc-mnm-variable' ),
 				'wrapper_class' => 'mnm_container_size_options form-row form-row-first',
-				'description'   => __( 'Minimum quantity for Mix and Match containers.', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
+				'description'   => __( 'Minimum quantity for Mix and Match containers.','wc-mnm-variable' ),
 				'type'          => 'number',
 				'value'         => $variation_object->get_min_container_size( 'edit' ),
 				'desc_tip'      => true
@@ -423,9 +423,9 @@ class WC_MNM_Variable_Product_Data {
 		woocommerce_wp_text_input(
 			array(
 				'id'            => 'wc_mnm_variation_max_container_size[' . $loop . ']',
-				'label'         => __( 'Maximum Container Size', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
+				'label'         => __( 'Maximum Container Size','wc-mnm-variable' ),
 				'wrapper_class' => 'mnm_container_size_options form-row form-row-last',
-				'description'   => __( 'Maximum quantity for Mix and Match containers. Leave blank to not enforce an upper quantity limit.', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
+				'description'   => __( 'Maximum quantity for Mix and Match containers. Leave blank to not enforce an upper quantity limit.','wc-mnm-variable' ),
 				'type'          => 'number',
 				'value'         => $variation_object->get_max_container_size( 'edit' ),
 				'desc_tip'      => true
@@ -451,11 +451,11 @@ class WC_MNM_Variable_Product_Data {
 				'id'            => 'wc_mnm_variation_content_source[' . $loop . ']',
 				'class'         => 'select short wc_mnm_content_source',
 				'wrapper_class' => 'wc_mnm_display_toggle',
-				'label'         => __( 'Allowed content', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
+				'label'         => __( 'Allowed content','wc-mnm-variable' ),
 				'value'	        => 'categories' === $variation_object->get_content_source( 'edit' ) ? 'categories': 'products',
 				'options'       => array(
-					'products'     => __( 'Select individual products', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
-					'categories'   => __( 'Select product categories', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ),
+					'products'     => __( 'Select individual products','wc-mnm-variable' ),
+					'categories'   => __( 'Select product categories','wc-mnm-variable' ),
 				)
 			)
 		);
@@ -584,9 +584,9 @@ class WC_MNM_Variable_Product_Data {
 				if ( 'yes' === $props[ 'share_content' ] && apply_filters( 'wc_mnm_display_empty_container_error', true, $product ) ) {
 
 					if ( 'categories' === $props['content_source'] && empty( $props['child_category_ids' ] ) ) {
-						WC_Admin_Meta_Boxes::add_error( __( 'Please select at least one category to use for this Variable Mix and Match product.', 'woocommerce-mix-and-match-products' ) );
+						WC_Admin_Meta_Boxes::add_error( __( 'Please select at least one category to use for this Variable Mix and Match product.', 'wc-mnm-variable' ) );
 					} elseif ( 'products' === $props['content_source'] && empty( $props['child_items'] ) ) {
-						WC_Admin_Meta_Boxes::add_error( __( 'Please select at least one product to use for this Variable Mix and Match product.', 'woocommerce-mix-and-match-products' ) );
+						WC_Admin_Meta_Boxes::add_error( __( 'Please select at least one product to use for this Variable Mix and Match product.', 'wc-mnm-variable' ) );
 					}
 
 				}

@@ -192,7 +192,7 @@ class WC_MNM_Variable {
 		if ( ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) && ! defined( 'IFRAME_REQUEST' ) ) {
 			$term_exists = \get_term_by( 'slug', 'variable-mix-and-match', 'product_type' );
 			if ( null === $term_exists ) {
-				wp_insert_term( __( 'Variable Mix and Match', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' ), 'product_type', array( 'slug' => 'variable-mix-and-match' ) );
+				wp_insert_term( __( 'Variable Mix and Match','wc-mnm-variable' ), 'product_type', array( 'slug' => 'variable-mix-and-match' ) );
 			}
 		}
 	}
@@ -210,7 +210,7 @@ class WC_MNM_Variable {
 	 * @return array
 	 */ 
 	public function product_selector_filter( $product_types ) {
-		$product_types[ 'variable-mix-and-match' ] = __( 'Variable Mix and Match', 'wc-mnm-variable-mix-and-match', 'wc-mnm-variable' );
+		$product_types[ 'variable-mix-and-match' ] = __( 'Variable Mix and Match','wc-mnm-variable' );
 		return $product_types;
 	}
 
