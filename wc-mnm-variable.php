@@ -90,6 +90,9 @@ class WC_MNM_Variable {
 		// Product data stores.
 		add_filter( 'woocommerce_data_stores', [ $this, 'data_stores' ] );
 
+		// Set and cache the type, which in turn loads the correct class.
+		add_filter( 'woocommerce_product_type_query', [ $this, 'product_type_query' ], 10, 2 );
+
 		// Set and cache the correct product class for mix and match variations.
 		add_filter( 'woocommerce_product_class', [ $this, 'set_variation_class' ], 10, 4 );
 
@@ -246,6 +249,51 @@ class WC_MNM_Variable {
 		$stores[ 'product-variable-mix-and-match' ]  = 'WC_Product_Variable_Mix_and_Match_Data_Store_CPT';
 		$stores[ 'product-mix-and-match-variation' ] = 'WC_Product_Mix_and_Match_Variation_Data_Store_CPT';
 		return $stores;
+	}
+
+
+
+	/**
+	 * Switch variation type.
+	 * 
+	 * Checks the classname being used for a product variation to see if it should be a mix and match product
+	 * variation, and if so, returns this as the class which should be instantiated (instead of the default
+	 * WC_Product_Variation class).
+	 *
+	 * @param  mixed false|string $product_type Product type.
+	 * @param int $product_id
+	 * @return string $type Will be mapped to the name of the WC_Product_* class which should be instantiated to create an instance of this product.
+	 */
+	public static function product_type_query( $product_type, $product_id ) {
+
+		$cache_key    = WC_Cache_Helper::get_cache_prefix( 'product_' . $product_id ) . '_type_' . $product_id;
+		$product_type = wp_cache_get( $cache_key, 'products' );
+
+		if ( $product_type ) {
+			return $product_type;
+		}
+
+		$post = get_post( $product_id );
+
+		if ( $post instanceof WP_Post ) {
+
+			if ( 'product_variation' === $post->post_type ) {
+
+				$terms = get_the_terms( $post->post_parent, 'product_type' );
+
+				$parent_product_type = ! empty( $terms ) && ! is_wp_error( $terms ) ? sanitize_title( current( $terms )->name ) : 'simple';
+	
+				if ( 'variable-mix-and-match' === $parent_product_type ) {
+					$product_type = 'mix-and-match-variation';
+					wp_cache_set( $cache_key, $product_type, 'products' );
+				}
+
+			}
+			
+		}
+
+		return $product_type;	
+
 	}
 
 
