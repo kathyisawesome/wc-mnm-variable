@@ -45,10 +45,10 @@ if ( ! class_exists( 'WC_MNM_Variable_APFS_Switching_Compatibility' ) ) :
 		 */
 		public static function add_container_switching_options( $data ) {
 
-			$switch_option_mnm_contents = get_option( WC_Subscriptions_Admin::$option_prefix . '_allow_switching_mnm_variations', '' );
+			$switch_option_mnm_contents = get_option( WC_Subscriptions_Admin::$option_prefix . '_allow_switching_mnm_variable', '' );
 
 			if ( '' === $switch_option_mnm_contents ) {
-				update_option( WC_Subscriptions_Admin::$option_prefix . '_allow_switching_mnm_variations', 'yes' );
+				update_option( WC_Subscriptions_Admin::$option_prefix . '_allow_switching_mnm_variable', 'yes' );
 			}
 
 			$data[] = array(
