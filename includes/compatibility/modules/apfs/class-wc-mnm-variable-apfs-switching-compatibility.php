@@ -33,6 +33,9 @@ if ( ! class_exists( 'WC_MNM_Variable_APFS_Switching_Compatibility' ) ) :
 
 			// Add extra 'Allow Switching' options. See 'WCS_ATT_Admin::allow_switching_options'.
 			add_filter( 'woocommerce_subscriptions_allow_switching_options', array( __CLASS__, 'add_container_switching_options' ), 11 );
+			// Add variations to switch link.
+			add_filter( 'wc_mnm_get_posted_container_form_data', array( __CLASS__, 'get_posted_container_form_data' ), 10, 3 );
+
 		}
 
 		/**
@@ -57,6 +60,30 @@ if ( ! class_exists( 'WC_MNM_Variable_APFS_Switching_Compatibility' ) ) :
 			);
 
 			return $data;
+		}
+
+
+		/**
+		 * Add attributes to variation switch link.
+		 *
+		 * @param  array       $form_data The params that will be used to bbuild siwtch link
+		 * @param  array       $configuration The container configuration
+		 * @param  WC_Product  $product The container product
+		 * @return boolean
+		 */
+		public static function get_posted_container_form_data( $form_data, $configuration, $container ) {
+
+			if ( $container->is_type( 'mix-and-match-variation' ) ) {
+
+				$attributes = array_filter( $container->get_variation_attributes(), 'wc_array_filter_default_attributes' );
+
+				if ( ! empty( $attributes ) ) {
+					$form_data = array_merge( $form_data, $attributes );
+				}
+
+			}
+		
+			return $form_data;
 		}
 
 
