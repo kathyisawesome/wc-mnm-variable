@@ -312,23 +312,33 @@ class WC_MNM_Variable {
 	 */
 	public static function set_variation_class( $classname, $product_type, $post_type, $product_id ) {
 
-		$cache_key           = WC_Cache_Helper::get_cache_prefix( 'product_' . $product_id ) . '_parent_type_' . $product_id;
-		$parent_product_type = wp_cache_get( $cache_key, 'products' );
+		$cache_key           = WC_Cache_Helper::get_cache_prefix( 'product_' . $product_id ) . '_type_' . $product_id;
+		$cached_product_type = wp_cache_get( $cache_key, 'products' );
 
-		if ( false === $parent_product_type ) {
+		if ( ! $cached_product_type ) {
+	
+			$post = get_post( $product_id );
 
-			if ( 'product_variation' === $post_type && 'variation' === $product_type ) {
-				$post = get_post( $product_id );
-
-				if ( $post ) {
+			if ( $post instanceof WP_Post ) {
+	
+				if ( 'product_variation' === $post->post_type ) {
+	
 					$terms = get_the_terms( $post->post_parent, 'product_type' );
-					$parent_product_type = ! empty( $terms ) && ! is_wp_error( $terms ) ? sanitize_title( current( $terms )->name ) : '';
-					wp_cache_set( $cache_key, $parent_product_type, 'products' );	
+	
+					$parent_product_type = ! empty( $terms ) && ! is_wp_error( $terms ) ? sanitize_title( current( $terms )->name ) : 'simple';
+		
+					if ( 'variable-mix-and-match' === $parent_product_type ) {
+						$cached_product_type = 'mix-and-match-variation';
+						wp_cache_set( $cache_key, $cached_product_type, 'products' );
+					}
+	
 				}
+				
 			}
+	
 		}
 
-		if ( 'variable-mix-and-match' === $parent_product_type ) {
+		if ( 'mix-and-match-variation' === $cached_product_type ) {
 			$classname = 'WC_Product_Mix_and_Match_Variation';
 		}
 
