@@ -51,7 +51,7 @@ if ( ! class_exists( 'WC_MNM_Variable_APFS_Compatibility' ) ) :
 		 * @return bool
 		 */
 		public static function wcsatt_modify_variation_data_price_html( $modify, $product ) {
-			return $product->is_type( [ 'variable-mix-and-match', 'mix-and-match-variation' ] ) ? false : $modify;
+			return $product && $product->is_type( [ 'variable-mix-and-match', 'mix-and-match-variation' ] ) ? false : $modify;
 		}
 
 	} // End class: do not remove or there will be no more guacamole for you.
