@@ -375,7 +375,16 @@ trait WC_MNM_Container_Data_Store {
 			$child_items = $wpdb->get_results(
                 $wpdb->prepare(
                     "
-				SELECT items.child_item_id, items.product_id, items.container_id, items.menu_order, p.post_parent as product_parent_id
+					SELECT items.child_item_id, items.product_id as p_id,
+					CASE
+						WHEN p.post_parent > 0 THEN p.post_parent
+						ELSE items.product_id 
+						END AS product_id,
+					CASE
+						WHEN p.post_parent > 0 THEN items.product_id
+						ELSE 0
+						END AS variation_id,
+	   			items.container_id, items.menu_order
 				FROM {$wpdb->prefix}wc_mnm_child_items AS items 
 				INNER JOIN {$wpdb->prefix}posts as p ON items.product_id = p.ID
 				WHERE items.container_id = %d
@@ -395,7 +404,7 @@ trait WC_MNM_Container_Data_Store {
 
 		}
 
-		return ! empty( $child_items ) ? array_unique( wp_list_pluck( $child_items, 'product_id', 'child_item_id' ) ) : array();
+		return ! empty( $child_items ) ? array_unique( wp_list_pluck( $child_items, 'p_id', 'child_item_id' ) ) : array();
 
 	}
 
