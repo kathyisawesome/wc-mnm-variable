@@ -3,9 +3,6 @@ jQuery( function( $ ) {
 	// Variable/variations support.
 	$( '.enable_variation' ).addClass( 'show_if_variable-mix-and-match' );
 	$( '.variations_tab' ).addClass( 'show_if_variable-mix-and-match' );
-	
-	// Hide the "Grouping" field.
-	//$( '#linked_product_data .grouping.show_if_simple, #linked_product_data .form-field.show_if_grouped' ).addClass( 'hide_if_variable-mix-and-match' );
 
 	$( '#variable_product_options' ).on( 'reload', function() {
 		$( '.enable_variation' ).addClass( 'show_if_variable-mix-and-match' );
