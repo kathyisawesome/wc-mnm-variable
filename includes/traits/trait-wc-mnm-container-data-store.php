@@ -303,7 +303,7 @@ trait WC_MNM_Container_Data_Store {
 
 		if ( 'categories' === $product->get_content_source() ) {
 
-			// If sharing content we need to query by the parent's ID, but the get_child_category_ids() will take that into account. 
+			// If sharing content we need to query by the parent's ID, but the get_child_category_ids() will take that into account via $product->get_child_category_ids()
 			$child_items_data = $this->query_child_items_by_category( $product );
 
 			if ( ! empty( $child_items_data ) && function_exists( '_prime_post_caches' ) ) {
@@ -318,11 +318,11 @@ trait WC_MNM_Container_Data_Store {
 				 */
 				if ( ! in_array( 'product-' . $product_id, $child_items ) ) {
 					$child_items[ 'product-' . $product_id ] = new WC_MNM_Child_Item(
-                        array(
-						'product_id'   => $product_id,
-						'variation_id' => 0, // Querying by category currently does not support variations.
-						'container_id' => $product->get_id(),
-                        ),
+						array(
+							'product_id'   => $product_id,
+							'variation_id' => 0, // Querying by category currently does not support variations.
+							'container_id' => $product->get_id(),
+						),
                         $product 
                     );
 				}
@@ -331,18 +331,24 @@ trait WC_MNM_Container_Data_Store {
 	   } else {
 
 			// If sharing content we need to query by the parent's ID.
-			$container_id = $product->get_parent_id() && $product->is_sharing_content() ? $product->get_parent_id() : $product->get_id();
+			$query_container_id = $product->get_parent_id() && $product->is_sharing_content() ? $product->get_parent_id() : $product->get_id();
 
-			$child_items_data = $this->query_child_items_by_container( $container_id );
+			$child_items_data = $this->query_child_items_by_container( $query_container_id, 'array' );
 
 			if ( ! empty( $child_items_data ) && function_exists( '_prime_post_caches' ) ) {
-				_prime_post_caches( $child_items_data );
+				_prime_post_caches( array_unique( wp_list_pluck( $child_items_data, 'p_id' ) ) );
 			}
 
 			foreach( $child_items_data as $item_key => $item_data ) {
-				$child_items[$item_key] = new WC_MNM_Child_Item( $item_key, $product );
+				$child_items[$item_key] = new WC_MNM_Child_Item( 
+					array(
+						'product_id'   => $item_data['product_id'],
+						'variation_id' => $item_data['variation_id'],
+						'container_id' => $product->get_id(),
+					),
+					$product );
 			}
-	   }
+		}
 
 		return $child_items;
 	}
