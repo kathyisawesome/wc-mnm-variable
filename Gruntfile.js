@@ -259,7 +259,7 @@ module.exports = function(grunt) {
 
 		// bump version numbers (replace with version in package.json)
 		replace: {
-			Version: {
+			version: {
 				src: [
 				'readme.txt',
 				'<%= pkg.name %>.php'
@@ -289,10 +289,6 @@ module.exports = function(grunt) {
 					{
 						from: /const VERSION = \'.*.'/m,
 						to: "const VERSION = '<%= pkg.version %>'"
-					},
-					{
-						from: /define\( 'WC_MNM_GROUPED_VERSION', .*$/m,
-						to: "define( 'WC_MNM_GROUPED_VERSION', '<%= pkg.version %>' );"
 					}
 				]
 			},
