@@ -379,6 +379,7 @@ trait WC_MNM_Container_Data_Store {
 				FROM {$wpdb->prefix}wc_mnm_child_items AS items 
 				INNER JOIN {$wpdb->prefix}posts as p ON items.product_id = p.ID
 				WHERE items.container_id = %d
+				GROUP BY items.product_id
 				ORDER BY items.menu_order ASC",
                     $product_id
                 ) 
