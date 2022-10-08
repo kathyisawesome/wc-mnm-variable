@@ -34,7 +34,14 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 
 		<?php if ( count( $attributes ) === 1 && count( $available_variations ) <= apply_filters( 'wc_mnm_variation_swatches_threshold', 3, $product ) ) :?>
 
-			<div class="variations wc-mnm-variations">
+			<?php
+			// Working with a single attribute here.
+			$attribute = key( $attributes );
+			?>
+
+			<fieldset class="variations wc-mnm-variations">
+
+				<legend><?php printf( esc_html_x( 'Choose %s', '[Frontend] attribute label', 'wc-mnm-variable' ), wc_attribute_label( $attribute ) ); ?></legend>
 
 				<?php wc_setup_loop( ['columns' => 3 ] ); ?>
 				<?php woocommerce_product_loop_start(); ?>
@@ -43,10 +50,11 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 					
 					<li class="product product-type-mix-and-match-variation <?php echo esc_attr( wc_get_loop_class() );?>">
 
-						<?php  // @todo - move to a template with hook?
+						<?php
+						
 						$attributes = $variation->get_variation_attributes( false ); 
-						$value = reset( $attributes );
-						$attribute = key( $attributes );
+						$value = reset( $attributes ); // get_attribute() returns the pretty term label, which isn't viable for a value attribute.
+						$label = $variation->get_attribute( $attribute );
 						
 						// Get selected value.
 						$checked_key = 'attribute_' . sanitize_title( $attribute );
@@ -58,15 +66,15 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 						<input id="<?php echo esc_attr( sanitize_title( $attribute . '-' . $value ) ); ?>" type="radio" name="attribute_<?php echo esc_attr( $attribute ) ?>" data-attribute_name="attribute_<?php echo esc_attr( sanitize_title( $attribute ) );?>" value="<?php echo esc_attr( $value ); ?>" <?php checked( sanitize_title( $checked ), $value ); ?> />
 						<label for="<?php echo esc_attr( sanitize_title( $attribute . '-' . $value ) ); ?>">
 						
-						<?php if ( $variation->get_image_id() ) {
-								$image_size = apply_filters( 'single_product_archive_thumbnail_size', 'woocommerce_thumbnail' );
-								echo $variation->get_image( $image_size );
-						} ?>
+							<?php if ( $variation->get_image_id() ) {
+									$image_size = apply_filters( 'single_product_archive_thumbnail_size', 'woocommerce_thumbnail' );
+									echo $variation->get_image( $image_size );
+							} ?>
 
-						<?php echo wp_kses_post( wc_get_formatted_variation( $variation ) ); ?>
+							<?php echo wp_kses_post( $label ); ?>
 
-						<?php echo wp_kses_post( $variation->get_price_html() ); ?>
-							<button type="button"><?php echo wp_kses_post( $product->add_to_cart_text() ); ?></button>
+							<p class="price"><?php echo wp_kses_post( $variation->get_price_html() ); ?></p>
+					
 						</label>
 						
 					</li>
@@ -75,8 +83,7 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 
 				<?php woocommerce_product_loop_end(); ?>
 
-
-			</div>
+			</fieldset>
 
 			<?php wp_reset_postdata(); ?>
 
