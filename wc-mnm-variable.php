@@ -391,6 +391,7 @@ class WC_MNM_Variable {
 				border: 1px solid;
 				border-color: var( --wc-highligh-text, #ccc );
 				padding: .5em;
+				display: block;
 			}
 			.variable_mnm_form .product-type-mix-and-match-variation label:hover {
 				cursor: pointer;
