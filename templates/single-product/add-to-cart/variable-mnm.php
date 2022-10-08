@@ -75,7 +75,6 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 
 				<?php woocommerce_product_loop_end(); ?>
 
-				<?php echo wp_kses_post( apply_filters( 'woocommerce_reset_variations_link', '<a class="reset_variations" href="#">' . esc_html__( 'Clear', 'woocommerce', 'wc-mnm-variable' ) . '</a>' ) ); ?>
 
 			</div>
 
