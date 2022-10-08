@@ -92,6 +92,14 @@
       // Finally, show the elements.
       $target.show();
 
+      if ( ! $target.wcMNMisInViewport() ) {
+        $('html,body').animate({
+          scrollTop: $target.offset().top
+        });
+      }
+
+      form.$form.trigger( 'wc_mnm_variation_found', [ variation ] );
+
     }
 
   };
@@ -151,6 +159,17 @@
 
   };
 
+  /*-----------------------------------------------------------------*/
+  /*  Helpers.                                                       */
+  /*-----------------------------------------------------------------*/
+
+  $.fn.wcMNMisInViewport = function() {
+    var elementTop = $(this).offset().top;
+    var elementBottom = elementTop + $(this).outerHeight();
+    var viewportTop = $(window).scrollTop();
+    var viewportBottom = viewportTop + $(window).height();
+    return elementBottom > viewportTop && elementTop < viewportBottom;
+  };
 
   /*-----------------------------------------------------------------*/
   /*  Initialization.                                                */
