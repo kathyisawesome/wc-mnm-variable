@@ -22,4 +22,4 @@ add_action( 'wc_mnm_variation_add_to_cart', 'wc_mnm_variation_add_to_cart' );
 add_action( 'woocommerce_single_variation', 'wc_mnm_template_single_variation', 15 );
 add_action( 'wc_mnm_variation_content_loop', 'wc_mnm_content_loop' );
 add_action( 'wc_mnm_variation_content_loop', 'wc_mnm_template_reset_link', 20 );
-add_action( 'wc_mnm_variation_content_loop', 'wc_mnm_template_add_to_cart_status', 30 );
+add_action( 'wc_mnm_variation_content_loop', 'wc_mnm_template_container_status', 30 );
