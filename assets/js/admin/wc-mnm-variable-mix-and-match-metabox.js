@@ -7,6 +7,10 @@ jQuery( function( $ ) {
 	// Hide the "Grouping" field.
 	//$( '#linked_product_data .grouping.show_if_simple, #linked_product_data .form-field.show_if_grouped' ).addClass( 'hide_if_variable-mix-and-match' );
 
+	$( '#variable_product_options' ).on( 'reload', function() {
+		$( '.enable_variation' ).addClass( 'show_if_variable-mix-and-match' );
+	} );
+	
 	// Variable type options are valid for mnm.
 	$( '#woocommerce-product-data .show_if_variable:not(.hide_if_variable-mix-and-match)' ).addClass( 'show_if_variable-mix-and-match' );
 
