@@ -112,7 +112,7 @@ if ( ! function_exists( 'wc_mnm_variation_add_to_cart' ) ) {
      * @param WC_Product_Mix_and_Match_Variation $variation
      */
     function wc_mnm_variation_add_to_cart( $variation ) {
-   
+
         if ( ! $variation || ! $variation->is_type( 'mix-and-match-variation' ) ) {
             return;
         }
