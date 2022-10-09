@@ -15,10 +15,14 @@
 		self.xhr           = false;
 		self.initialized   = false;
 
+    // Bind methods.
+    self.shutdown = self.shutdown.bind( self );
 
     // Events.
     $form.on( 'found_variation.wc-mnm-variable-form', { mnmVariationForm: self }, self.onFoundVariation );
     $form.on( 'check_radio_variations.wc-mnm-variable-form', { mnmVariationForm: self }, self.checkRadioVariation );
+    $form.on( 'update_variation_values', self.shutdown );
+
     // Catch initial reset and re-run findVariations with data from radio inputs.
     $form.on( 'reset_data', { mnmVariationForm: self }, self.onReset );
     $form.on( 'reload_product_variations', { mnmVariationForm: self }, self.onReload );
@@ -26,6 +30,14 @@
     // Listen for radio change.
     $form.on( 'change.wc-mnm-variable-form', '.wc-mnm-variations :radio', { mnmVariationForm: self }, this.onChange );
 
+  };
+
+  /**
+   * Shutdown the mix and match listeners
+   */
+  WC_MNM_Variation_Form.prototype.shutdown = function() {
+    // Shutdown all MNM listeners. Future self: this cannot be removed or chaging the attribute fires the change event on all child items for an unknown reason.
+    this.$form.find( '*' ).off( '.wc-mnm-form' );
   };
 
   /**
@@ -62,7 +74,6 @@
   WC_MNM_Variation_Form.prototype.onFoundVariation = function( event, variation ) {
 
     var form = event.data.mnmVariationForm;
-
     var $target = $( event.target ).find( '.single_mnm_variation' );
 
     if ( variation.variation_is_visible && variation.mix_and_match_html ) {
@@ -78,15 +89,8 @@
       // HTML must be loaded first for MNM scripts to catch the container ID.
       $target.html( $template_html );
 
-      // Clear out the script ID to bypass shutdown() (a wrapper for .off()) and that is killing the variable MNM variation swatch selector.
-      form.$form.removeData( 'script_id' );
-
       // Fire MNM scripts.
-      if ( wc_mnm_scripts.length && 'undefined' !== typeof ( wc_mnm_scripts[ variation.variation_id ] ) ) {
-        wc_mnm_scripts[ variation.variation_id ].api.reinitialize();
-      } else {
-        $( event.target ).wc_mnm_form();
-      }
+      $( event.target ).wc_mnm_form();
 
       // Finally, show the elements.
       $target.show();
@@ -115,7 +119,6 @@
       return false;
     }
 
-    
     $( event.target ).find( '.single_mnm_variation' ).hide();
     form.$selectors.prop( 'checked', false );
 
