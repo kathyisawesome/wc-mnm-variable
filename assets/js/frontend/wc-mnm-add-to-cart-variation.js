@@ -15,17 +15,16 @@
 		self.xhr           = false;
 		self.initialized   = false;
 
-    /**
-     * Bind event handlers.
-     */
-    $form.on( 'found_variation', { mnmVariationForm: self }, self.onFoundVariation );
-    $form.on( 'check_radio_variations', { mnmVariationForm: self }, self.checkRadioVariation );
 
+    // Events.
+    $form.on( 'found_variation.wc-mnm-variable-form', { mnmVariationForm: self }, self.onFoundVariation );
+    $form.on( 'check_radio_variations.wc-mnm-variable-form', { mnmVariationForm: self }, self.checkRadioVariation );
     // Catch initial reset and re-run findVariations with data from radio inputs.
     $form.on( 'reset_data', { mnmVariationForm: self }, self.onReset );
     $form.on( 'reload_product_variations', { mnmVariationForm: self }, self.onReload );
 
-    self.$selectors.on( 'change', { mnmVariationForm: self }, this.onChange );
+    // Listen for radio change.
+    $form.on( 'change.wc-mnm-variable-form', '.wc-mnm-variations :radio', { mnmVariationForm: self }, this.onChange );
 
   };
 
