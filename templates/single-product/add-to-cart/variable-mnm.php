@@ -52,7 +52,7 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 
 						<?php
 						
-						$attributes = $variation->get_variation_attributes( false ); 
+						$attributes = $variation->get_variation_attributes( false );
 						$value = reset( $attributes ); // get_attribute() returns the pretty term label, which isn't viable for a value attribute.
 						$label = $variation->get_attribute( $attribute );
 						
@@ -63,7 +63,7 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 						// phpcs:enable WordPress.Security.NonceVerification.Recommended					
 						?>
 
-						<input id="<?php echo esc_attr( sanitize_title( $attribute . '-' . $value ) ); ?>" type="radio" name="attribute_<?php echo esc_attr( $attribute ) ?>" data-attribute_name="attribute_<?php echo esc_attr( sanitize_title( $attribute ) );?>" value="<?php echo esc_attr( $value ); ?>" <?php checked( sanitize_title( $checked ), $value ); ?> />
+						<input id="<?php echo esc_attr( sanitize_title( $attribute . '-' . $value ) ); ?>" type="radio" name="attribute_<?php echo esc_attr( sanitize_title( $attribute ) );?>" value="<?php echo esc_attr( $value ); ?>" <?php checked( sanitize_title( $checked ), $value ); ?> />
 						<label for="<?php echo esc_attr( sanitize_title( $attribute . '-' . $value ) ); ?>">
 						
 							<?php if ( $variation->get_image_id() ) {
