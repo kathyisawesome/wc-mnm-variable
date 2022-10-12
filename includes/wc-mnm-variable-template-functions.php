@@ -13,40 +13,40 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'wc_mnm_variable_template_add_to_cart' ) ) {
 
-    /**
-     * Output the variable mix and match product add to cart area.
-     * 
-     * @param WC_Product_Variable_Mix_and_Match $custom_product - Optionally call template for a specific product.
-     */
-    function wc_mnm_variable_template_add_to_cart( $custom_product = false ) {
+	/**
+	 * Output the variable mix and match product add to cart area.
+	 * 
+	 * @param WC_Product_Variable_Mix_and_Match $custom_product - Optionally call template for a specific product.
+	 */
+	function wc_mnm_variable_template_add_to_cart( $custom_product = false ) {
 
-        global $product;
-        $backup_product = $product;
-    
-        if ( is_numeric( $custom_product ) ) {
-            $custom_product = wc_get_product( intval( $custom_product ) );
-        }
-    
-        // Swap the global product for this specific product.
-        if ( $custom_product ) {
-            $product = $custom_product;
-        }
-    
-        if ( ! $product || ! $product->is_type( 'variable-mix-and-match' ) ) {
-            return;
-        }
+		global $product;
+		$backup_product = $product;
+	
+		if ( is_numeric( $custom_product ) ) {
+			$custom_product = wc_get_product( intval( $custom_product ) );
+		}
+	
+		// Swap the global product for this specific product.
+		if ( $custom_product ) {
+			$product = $custom_product;
+		}
+	
+		if ( ! $product || ! $product->is_type( 'variable-mix-and-match' ) ) {
+			return;
+		}
 
-        if ( doing_action( 'woocommerce_single_product_summary' ) ) {
-            if ( 'after_summary' === $product->get_add_to_cart_form_location() ) {
-                return;
-            }
-        }
+		if ( doing_action( 'woocommerce_single_product_summary' ) ) {
+			if ( 'after_summary' === $product->get_add_to_cart_form_location() ) {
+				return;
+			}
+		}
 
-        // Enqueue variation scripts.
-        WC_MNM_Variable::get_instance()->load_scripts();
+		// Enqueue variation scripts.
+		WC_MNM_Variable::get_instance()->load_scripts();
 
-        // Get Available variations?
-        $get_variations = count( $product->get_children() ) <= apply_filters( 'woocommerce_ajax_variation_threshold', 30, $product );
+		// Get Available variations?
+		$get_variations = count( $product->get_children() ) <= apply_filters( 'woocommerce_ajax_variation_threshold', 30, $product );
 
 		$classes = array(
 			'variations_form',
@@ -65,23 +65,23 @@ if ( ! function_exists( 'wc_mnm_variable_template_add_to_cart' ) ) {
 		 */
 		$classes = (array) apply_filters( 'wc_mnm_form_wrapper_classes', $classes, $product );
 
-        // Load the template.
-        wc_get_template(
-            'single-product/add-to-cart/variable-mnm.php',
-            array(
-                'available_variations' => $get_variations ? $product->get_available_variations() : false,
-                'attributes'           => $product->get_variation_attributes(),
-                'selected_attributes'  => $product->get_default_attributes(),
+		// Load the template.
+		wc_get_template(
+			'single-product/add-to-cart/variable-mnm.php',
+			array(
+				'available_variations' => $get_variations ? $product->get_available_variations() : false,
+				'attributes'           => $product->get_variation_attributes(),
+				'selected_attributes'  => $product->get_default_attributes(),
 				'classes'              => $classes,
-            ),
-            '',
-            WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
-        );
+			),
+			'',
+			WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
+		);
 
-        // Restore product object.
-	    $product = $backup_product;
+		// Restore product object.
+		$product = $backup_product;
 
-    }
+	}
 }
 
 if ( ! function_exists( 'wc_mnm_variable_template_add_to_cart_after_summary' ) ) {
@@ -106,41 +106,41 @@ if ( ! function_exists( 'wc_mnm_variable_template_add_to_cart_after_summary' ) )
 
 if ( ! function_exists( 'wc_mnm_variation_add_to_cart' ) ) {
 
-    /**
-     * Output the mix and match variation's options to add to cart area.
-     * 
-     * @param WC_Product_Mix_and_Match_Variation $variation
-     */
-    function wc_mnm_variation_add_to_cart( $variation ) {
+	/**
+	 * Output the mix and match variation's options to add to cart area.
+	 * 
+	 * @param WC_Product_Mix_and_Match_Variation $variation
+	 */
+	function wc_mnm_variation_add_to_cart( $variation ) {
 
-        if ( ! $variation || ! $variation->is_type( 'mix-and-match-variation' ) ) {
-            return;
-        }
+		if ( ! $variation || ! $variation->is_type( 'mix-and-match-variation' ) ) {
+			return;
+		}
 
-        /* @todo eventually support full-width form location.
-        if ( doing_action( 'woocommerce_single_product_summary' ) ) {
-            if ( 'after_summary' === $product->get_add_to_cart_form_location() ) {
-                return;
-            }
-        }
-        */
+		/* @todo eventually support full-width form location.
+		if ( doing_action( 'woocommerce_single_product_summary' ) ) {
+			if ( 'after_summary' === $product->get_add_to_cart_form_location() ) {
+				return;
+			}
+		}
+		*/
 
-        // Load the template.
-        wc_get_template(
-            'single-product/add-to-cart/mnm-variation-add-to-cart.php',
-            array(
+		// Load the template.
+		wc_get_template(
+			'single-product/add-to-cart/mnm-variation-add-to-cart.php',
+			array(
 				'variation' => $variation,
-            //    'available_variations' => $get_variations ? $product->get_available_variations() : false,
-            //    'available_variations' =>false, // @todo for testing
-            //    'attributes'           => $product->get_variation_attributes(),
-            //    'selected_attributes'  => $product->get_default_attributes(),
-            //    'mix_and_match_html'   => $product->is_sharing_content() ? WC_MNM_Variable::get_instance()->get_template_html( $product ) : '', // @todo fetch form if sharing contents.
-            ),
-            '',
-            WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
-        );
+			//    'available_variations' => $get_variations ? $product->get_available_variations() : false,
+			//    'available_variations' =>false, // @todo for testing
+			//    'attributes'           => $product->get_variation_attributes(),
+			//    'selected_attributes'  => $product->get_default_attributes(),
+			//    'mix_and_match_html'   => $product->is_sharing_content() ? WC_MNM_Variable::get_instance()->get_template_html( $product ) : '', // @todo fetch form if sharing contents.
+			),
+			'',
+			WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
+		);
 
-    }
+	}
 }
 
 
@@ -163,12 +163,14 @@ if ( ! function_exists( 'wc_mnm_template_variation_add_to_cart_button' ) ) {
 	 */
 	function wc_mnm_template_variation_add_to_cart_button( $variation ) {
 		wc_get_template(
-            'single-product/add-to-cart/mnm-variation-add-to-cart-button.php',
-            array(
+			'single-product/add-to-cart/mnm-variation-add-to-cart-button.php',
+			array(
 				'variation' => $variation,
 			),
-            '',
-            WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
-        );
+			'',
+			WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
+		);
+	}
+}
 	}
 }
