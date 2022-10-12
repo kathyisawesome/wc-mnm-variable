@@ -172,5 +172,88 @@ if ( ! function_exists( 'wc_mnm_template_variation_add_to_cart_button' ) ) {
 		);
 	}
 }
+
+if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
+
+	/**
+	 * Output a list of variation attributes for use in the cart forms.
+	 *
+	 * @param array $args Arguments.
+	 */
+	function wc_mnm_template_variation_attribute_options( $args ) {
+
+		$args = wp_parse_args(
+			apply_filters( 'wc_mnm_template_variation_attribute_options_args', $args ),
+			array(
+				'attribute'        => false,
+				'product'          => false,
+				'selected'         => false,
+				'name'             => '',
+				'id'               => '',
+				'class'            => '',
+			)
+		);
+
+		// Get selected value.
+		if ( false === $args['selected'] && $args['attribute'] && $args['product'] instanceof WC_Product ) {
+			$selected_key = 'attribute_' . sanitize_title( $args['attribute'] );
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended
+			$args['selected'] = isset( $_REQUEST[ $selected_key ] ) ? wc_clean( wp_unslash( $_REQUEST[ $selected_key ] ) ) : $args['product']->get_variation_default_attribute( $args['attribute'] );
+			// phpcs:enable WordPress.Security.NonceVerification.Recommended
+		}
+
+		$product               = $args['product'];
+		$attribute             = $args['attribute'];
+		$name                  = $args['name'] ? $args['name'] : 'attribute_' . sanitize_title( $attribute );
+		$id                    = $args['id'] ? $args['id'] : sanitize_title( $attribute );
+		$class                 = $args['class'];
+		?>
+
+		<fieldset id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $class );?>" class="variations wc-mnm-variations">
+
+			<legend><?php printf( esc_html_x( 'Choose %s', '[Frontend] attribute label', 'wc-mnm-variable' ), wc_attribute_label( $args[ 'attribute' ] ) ); ?></legend>
+
+			<?php wc_setup_loop( ['columns' => 3 ] ); ?>
+			<?php woocommerce_product_loop_start(); ?>
+
+			<?php foreach ( $args[ 'product' ]->get_available_variations( 'objects' ) as $variation ) : ?>
+				
+				<li class="product product-type-mix-and-match-variation <?php echo esc_attr( wc_get_loop_class() );?>">
+
+					<?php
+					
+					$attributes = $variation->get_variation_attributes( false );
+					$value      = reset( $attributes ); // get_attribute() returns the pretty term label, which isn't viable for a value attribute.
+					$label      = $variation->get_attribute( $args[ 'attribute' ] );
+					$input_id   = sanitize_title( $args[ 'attribute' ] . '-' . $value );
+								
+					?>
+
+					<input id="<?php echo esc_attr( $input_id ); ?>" type="radio" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" <?php checked( sanitize_title( $args['selected'] ), $value ); ?> />
+					<label for="<?php echo esc_attr( $input_id ); ?>">
+					
+						<?php if ( $variation->get_image_id() ) {
+								$image_size = apply_filters( 'single_product_archive_thumbnail_size', 'woocommerce_thumbnail' );
+								echo $variation->get_image( $image_size );
+						} ?>
+
+						<?php echo wp_kses_post( $label ); ?>
+
+						<p class="price"><?php echo wp_kses_post( $variation->get_price_html() ); ?></p>
+				
+					</label>
+					
+				</li>
+
+			<?php endforeach; ?>
+
+			<?php woocommerce_product_loop_end(); ?>
+
+		</fieldset>
+
+		<?php wp_reset_postdata(); ?>
+
+		<?php
+
 	}
 }

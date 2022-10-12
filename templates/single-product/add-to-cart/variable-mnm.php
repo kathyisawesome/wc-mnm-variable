@@ -31,60 +31,20 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 	<?php if ( empty( $available_variations ) && false !== $available_variations ) : ?>
 		<p class="stock out-of-stock"><?php echo esc_html( apply_filters( 'woocommerce_out_of_stock_message', __( 'This product is currently out of stock and unavailable.', 'woocommerce', 'wc-mnm-variable' ) ) ); ?></p>
 	<?php else : ?>
-		<?php if ( count( $attributes ) === 1 && ! empty( $available_variations ) && count( $available_variations ) <= apply_filters( 'wc_mnm_variation_swatches_threshold', 0, $product ) ) :?>
+		<?php if ( count( $attributes ) === 1 && ! empty( $available_variations ) && count( $available_variations ) <= apply_filters( 'wc_mnm_variation_swatches_threshold', 3, $product ) ) :?>
 
 			<?php
 			// Working with a single attribute here.
 			$attribute = key( $attributes );
+			
+			wc_mnm_template_variation_attribute_options(
+				array(
+					'attribute' => $attribute,
+					'product'   => $product,
+				)				
+			);
+
 			?>
-
-			<fieldset class="variations wc-mnm-variations">
-
-				<legend><?php printf( esc_html_x( 'Choose %s', '[Frontend] attribute label', 'wc-mnm-variable' ), wc_attribute_label( $attribute ) ); ?></legend>
-
-				<?php wc_setup_loop( ['columns' => 3 ] ); ?>
-				<?php woocommerce_product_loop_start(); ?>
-
-				<?php foreach ( $product->get_available_variations( 'objects' ) as $variation ) : ?>
-					
-					<li class="product product-type-mix-and-match-variation <?php echo esc_attr( wc_get_loop_class() );?>">
-
-						<?php
-						
-						$attributes = $variation->get_variation_attributes( false );
-						$value = reset( $attributes ); // get_attribute() returns the pretty term label, which isn't viable for a value attribute.
-						$label = $variation->get_attribute( $attribute );
-						
-						// Get selected value.
-						$checked_key = 'attribute_' . sanitize_title( $attribute );
-						// phpcs:disable WordPress.Security.NonceVerification.Recommended
-						$checked = isset( $_REQUEST[ $checked_key ] ) ? wc_clean( wp_unslash( $_REQUEST[ $checked_key ] ) ) : $product->get_variation_default_attribute( $attribute );
-						// phpcs:enable WordPress.Security.NonceVerification.Recommended					
-						?>
-
-						<input id="<?php echo esc_attr( sanitize_title( $attribute . '-' . $value ) ); ?>" type="radio" name="attribute_<?php echo esc_attr( sanitize_title( $attribute ) );?>" value="<?php echo esc_attr( $value ); ?>" <?php checked( sanitize_title( $checked ), $value ); ?> />
-						<label for="<?php echo esc_attr( sanitize_title( $attribute . '-' . $value ) ); ?>">
-						
-							<?php if ( $variation->get_image_id() ) {
-									$image_size = apply_filters( 'single_product_archive_thumbnail_size', 'woocommerce_thumbnail' );
-									echo $variation->get_image( $image_size );
-							} ?>
-
-							<?php echo wp_kses_post( $label ); ?>
-
-							<p class="price"><?php echo wp_kses_post( $variation->get_price_html() ); ?></p>
-					
-						</label>
-						
-					</li>
-
-				<?php endforeach; ?>
-
-				<?php woocommerce_product_loop_end(); ?>
-
-			</fieldset>
-
-			<?php wp_reset_postdata(); ?>
 
 		<?php else: ?>
 		<table class="variations" cellspacing="0" role="presentation">
