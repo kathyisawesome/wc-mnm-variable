@@ -190,7 +190,7 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 				'selected'         => false,
 				'name'             => '',
 				'id'               => '',
-				'class'            => '',
+				'class'            => 'wc-mnm-variations',
 			)
 		);
 
