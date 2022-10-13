@@ -128,11 +128,6 @@ if ( ! function_exists( 'wc_mnm_variation_add_to_cart' ) ) {
 			'single-product/add-to-cart/mnm-variation-add-to-cart.php',
 			array(
 				'variation' => $variation,
-			//    'available_variations' => $get_variations ? $product->get_available_variations() : false,
-			//    'available_variations' =>false, // @todo for testing
-			//    'attributes'           => $product->get_variation_attributes(),
-			//    'selected_attributes'  => $product->get_default_attributes(),
-			//    'mix_and_match_html'   => $product->is_sharing_content() ? WC_MNM_Variable::get_instance()->get_template_html( $product ) : '', // @todo fetch form if sharing contents.
 			),
 			'',
 			WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
@@ -205,51 +200,56 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 		$name                  = $args['name'] ? $args['name'] : 'attribute_' . sanitize_title( $attribute );
 		$id                    = $args['id'] ? $args['id'] : sanitize_title( $attribute );
 		$class                 = $args['class'];
-		?>
 
-		<fieldset id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $class );?>" class="variations wc-mnm-variations">
+		$available_variations  = $product ? $product->get_available_variations( 'objects' ) : [];
 
-			<legend><?php printf( esc_html_x( 'Choose %s', '[Frontend] attribute label', 'wc-mnm-variable' ), wc_attribute_label( $args[ 'attribute' ] ) ); ?></legend>
+		if ( ! empty ( $available_variations ) ) { ?>
 
-			<?php wc_setup_loop( ['columns' => 3 ] ); ?>
-			<?php woocommerce_product_loop_start(); ?>
+			<fieldset id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $class );?>" class="variations wc-mnm-variations">
 
-			<?php foreach ( $args[ 'product' ]->get_available_variations( 'objects' ) as $variation ) : ?>
-				
-				<li class="product product-type-mix-and-match-variation <?php echo esc_attr( wc_get_loop_class() );?>">
+				<legend><?php printf( esc_html_x( 'Choose %s', '[Frontend] attribute label', 'wc-mnm-variable' ), wc_attribute_label( $args[ 'attribute' ] ) ); ?></legend>
 
-					<?php
+				<?php wc_setup_loop( ['columns' => 3 ] ); ?>
+				<?php woocommerce_product_loop_start(); ?>
+
+				<?php foreach ( $available_variations as $variation ) : ?>
 					
-					$attributes = $variation->get_variation_attributes( false );
-					$value      = reset( $attributes ); // get_attribute() returns the pretty term label, which isn't viable for a value attribute.
-					$label      = $variation->get_attribute( $args[ 'attribute' ] );
-					$input_id   = sanitize_title( $args[ 'attribute' ] . '-' . $value );
-								
-					?>
+					<li class="product product-type-mix-and-match-variation <?php echo esc_attr( wc_get_loop_class() );?>">
 
-					<input id="<?php echo esc_attr( $input_id ); ?>" type="radio" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" <?php checked( sanitize_title( $args['selected'] ), $value ); ?> />
-					<label for="<?php echo esc_attr( $input_id ); ?>">
-					
-						<?php if ( $variation->get_image_id() ) {
+						<?php
+						
+						$attributes = $variation->get_variation_attributes( false );
+						$value      = reset( $attributes ); // get_attribute() returns the pretty term label, which isn't viable for a value attribute.
+						$label      = $variation->get_attribute( $args[ 'attribute' ] );
+						$input_id   = sanitize_title( $args[ 'attribute' ] . '-' . $value );
+									
+						?>
+
+						<input id="<?php echo esc_attr( $input_id ); ?>" type="radio" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" <?php checked( sanitize_title( $args['selected'] ), $value ); ?> />
+						<label for="<?php echo esc_attr( $input_id ); ?>">
+						
+							<?php
 								$image_size = apply_filters( 'single_product_archive_thumbnail_size', 'woocommerce_thumbnail' );
 								echo $variation->get_image( $image_size );
-						} ?>
+							?>
 
-						<?php echo wp_kses_post( $label ); ?>
+							<?php echo wp_kses_post( $label ); ?>
 
-						<p class="price"><?php echo wp_kses_post( $variation->get_price_html() ); ?></p>
-				
-					</label>
+							<p class="price"><?php echo wp_kses_post( $variation->get_price_html() ); ?></p>
 					
-				</li>
+						</label>
+						
+					</li>
 
-			<?php endforeach; ?>
+				<?php endforeach; ?>
 
-			<?php woocommerce_product_loop_end(); ?>
+				<?php woocommerce_product_loop_end(); ?>
 
-		</fieldset>
+			</fieldset>
 
-		<?php wp_reset_postdata(); ?>
+			<?php wp_reset_postdata(); ?>
+
+		<?php } ?>
 
 		<?php
 
