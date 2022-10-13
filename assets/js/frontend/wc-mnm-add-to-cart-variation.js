@@ -185,19 +185,20 @@
   /*-----------------------------------------------------------------*/
 
   /**
-	 * Function to call wc_mnm_variation_form on jquery selector.
-	 */
-	$.fn.wc_mnm_variation_form = function() {
-		new WC_MNM_Variation_Form( this );
-		return this;
-	};
+   * Function to call wc_mnm_variation_form on jquery selector.
+   */
+  $.fn.wc_mnm_variation_form = function() {
+    if ( typeof WC_MNM_VARIATION_ADD_TO_CART_PARAMS !== 'undefined' && typeof wc_add_to_cart_variation_params !== 'undefined' && typeof wc_mnm_params !== 'undefined' ) {
+      $( this ).wc_variation_form();
+      new WC_MNM_Variation_Form( this );
+    }
+    return this;
+  };
 
   $(function() {
-		if ( typeof WC_MNM_VARIATION_ADD_TO_CART_PARAMS !== 'undefined' ) {
-			$( '.variable_mnm_form' ).each( function() {
-				$( this ).wc_mnm_variation_form();
-			});
-		}
-	});
+      $( '.variable_mnm_form' ).each( function() {
+        $( this ).wc_mnm_variation_form();
+      } );
+  } );
 
 } )( jQuery, window, document );
