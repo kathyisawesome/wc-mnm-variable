@@ -15,6 +15,9 @@
 		self.xhr           = false;
 		self.initialized   = false;
 
+    // Add MNM container class.
+    self.$form.addClass( 'mnm_form' );
+
     // Bind methods.
     self.shutdown = self.shutdown.bind( self );
 

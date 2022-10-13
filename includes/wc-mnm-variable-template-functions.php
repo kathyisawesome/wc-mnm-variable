@@ -49,9 +49,7 @@ if ( ! function_exists( 'wc_mnm_variable_template_add_to_cart' ) ) {
 		$get_variations = count( $product->get_children() ) <= apply_filters( 'woocommerce_ajax_variation_threshold', 30, $product );
 
 		$classes = array(
-			'variations_form',
 			'variable_mnm_form',
-			'mnm_form',
 			'cart',
 			'cart_group',
 			'layout_' . $product->get_layout(),
