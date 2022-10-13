@@ -383,6 +383,13 @@ class WC_MNM_Variable {
 	public function print_styles() { ?>
 
 		<style>
+
+			.variable_mnm_form .wc-mnm-variations {
+				margin-bottom: 1.5em
+			}
+			.variable_mnm_form .wc-mnm-variations ul.products li.product {
+				margin-bottom: 0em
+			}
 			.variable_mnm_form .single_variation .woocommerce-variation-availability { display: none; }
 			.variable_mnm_form .product-type-mix-and-match-variation input[type="radio"] {
 				display: none;
@@ -398,9 +405,6 @@ class WC_MNM_Variable {
 			}
 			.variable_mnm_form .product-type-mix-and-match-variation input:checked + label {
 				border-color: var( --wc-primary, #a46497 );
-			}
-			.variable_mnm_form .product-type-mix-and-match-variation label > button {
-				pointer-events: none;
 			}
 		</style>
 
