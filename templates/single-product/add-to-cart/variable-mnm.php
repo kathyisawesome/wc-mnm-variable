@@ -29,7 +29,7 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 	<?php do_action( 'woocommerce_before_variations_form' ); ?>
 
 	<?php if ( empty( $available_variations ) && false !== $available_variations ) : ?>
-		<p class="stock out-of-stock"><?php echo esc_html( apply_filters( 'woocommerce_out_of_stock_message', __( 'This product is currently out of stock and unavailable.', 'woocommerce', 'wc-mnm-variable' ) ) ); ?></p>
+		<p class="stock out-of-stock"><?php echo esc_html( apply_filters( 'woocommerce_out_of_stock_message', __( 'This product is currently out of stock and unavailable.', 'wc-mnm-variable' ) ) ); ?></p>
 	<?php else : ?>
 		<?php if ( count( $attributes ) === 1 && ! empty( $available_variations ) && count( $available_variations ) <= apply_filters( 'wc_mnm_variation_swatches_threshold', 3, $product ) ) :?>
 
@@ -82,7 +82,6 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 				/**
 				 * Hook: woocommerce_single_variation. Used to output the cart button and placeholder for variation data.
 				 *
-				 * @since 2.4.0
 				 * @hooked woocommerce_single_variation - 10 Empty div for variation data.
 				 * @hooked woocommerce_single_variation_add_to_cart_button - 20 Qty and cart button.
 				 */
