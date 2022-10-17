@@ -108,7 +108,37 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 		return $value;
 	}
 
-	
+
+		/**
+	 * "Form Location" getter.
+	 *
+	 * @param  string  $context
+	 * @return string
+	 */
+	public function get_add_to_cart_form_location( $context = 'view' ) {
+		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'add_to_cart_form_location', $this->parent_data[ 'add_to_cart_form_location' ], $this ) : $this->parent_data[ 'add_to_cart_form_location' ];
+	}
+
+	/**
+	 * "Override template" getter.
+	 *
+	 * @param  string  $context
+	 * @return string
+	 */
+	public function get_layout_override( $context = 'view' ) {
+		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'layout_override', $this->parent_data[ 'layout_override' ], $this ) : $this->parent_data[ 'layout_override' ];
+	}
+
+	/**
+	 * "Layout" getter.
+	 *
+	 * @param  string  $context
+	 * @return string
+	 */
+	public function get_layout( $context = 'view' ) {
+		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'layout', $this->parent_data[ 'layout' ], $this ) : $this->parent_data[ 'layout' ];
+	}
+
 	/*
 	|--------------------------------------------------------------------------
 	| Setters.

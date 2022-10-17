@@ -169,37 +169,6 @@ trait WC_MNM_Container {
 
 
 	/**
-	 * "Form Location" getter.
-	 *
-	 * @param  string  $context
-	 * @return string
-	 */
-	public function get_add_to_cart_form_location( $context = 'view' ) {
-		return $this->get_prop( 'add_to_cart_form_location', $context );
-	}
-
-	/**
-	 * "Override template" getter.
-	 *
-	 * @param  string  $context
-	 * @return string
-	 */
-	public function get_layout_override( $context = 'any' ) {
-		return $this->get_prop( 'layout_override', $context );
-	}
-
-	/**
-	 * "Layout" getter.
-	 *
-	 * @param  string  $context
-	 * @return string
-	 */
-	public function get_layout( $context = 'any' ) {
-		return $this->get_prop( 'layout', $context );
-	}
-
-
-	/**
 	 * Minimum raw MnM container price getter.
 	 *
 	 * @param  string  $context
