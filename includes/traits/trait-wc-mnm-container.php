@@ -1251,7 +1251,7 @@ trait WC_MNM_Container {
 	 */
 	public function get_data_attributes( $args = array() ) {
 
-		$attributes = array(
+		$attributes = wp_parse_args( $args, array(
 			'per_product_pricing' => $this->is_priced_per_product() ? 'true'        :  'false',
 			'container_id'        => $this->get_id(),
 			'min_container_size'  => $this->get_min_container_size(),
@@ -1261,7 +1261,7 @@ trait WC_MNM_Container {
 			'price_data'          => json_encode( $this->get_container_price_data() ),
 			'input_name'          => wc_mnm_get_child_input_name( $this->get_id() ),
 			'context'             => is_admin() ? 'edit' : 'add-to-cart',
-		);
+		) );
 
 		/**
 		 * `wc_mnm_container_data_attributes` Data attribues filter.
