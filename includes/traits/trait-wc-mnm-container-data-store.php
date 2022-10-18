@@ -339,15 +339,33 @@ trait WC_MNM_Container_Data_Store {
 				_prime_post_caches( array_unique( wp_list_pluck( $child_items_data, 'p_id' ) ) );
 			}
 
-			foreach( $child_items_data as $item_key => $item_data ) {
-				$child_items[$item_key] = new WC_MNM_Child_Item( 
-					array(
-						'product_id'   => $item_data['product_id'],
-						'variation_id' => $item_data['variation_id'],
-						'container_id' => $product->get_id(),
-					),
-					$product );
+			/**
+			 * For now, lets key shared contents the same key construct as category contents.
+			 * 
+			 * If you generate the WC_MNM_Child_Item from the child item ID, then the props will be read from the database and container_id will be the ID of the parent variable product, which breaks things.
+			 * If you generate the WC_MNM_Child_Item from props then the array key is the child item DB, but the WC_MNM_Child_Item doesn't have a matching get_id(). Hesitant to set_id() as any 
+			 * save actions on the child item object might add info to the DB that we don't need.
+			 * 
+			 * Especially struggling in WC_Mix_and_Match_Cart::set_mnm_cart_item() at $container->get_child_item( $cart_item[ 'child_item_id' ] ) cannot find the child item with the id + array key mismatch.
+			 */
+			if ( $product->get_parent_id() && $product->is_sharing_content() ) {
+
+				foreach( $child_items_data as $item_key => $item_data ) {
+					$child_items[ 'product-' . ( $item_data['variation_id'] ? $item_data['variation_id'] : $item_data['product_id'] ) ] = new WC_MNM_Child_Item( 
+						array(
+							'product_id'   => $item_data['product_id'],
+							'variation_id' => $item_data['variation_id'],
+							'container_id' => $product->get_id(),
+						),
+						$product );
+				}
+
+			} else {
+				foreach( $child_items_data as $item_key => $item_data ) {
+					$child_items[$item_key] = new WC_MNM_Child_Item( $item_key, $product );
+				}
 			}
+
 		}
 
 		return $child_items;
