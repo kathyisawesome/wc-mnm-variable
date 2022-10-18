@@ -139,6 +139,27 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'layout', $this->parent_data[ 'layout' ], $this ) : $this->parent_data[ 'layout' ];
 	}
 
+	/**
+	 * Packing Mode getter.
+	 *
+	 * @param  string $context
+	 * @return bool
+	 */
+	public function get_packing_mode( $context = 'view' ) {
+		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'packing_mode', $this->parent_data[ 'packing_mode' ], $this ) : $this->parent_data[ 'packing_mode' ];
+		return $this->get_prop( 'packing_mode', $context );
+	}
+
+	/**
+	 * Shipping weight cumulative getter.
+	 *
+	 * @param  string $context
+	 * @return string
+	 */
+	public function get_weight_cumulative( $context = 'view' ) {
+		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'weight_cumulative', $this->parent_data[ 'weight_cumulative' ], $this ) : $this->parent_data[ 'weight_cumulative' ];
+	}
+
 	/*
 	|--------------------------------------------------------------------------
 	| Setters.
