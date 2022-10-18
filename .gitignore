@@ -5,3 +5,4 @@ package-lock.json
 assets/js/frontend/*.min.js
 assets/js/admin/*.min.js
 languages/
+bookmarks.json
