@@ -36,7 +36,7 @@ jQuery( function( $ ) {
 	} );
 
 	// Hide/Show variation dimension fields.
-	$( '#shipping_product_data' ).on( 'wc_mnm_packing_mode_changed', function( event, mode ) {
+	$( '#woocommerce-product-data' ).on( 'wc_mnm_packing_mode_changed', function( event, mode ) {
 
 		if ( 'undefined' === mode ) {
 			mode = event.target.value;
