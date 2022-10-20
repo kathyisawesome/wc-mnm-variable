@@ -228,9 +228,11 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 						<input id="<?php echo esc_attr( $input_id ); ?>" type="radio" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" <?php checked( sanitize_title( $args['selected'] ), $value ); ?> />
 						<label for="<?php echo esc_attr( $input_id ); ?>">
 						
-							<?php
-								$image_size = apply_filters( 'single_product_archive_thumbnail_size', 'woocommerce_thumbnail' );
-								echo $variation->get_image( $image_size );
+							<?php 
+								if ( $variation->get_image_id() ) {
+									$image_size = apply_filters( 'single_product_archive_thumbnail_size', 'woocommerce_thumbnail' );
+									echo $variation->get_image( $image_size );
+								}
 							?>
 
 							<?php echo wp_kses_post( $label ); ?>
