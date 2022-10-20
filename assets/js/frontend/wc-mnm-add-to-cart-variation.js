@@ -16,7 +16,7 @@
 		self.initialized   = false;
 
     // Add MNM container class.
-    self.$form.addClass( 'mnm_form' );
+    self.$form.addClass( 'mnm_form variations_form' );
 
     // Bind methods.
     self.shutdown = self.shutdown.bind( self );
