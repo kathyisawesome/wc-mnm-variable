@@ -183,7 +183,7 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 				'selected'         => false,
 				'name'             => '',
 				'id'               => '',
-				'class'            => 'wc-mnm-variations',
+				'class'            => 'variations wc-mnm-variations',
 			)
 		);
 
@@ -205,7 +205,7 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 
 		if ( ! empty ( $available_variations ) ) { ?>
 
-			<fieldset id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $class );?>" class="variations wc-mnm-variations">
+			<fieldset id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $class );?>">
 
 				<legend><?php printf( esc_html_x( 'Choose %s', '[Frontend] attribute label', 'wc-mnm-variable' ), wc_attribute_label( $args[ 'attribute' ] ) ); ?></legend>
 
