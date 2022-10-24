@@ -12,7 +12,7 @@ Experimental mini-extension for [WooCommerce Mix and Match Products](https://woo
 
 ![Screen Recording of a product called "Mix and Match Wine Pack". Shows the 3 options: small, large, x-large boxes. Customer selects large box and several bottles of wine are displayed. Customer selects 4 of each bottle and the product is added to the cart.](https://user-images.githubusercontent.com/507025/196753568-d57cbbe8-1a2e-4c66-8451-559d03495482.gif)
 
-## Important
+>**Warning**
 
 1. This is provided _as is_ and does not receive priority support.
 2. Please test thoroughly before using in production.
