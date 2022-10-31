@@ -2,6 +2,7 @@ node_modules/
 build/
 deploy/
 package-lock.json
+assets/css/
 assets/js/frontend/*.min.js
 assets/js/admin/*.min.js
 languages/

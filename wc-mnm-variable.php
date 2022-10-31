@@ -103,11 +103,8 @@ class WC_MNM_Variable {
 		// Include form html in woocommerce_available_variation.
 		add_filter( 'woocommerce_available_variation', [ $this, 'available_variation' ], 10, 3 );
 
-		// Print custom styles.
-		add_action( 'wp_print_styles', [ $this, 'print_styles' ] );
-
-		// Register Scripts.
-		add_action( 'wp_enqueue_scripts', [ $this, 'register_scripts' ] );
+		// Register Scripts and Styles.
+		add_action( 'wp_enqueue_scripts', [ $this, 'frontend_scripts' ], 20 );
 
 		// Display Scripts.
 		add_action( 'woocommerce_variable-mix-and-match_add_to_cart', [ $this, 'load_scripts' ] );
@@ -377,47 +374,24 @@ class WC_MNM_Variable {
 	|--------------------------------------------------------------------------
 	*/
 
-	/**
-	 * Print some very minimal styles.
-	 */
-	public function print_styles() { ?>
-
-		<style>
-
-			.variable_mnm_form .wc-mnm-variations {
-				margin-bottom: 1.5em
-			}
-			.variable_mnm_form .wc-mnm-variations ul.products li.product {
-				margin-bottom: 0em
-			}
-			.variable_mnm_form .single_variation .woocommerce-variation-availability { display: none; }
-			.variable_mnm_form .product-type-mix-and-match-variation input[type="radio"] {
-				display: none;
-			}
-			.variable_mnm_form .product-type-mix-and-match-variation label {
-				border: 1px solid;
-				border-color: var( --wc-highligh-text, #ccc );
-				padding: .5em;
-				display: block;
-			}
-			.variable_mnm_form .product-type-mix-and-match-variation label:hover {
-				cursor: pointer;
-			}
-			.variable_mnm_form .product-type-mix-and-match-variation input:checked + label {
-				border-color: var( --wc-primary, #a46497 );
-			}
-		</style>
-
-	<?php
-
-	}
-
 
 	/**
 	 * Register scripts
 	 */
-	public function register_scripts() {
+	public function frontend_scripts() {
 		$suffix         = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '': '.min';
+		$style_path    = 'assets/css/frontend/wc-mnm-add-to-cart-variation' . $suffix . '.css';
+		$style_url     = $this->get_plugin_url() . $style_path;
+		$style_version = WC_Mix_and_Match()->get_file_version( $this->get_plugin_path() . $style_path, self::VERSION );
+
+		wp_enqueue_style( 'wc-mnm-add-to-cart-variation', $style_url, [ 'wc-mnm-frontend' ], $style_version );
+
+		wp_style_add_data( 'wc-mnm-add-to-cart-variation', 'rtl', 'replace' );
+
+		if ( $suffix ) {
+			wp_style_add_data( 'wc-mnm-add-to-cart-variation', 'suffix', '.min' );
+		}
+
 		$script_path    = 'assets/js/frontend/wc-mnm-add-to-cart-variation' . $suffix . '.js';
 		$script_url     = $this->get_plugin_url() . $script_path;
 		$script_version = WC_Mix_and_Match()->get_file_version( $this->get_plugin_path() . $script_path, self::VERSION );
@@ -429,6 +403,7 @@ class WC_MNM_Variable {
 		);
 
 		wp_localize_script( 'wc-mnm-add-to-cart-variation', 'WC_MNM_VARIATION_ADD_TO_CART_PARAMS', $l10n );
+
 	}
 
 
