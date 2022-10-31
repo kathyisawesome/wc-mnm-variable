@@ -14,7 +14,7 @@
   },
   "author": "helgatheviking",
   "devDependencies": {
-    "autoprefixer": "^10.4.7",
+    "autoprefixer": "^10.4.13",
     "@lodder/grunt-postcss": "^3.1.1",
     "grunt": "~1.5.3",
     "grunt-contrib-clean": "^2.0.1",
@@ -31,8 +31,8 @@
     "grunt-wp-i18n": "~1.0.3",
     "jshint-stylish": "~2.2.1",
     "load-grunt-tasks": "~5.1.0",
-    "node-sass": "^7.0.1",
-    "postcss": "^8.4.14"
+    "node-sass": "^7.0.3",
+    "postcss": "^8.4.18"
   },
   "scripts": {
     "build": "grunt build",
