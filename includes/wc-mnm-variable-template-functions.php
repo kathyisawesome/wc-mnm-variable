@@ -233,10 +233,12 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 						$value      = reset( $attributes ); // get_attribute() returns the pretty term label, which isn't viable for a value attribute.
 						$label      = $variation->get_attribute( $args[ 'attribute' ] );
 						$input_id   = sanitize_title( $args[ 'attribute' ] . '-' . $value );
-									
+
+						// This handles < 2.4.0 bw compatibility where text attributes were not sanitized.
+						$checked = sanitize_title( $args['selected'] ) === $args['selected'] ? checked( $args['selected'], sanitize_title( $value ), false ) : checked( $args['selected'], $value, false );	
 						?>
 
-						<input id="<?php echo esc_attr( $input_id ); ?>" type="radio" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" <?php checked( sanitize_title( $args['selected'] ), $value ); ?> />
+						<input id="<?php echo esc_attr( $input_id ); ?>" type="radio" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" <?php echo $checked; ?> />
 						<label for="<?php echo esc_attr( $input_id ); ?>">
 						
 							<?php 
