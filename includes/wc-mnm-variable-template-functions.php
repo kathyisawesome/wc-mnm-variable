@@ -241,7 +241,7 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 						<input id="<?php echo esc_attr( $input_id ); ?>" type="radio" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" <?php echo $checked; ?> />
 						<label for="<?php echo esc_attr( $input_id ); ?>">
 						
-							<?php 
+							<?php
 								if ( $variation->get_image_id() ) {
 									$image_size = apply_filters( 'single_product_archive_thumbnail_size', 'woocommerce_thumbnail' );
 									echo $variation->get_image( $image_size );
