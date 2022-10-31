@@ -14,6 +14,5 @@ defined( 'ABSPATH' ) || exit;
 
 ?>
 <script type="text/template" id="tmpl-mnm-variation-template">
-	<h2><?php esc_html_e( 'Choose selections', 'wc-mnm-variable' ); ?></h2>
 	<div class="woocommerce-mix_and_match_variation_html">{{{ data.variation.mix_and_match_html }}}</div>
 </script>

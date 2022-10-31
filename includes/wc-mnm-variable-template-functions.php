@@ -147,6 +147,17 @@ if ( ! function_exists( 'wc_mnm_template_single_variation' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wc_mnm_variation_header' ) ) {
+
+	/**
+	 * Output placeholders for the single variation.
+	 */
+	function wc_mnm_variation_header() {
+		echo '<h2>' . esc_html__( 'Choose selections', 'wc-mnm-variable' ) . '</h2>';
+	}
+}
+
+
 if ( ! function_exists( 'wc_mnm_template_variation_add_to_cart_button' ) ) {
 
 	/**

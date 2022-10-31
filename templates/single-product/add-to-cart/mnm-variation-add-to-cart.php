@@ -30,10 +30,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	 * 'wc_mnm_content_loop' action.
 	 *
 	 * @param  WC_Mix_and_Match_Variation  $variation
-	 *
-	 * @hooked wc_mnm_content_loop        - 10
-	 * @hooked wc_mnm_template_reset_link - 20
-	 * @hooked wc_mnm_template_status     - 30
+	 * 
+	 * @hooked wc_mnm_variation_header    - 10
+	 * @hooked wc_mnm_content_loop        - 20
+	 * @hooked wc_mnm_template_reset_link - 30
+	 * @hooked wc_mnm_template_status     - 40
 	 */
 	do_action( 'wc_mnm_variation_content_loop', $variation );
 
