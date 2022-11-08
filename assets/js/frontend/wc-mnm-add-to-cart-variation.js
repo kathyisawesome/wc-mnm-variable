@@ -14,6 +14,7 @@
 		self.useAjax       = false === self.variationData;
 		self.xhr           = false;
 		self.initialized   = false;
+    self.html_forms    = []; // Keyed by variation ID.
 
     // Add MNM container class.
     self.$form.addClass( 'mnm_form variations_form' );
@@ -32,6 +33,8 @@
 
     // Listen for radio change.
     $form.on( 'change.wc-mnm-variable-form', '.wc-mnm-variations :radio', { mnmVariationForm: self }, self.onChange );
+
+    $form.on( 'wc_mnm_display_variation_form', { mnmVariationForm: self }, self.displayForm );
 
   };
 
@@ -76,14 +79,73 @@
   // When variation is found, load the MNM form.
   WC_MNM_Variation_Form.prototype.onFoundVariation = function( event, variation ) {
 
-    var form = event.data.mnmVariationForm;
-    var $target = $( event.target ).find( '.single_mnm_variation' );
+    let form = event.data.mnmVariationForm;
 
-    if ( variation.variation_is_visible && variation.mix_and_match_html ) {
+    if ( variation.variation_is_visible  ) {
 
-      var template = wp.template( 'mnm-variation-template' );
+      if (  'undefined' === variation.mix_and_match_html ) {
 
-      var $template_html = template( {
+        variation.mix_and_match_html = 'undefined' !== typeof form.html_forms[ variation.variation_id ] ? form.html_forms[ variation.variation_id ] : false;
+
+      }
+
+      if ( variation.mix_and_match_html ) {
+
+        form.$form.trigger( 'wc_mnm_display_variation_form', [ variation ] );  
+
+      } else {
+
+        $.ajax( {
+          url: WC_MNM_VARIATION_ADD_TO_CART_PARAMS.wc_ajax_url.toString().replace( '%%endpoint%%', 'mnm_get_variation_container_form' ),
+          type: 'POST',
+          data: {
+            product_id : variation.variation_id,
+            dataType: 'json',
+            security: WC_MNM_VARIATION_ADD_TO_CART_PARAMS.form_nonce
+          },
+          success: function( response ) {
+    
+            if ( response.success && response.data ) {
+    
+              // Load the Form in the modal. We get fragments returned, but in admin we only need the form.
+              if ( 'undefined' !== typeof response.data[ 'div.wc-mnm-container-form' ] ) {
+    
+                // Add response to variation object.
+                variation.mix_and_match_html = response.data[ 'div.wc-mnm-container-form' ];
+
+                form.$form.trigger( 'wc_mnm_display_variation_form', [ variation ] );
+
+                // Store the HTML for later.
+                form.html_forms[ variation.variation_id ] = variation.mix_and_match_html;
+    
+              }
+        
+            } else {
+              window.alert( response.data );
+            }
+    
+          },
+          fail: function() {
+            window.alert( wc_mnm_admin_order_params.i18n_form_error );
+          }
+        } );
+
+      }      
+
+    }
+
+  };
+
+
+  // When variation is found, load the MNM form.
+  WC_MNM_Variation_Form.prototype.displayForm = function( event, variation ) {
+
+    if ( variation.mix_and_match_html ) {
+
+      let $target = $( event.target ).find( '.single_mnm_variation' );
+      let template = wp.template( 'wc-mnm-variation-template' );
+      
+      let $template_html = template( {
         variation: variation
       } );
       $template_html = $template_html.replace( '/*<![CDATA[*/', '' );
@@ -98,13 +160,13 @@
       // Finally, show the elements.
       $target.show();
 
-      if ( ! $target.wcMNMisInViewport() ) {
+      if ( ! $target.wcMNMisInViewport() && false !== $( document.body ).triggerHandler( 'wc_mnm_scroll_to_variation' ) ) {
         $('html,body').animate({
           scrollTop: $target.offset().top
         });
       }
 
-      form.$form.trigger( 'wc_mnm_variation_found', [ variation ] );
+      $( event.target ).trigger( 'wc_mnm_variation_found', [ variation ] );
 
     }
 

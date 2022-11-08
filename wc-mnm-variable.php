@@ -358,9 +358,10 @@ class WC_MNM_Variable {
 	 */
 	public function available_variation( $data, $product, $variation ) {
 
-		// @todo - should we always add this? Seems like it could be a lot of data in the HTML... maybe only include the form when sharing contents?
-		if ( /* Constants::is_defined( 'WC_DOING_AJAX' ) && */ $variation->is_type( 'mix-and-match-variation' ) && $product->is_type( 'variable-mix-and-match' ) ) {
-			$data[ 'mix_and_match_html' ]               = $this->get_variation_template_html( $variation );
+		if ( $variation->is_type( 'mix-and-match-variation' ) && $product->is_type( 'variable-mix-and-match' ) ) {
+			if ( did_action( 'wc_ajax_get_variation' ) ) {
+				$data[ 'mix_and_match_html' ] = $this->get_variation_template_html( $variation );
+			}
 			$data[ 'mix_and_match_min_container_size' ] = $variation->get_min_container_size();
 			$data[ 'mix_and_match_max_container_size' ] = $variation->get_min_container_size();
 		}

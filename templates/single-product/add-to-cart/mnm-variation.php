@@ -13,6 +13,6 @@
 defined( 'ABSPATH' ) || exit;
 
 ?>
-<script type="text/template" id="tmpl-mnm-variation-template">
+<script type="text/template" id="tmpl-wc-mnm-variation-template">
 	<div class="woocommerce-mix_and_match_variation_html">{{{ data.variation.mix_and_match_html }}}</div>
 </script>
