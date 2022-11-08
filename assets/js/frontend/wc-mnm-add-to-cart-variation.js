@@ -90,7 +90,7 @@
       $template_html = $template_html.replace( '/*]]>*/', '' );
 
       // HTML must be loaded first for MNM scripts to catch the container ID.
-      $target.toggleClass( 'mnm_variation_out_of_stock', ! variation. is_in_stock ).html( $template_html );
+      $target.toggleClass( 'wc_mnm_variation_out_of_stock', ! variation.is_in_stock ).html( $template_html );
 
       // Fire MNM scripts.
       $( event.target ).wc_mnm_form();
