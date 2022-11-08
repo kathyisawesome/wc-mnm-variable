@@ -197,6 +197,7 @@ module.exports = function(grunt) {
 				'!.gitcreds',
 				'!.gitignore',
 				'!.gitmodules',
+				'!.nvmrc',
 				'!sftp-config.json',
 				'!**.sublime-workspace',
 				'!**.sublime-project',
