@@ -402,7 +402,8 @@ class WC_MNM_Variable {
 		wp_register_script( 'wc-mnm-add-to-cart-variation', $script_url, array( 'wc-add-to-cart-mnm', 'jquery-blockui' ), $script_version, true );
 
 		$l10n = array( 
-			'wc_ajax_url' => \WC_AJAX::get_endpoint( '%%endpoint%%' )
+			'wc_ajax_url'     => \WC_AJAX::get_endpoint( '%%endpoint%%' ),
+			'i18n_form_error' => __( 'Failed to initialize form. If this issue persists, please reload the page and try again.', 'wc-mnm-variable' ),
 		);
 
 		wp_localize_script( 'wc-mnm-add-to-cart-variation', 'WC_MNM_VARIATION_ADD_TO_CART_PARAMS', $l10n );

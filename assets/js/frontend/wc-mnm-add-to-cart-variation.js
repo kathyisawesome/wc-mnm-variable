@@ -126,7 +126,7 @@
     
           },
           fail: function() {
-            window.alert( wc_mnm_admin_order_params.i18n_form_error );
+            window.alert( WC_MNM_VARIATION_ADD_TO_CART_PARAMS.i18n_form_error );
           }
         } );
 
