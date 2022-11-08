@@ -31,7 +31,7 @@
     $form.on( 'reload_product_variations', { mnmVariationForm: self }, self.onReload );
 
     // Listen for radio change.
-    $form.on( 'change.wc-mnm-variable-form', '.wc-mnm-variations :radio', { mnmVariationForm: self }, this.onChange );
+    $form.on( 'change.wc-mnm-variable-form', '.wc-mnm-variations :radio', { mnmVariationForm: self }, self.onChange );
 
   };
 
