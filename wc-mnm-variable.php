@@ -6,7 +6,7 @@
  * Version: 1.0.0-rc.4
  * Author: Kathy Darling
  * Author URI: http://kathyisawesome.com/
- * Text Domain: wc-mnm-variable-mix-and-match
+ * Text Domain: wc-mnm-variable
  * Domain Path: /languages
  * 
  * WC requires at least: 6.9.0
