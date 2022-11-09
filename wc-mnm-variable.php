@@ -124,7 +124,7 @@ class WC_MNM_Variable {
 		/**
 		 * Ajax handlers
 		 */
-		add_action( 'wc_ajax_mnm_get_variation_container_form', array( __CLASS__, 'get_container_form' ) );
+		add_action( 'wc_ajax_mnm_get_variation_container_form', array( $this, 'get_container_form' ) );
 
 	}
 
@@ -266,7 +266,7 @@ class WC_MNM_Variable {
 	 * @param int $product_id
 	 * @return string $type Will be mapped to the name of the WC_Product_* class which should be instantiated to create an instance of this product.
 	 */
-	public static function product_type_query( $product_type, $product_id ) {
+	public function product_type_query( $product_type, $product_id ) {
 
 		$cache_key    = WC_Cache_Helper::get_cache_prefix( 'product_' . $product_id ) . '_type_' . $product_id;
 		$product_type = wp_cache_get( $cache_key, 'products' );
@@ -312,7 +312,7 @@ class WC_MNM_Variable {
 	 * @param int $product_id
 	 * @return string $classname The name of the WC_Product_* class which should be instantiated to create an instance of this product.
 	 */
-	public static function set_variation_class( $classname, $product_type, $post_type, $product_id ) {
+	public function set_variation_class( $classname, $product_type, $post_type, $product_id ) {
 
 		$cache_key           = WC_Cache_Helper::get_cache_prefix( 'product_' . $product_id ) . '_type_' . $product_id;
 		$cached_product_type = wp_cache_get( $cache_key, 'products' );
@@ -567,7 +567,7 @@ class WC_MNM_Variable {
 	/**
 	 * Form content used to populate variation.
 	 */
-	public static function get_container_form() {
+	public function get_container_form() {
 
 		$product_id = isset( $_POST[ 'product_id' ] ) ? intval( $_POST[ 'product_id' ] ) : 0;
 		$product = wc_get_product( $product_id );
