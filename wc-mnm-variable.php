@@ -64,7 +64,7 @@ class WC_MNM_Variable {
 		$this->includes();
 
 		// Load template actions/functions later.
-		add_action( 'after_setup_theme', [ $this, 'template_includes' ] );
+		add_action( 'after_setup_theme', [ $this, 'template_includes' ], 20 );
 
 		// Include admin class to handle all back-end functions.
 		if ( is_admin() ) {
