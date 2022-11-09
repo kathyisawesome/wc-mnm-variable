@@ -121,6 +121,11 @@ class WC_MNM_Variable {
 		// Use the default variable product handler.
 		add_filter( 'woocommerce_add_to_cart_handler', [ $this, 'add_to_cart_handler' ], 10, 2 );
 
+		/**
+		 * Ajax handlers
+		 */
+		add_action( 'wc_ajax_mnm_get_variation_container_form', array( __CLASS__, 'get_container_form' ) );
+
 	}
 
 	/**
@@ -453,36 +458,6 @@ class WC_MNM_Variable {
 	}
 	
 
-
-	/*
-	|--------------------------------------------------------------------------
-	| Ajax callbacks.
-	|--------------------------------------------------------------------------
-	*/
-	
-	/**
-	 * Return the specific MNM variation template
-	 *
-	 * @param  mixed int|WC_Product $product
-	 * @return string
-	 */
-	public function get_variation_template_html( $product ) {
-		
-		if ( is_numeric( $product ) ) {
-			$product = wc_get_product( intval( $product ) );
-		}
-
-		$html = '';
-		
-		if ( $product && $product->is_type( 'mix-and-match-variation' ) ) {
-			ob_start();
-			do_action( 'wc_mnm_variation_add_to_cart', $product );
-			$html = ob_get_clean();
-		}
-		
-		return $html;
-	}
-
 	/*
 	|--------------------------------------------------------------------------
 	| Cart.
@@ -559,6 +534,67 @@ class WC_MNM_Variable {
 		return $product_type;
 	}
 	
+
+	/*
+	|--------------------------------------------------------------------------
+	| Ajax callbacks.
+	|--------------------------------------------------------------------------
+	*/
+	
+	/**
+	 * Return the specific MNM variation template
+	 *
+	 * @param  mixed int|WC_Product $product
+	 * @return string
+	 */
+	public function get_variation_template_html( $product ) {
+		
+		if ( is_numeric( $product ) ) {
+			$product = wc_get_product( intval( $product ) );
+		}
+
+		$html = '';
+		
+		if ( $product && $product->is_type( 'mix-and-match-variation' ) ) {
+			ob_start();
+			do_action( 'wc_mnm_variation_add_to_cart', $product );
+			$html = ob_get_clean();
+		}
+		
+		return $html;
+	}
+
+	/**
+	 * Form content used to populate variation.
+	 */
+	public static function get_container_form() {
+
+		$product_id = isset( $_POST[ 'product_id' ] ) ? intval( $_POST[ 'product_id' ] ) : 0;
+		$product = wc_get_product( $product_id );
+
+		if ( ! $product ) {
+			$error = esc_html__( 'This product does not exist and so can not be configured', 'wc-mnm-variable' );
+			wp_send_json_error( $error );
+		}
+
+		// Initialize form state based on the actual configuration of the container.
+		$configuration = ! empty ( $_POST[ 'configuration' ] ) ? wc_clean( $_POST[ 'configuration' ] ) : array();
+
+		if ( ! empty( $configuration ) ) {
+			$_REQUEST = array_merge( $_REQUEST, WC_Mix_and_Match()->cart->rebuild_posted_container_form_data( $configuration, $product ) );
+		}
+		
+		/*
+		 * `wc_mnm_container_form_fragments` filter
+		 * 
+		 * @param  array $fragments
+		 * @param  $product WC_Product
+		 */
+		$response = apply_filters( 'wc_mnm_container_form_fragments', array( 'div.wc-mnm-container-form' => self::get_instance()->get_variation_template_html( $product ) ), $product );
+
+		wp_send_json_success( $response );
+	}
+
 
 	/*
 	|--------------------------------------------------------------------------
