@@ -102,6 +102,7 @@
             product_id : variation.variation_id,
             dataType: 'json',
             security: WC_MNM_VARIATION_ADD_TO_CART_PARAMS.form_nonce
+            request: window.location.search.substr(1),
           },
           success: function( response ) {
     

@@ -577,6 +577,14 @@ class WC_MNM_Variable {
 			wp_send_json_error( $error );
 		}
 
+		// Initialize form state based on the URL params.
+		$request = ! empty ( $_POST[ 'request' ] ) ? wc_clean( $_POST[ 'request' ] ) : '';
+
+		if ( ! empty( $request ) ) {
+			parse_str(html_entity_decode( $request), $params );
+			$_REQUEST = array_merge( $_REQUEST, $params );
+		}
+
 		// Initialize form state based on the actual configuration of the container.
 		$configuration = ! empty ( $_POST[ 'configuration' ] ) ? wc_clean( $_POST[ 'configuration' ] ) : array();
 
