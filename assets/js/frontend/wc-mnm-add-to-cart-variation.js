@@ -13,14 +13,15 @@
     self.variationData = $form.data( 'product_variations' );
 		self.useAjax       = false === self.variationData;
 		self.xhr           = false;
-		self.initialized   = false;
+		self.scroll        = false;
     self.html_forms    = []; // Keyed by variation ID.
 
     // Add MNM container class.
     self.$form.addClass( 'mnm_form variations_form' );
 
     // Bind methods.
-    self.shutdown = self.shutdown.bind( self );
+    self.displayForm = self.displayForm.bind( self );
+    self.shutdown    = self.shutdown.bind( self );
 
     // Events.
     $form.on( 'found_variation.wc-mnm-variable-form', { mnmVariationForm: self }, self.onFoundVariation );
@@ -52,6 +53,9 @@
   WC_MNM_Variation_Form.prototype.onChange = function( event ) {
 
 		var form = event.data.mnmVariationForm;
+
+    // Set the scroll flag.
+    form.scroll = true;
 
 		form.$form.find( 'input[name="variation_id"], input.variation_id' ).val( '' ).trigger( 'change' );
 		form.$form.find( '.wc-no-matching-variations' ).remove();
@@ -101,7 +105,6 @@
           data: {
             product_id : variation.variation_id,
             dataType: 'json',
-            security: WC_MNM_VARIATION_ADD_TO_CART_PARAMS.form_nonce
             request: window.location.search.substr(1),
           },
           success: function( response ) {
@@ -161,7 +164,7 @@
       // Finally, show the elements.
       $target.show();
 
-      if ( ! $target.wcMNMisInViewport() && false !== $( document.body ).triggerHandler( 'wc_mnm_scroll_to_variation' ) ) {
+      if ( ! $target.wcMNMisInViewport() && this.scroll && false !== $( document.body ).triggerHandler( 'wc_mnm_scroll_to_variation' ) ) {
         $('html,body').animate({
           scrollTop: $target.offset().top
         });
