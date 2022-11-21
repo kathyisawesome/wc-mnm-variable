@@ -143,7 +143,12 @@ class WC_Product_Mix_and_Match_Variation_Data_Store_CPT extends WC_Product_Varia
 
 		// Need content_source and cat IDs in the parent data.
 		foreach ( $this->parent_props_to_meta_keys as $property => $meta_key ) {
-			$value = get_post_meta( $parent_id, $meta_key, true );
+			// Get a global value for layout/location props (always use global options in customizer).
+			if ( $this->is_global_prop( $product, $property ) ) {
+				$value = get_option( $this->global_props[$property] );
+			} else {
+				$value = get_post_meta( $parent_id, $meta_key, true );
+			}
 			$parent_data[ $property ] = $value;
 		}
 
