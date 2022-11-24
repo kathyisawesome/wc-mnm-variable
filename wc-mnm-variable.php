@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce Mix and Match - Variable Mix and Match
  * Plugin URI: 
  * Description: Variable mix and match product type
- * Version: 1.0.0-rc.7
+ * Version: 1.0.0-rc.8
  * Author: Kathy Darling
  * Author URI: http://kathyisawesome.com/
  * Text Domain: wc-mnm-variable
@@ -26,7 +26,7 @@ use Automattic\Jetpack\Constants;
 
 class WC_MNM_Variable {
 
-	const VERSION = '1.0.0-rc.6';
+	const VERSION = '1.0.0-rc.8';
 	const REQ_MNM_VERSION = '2.2.0';
 	const REQ_WC_VERSION  = '6.9.0'; // @todo -check this.
 
@@ -409,6 +409,7 @@ class WC_MNM_Variable {
 		$l10n = array( 
 			'wc_ajax_url'     => \WC_AJAX::get_endpoint( '%%endpoint%%' ),
 			'i18n_form_error' => __( 'Failed to initialize form. If this issue persists, please reload the page and try again.', 'wc-mnm-variable' ),
+			'form_nonce'      => wp_create_nonce( 'wc_mnm_container_form' ),
 		);
 
 		wp_localize_script( 'wc-mnm-add-to-cart-variation', 'WC_MNM_VARIATION_ADD_TO_CART_PARAMS', $l10n );
