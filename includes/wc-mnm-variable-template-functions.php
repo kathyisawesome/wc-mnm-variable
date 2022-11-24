@@ -143,7 +143,7 @@ if ( ! function_exists( 'wc_mnm_template_single_variation' ) ) {
 	 * Output placeholders for the single variation.
 	 */
 	function wc_mnm_template_single_variation() {
-		echo '<div class="woocommerce-variation single_mnm_variation processing"></div>';
+		echo '<div class="woocommerce-variation single_mnm_variation"></div>';
 	}
 }
 

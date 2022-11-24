@@ -99,6 +99,8 @@
 
       } else {
 
+        form.$form.find( '.single_mnm_variation' ).html( '<div class="processing" /> ');
+
         $.ajax( {
           url: WC_MNM_VARIATION_ADD_TO_CART_PARAMS.wc_ajax_url.toString().replace( '%%endpoint%%', 'mnm_get_variation_container_form' ),
           type: 'POST',
@@ -172,6 +174,8 @@
 
       $( event.target ).trigger( 'wc_mnm_variation_found', [ variation ] );
 
+    } else {
+      $( event.target ).find( '.single_mnm_variation' ).html('');
     }
 
   };
