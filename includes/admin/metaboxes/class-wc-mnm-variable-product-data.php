@@ -166,7 +166,7 @@ class WC_MNM_Variable_Product_Data {
 		wc_mnm_wp_radio_images(
 			array(
 				'id'            => 'wc_mnm_variable_layout',
-				'wrapper_class' => 'mnm_container_layout_options show_if_wc_mnm_layout_override_yes hide_if_wc_mnm_layout_override_no hidden',
+				'wrapper_class' => 'mnm_container_layout_options show_if_wc_mnm_variable_layout_override_yes hide_if_wc_mnm_variable_layout_override_no hidden',
 				'label'         => esc_html__( 'Layout', 'wc-mnm-variable' ),
 				'value'	        => $vmnm_product_object->get_layout( 'edit' ),
 				'options'       => WC_Product_Mix_and_Match::get_layout_options(),
@@ -180,7 +180,7 @@ class WC_MNM_Variable_Product_Data {
 		wc_mnm_wp_radio_images(
 			array(
 				'id'            => 'wc_mnm_variable_form_location',
-				'wrapper_class' => 'mnm_container_layout_options show_if_wc_mnm_layout_override_yes hide_if_wc_mnm_layout_override_no hidden',
+				'wrapper_class' => 'mnm_container_layout_options show_if_wc_mnm_variable_layout_override_yes hide_if_wc_mnm_variable_layout_override_no hidden',
 				'label'         => esc_html__( 'Layout', 'wc-mnm-variable' ),
 				'value'	        => $vmnm_product_object->get_add_to_cart_form_location( 'edit' ),
 				'options'       => WC_Product_Mix_and_Match::get_add_to_cart_form_location_options(),
