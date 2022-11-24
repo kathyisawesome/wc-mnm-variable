@@ -541,7 +541,7 @@ trait WC_MNM_Container_Data_Store {
 	 * @return  bool
 	 */
 	protected function is_global_prop( $product, $property ) {
-		return isset( $this->global_props ) && array_key_exists( $property, $this->global_props ) );
+		return isset( $this->global_props ) && array_key_exists( $property, $this->global_props );
 	}
 
 }
