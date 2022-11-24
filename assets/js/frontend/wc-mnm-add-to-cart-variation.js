@@ -162,7 +162,7 @@
       $( event.target ).wc_mnm_form();
 
       // Finally, show the elements.
-      $target.show();
+      $target.removeClass( 'processing' ).show();
 
       if ( ! $target.wcMNMisInViewport() && this.scroll && false !== $( document.body ).triggerHandler( 'wc_mnm_scroll_to_variation' ) ) {
         $('html,body').animate({
