@@ -215,6 +215,18 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 		return $this->get_share_content( $context );
 	}
 
+
+	/**
+	 * Checks if this particular variation is visible. Invisible variations are enabled and can be selected, but no price / stock info is displayed.
+	 * Instead, a suitable 'unavailable' message is displayed.
+	 * Invisible by default: Disabled variations and variations with an empty price AND no child items.
+	 *
+	 * @return bool
+	 */
+	public function variation_is_visible() {
+		return apply_filters( 'woocommerce_variation_is_visible', 'publish' === get_post_status( $this->get_id() ) && '' !== $this->get_price() && $this->has_child_items(), $this->get_id(), $this->get_parent_id(), $this );
+	}
+
 }
 
 
