@@ -16,6 +16,8 @@
 		self.scroll        = false;
     self.html_forms    = []; // Keyed by variation ID.
 
+    self.storedConfig  = [];
+
     // Add MNM container class.
     self.$form.addClass( 'mnm_form variations_form' );
 
@@ -36,6 +38,36 @@
     $form.on( 'change.wc-mnm-variable-form', '.wc-mnm-variations :radio', { mnmVariationForm: self }, self.onChange );
 
     $form.on( 'wc_mnm_display_variation_form', { mnmVariationForm: self }, self.displayForm );
+
+    // Stash the configuration for later.
+    $form.on( 'wc-mnm-container-quantities-updated', function(event, container) {
+      self.storedConfig = container.api.get_container_config();
+    } );
+    // Persist config when switching between variations.
+    $form.on( 'wc-mnm-initializing', function(event, container) {
+
+      if ( container.child_items.length && Object.keys( self.storedConfig ).length ) {
+
+        let total_qty = 0;
+
+        // Add up quantities.
+        for ( let child_item of container.child_items ) {
+
+          let new_qty = self.storedConfig[ child_item.get_item_id() ] || 0;
+
+          child_item.update_quantity( new_qty );
+
+          total_qty += child_item.get_quantity();
+
+          if ( total_qty >= container.api.get_max_container_size() ) {
+            break;
+          }
+
+        }
+
+      }
+
+    } );
 
   };
 
@@ -191,6 +223,9 @@
       form.$form.trigger( 'check_radio_variations' );
       return false;
     }
+
+    // Reset stored config.
+    form.storedConfig = [];
 
     $( event.target ).find( '.single_mnm_variation' ).hide();
     form.$selectors.prop( 'checked', false );
