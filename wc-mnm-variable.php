@@ -364,7 +364,7 @@ class WC_MNM_Variable {
 	public function available_variation( $data, $product, $variation ) {
 
 		if ( $variation->is_type( 'mix-and-match-variation' ) && $product->is_type( 'variable-mix-and-match' ) ) {
-			if ( apply_filters( 'wc_mnm_eager_load_variations', false, $product ) || did_action( 'wc_ajax_get_variation' ) ) {
+			if ( apply_filters( 'wc_mnm_eager_load_variations', true, $product ) || did_action( 'wc_ajax_get_variation' ) ) {
 				$data[ 'mix_and_match_html' ] = $this->get_variation_template_html( $variation );
 			}
 			$data[ 'mix_and_match_min_container_size' ] = $variation->get_min_container_size();
