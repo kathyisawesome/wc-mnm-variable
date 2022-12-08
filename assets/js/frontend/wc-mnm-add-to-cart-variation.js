@@ -231,6 +231,8 @@
     form.$selectors.prop( 'checked', false );
 
     form.$form.find( '.reset_variations' ).css( 'visibility', 'hidden' );
+
+    $( event.target ).trigger( 'wc_mnm_variation_reset' );
   };
 
   
