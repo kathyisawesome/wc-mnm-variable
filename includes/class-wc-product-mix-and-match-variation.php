@@ -111,7 +111,7 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	}
 
 
-		/**
+	/**
 	 * "Form Location" getter.
 	 *
 	 * @param  string  $context
@@ -119,6 +119,10 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 */
 	public function get_add_to_cart_form_location( $context = 'view' ) {
 		$value = $this->has_layout_override( $context ) ? $this->parent_data[ 'add_to_cart_form_location' ] : $this->parent_data[ 'global_add_to_cart_form_location' ];
+
+		// Since the global value _can_ be false, we need a fallback for new installs.
+		$value = $value ? $value : $this->get_prop( 'add_to_cart_form_location', 'edit' );
+
 		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'add_to_cart_form_location', $layout, $this ) : $layout;
 	}
 
@@ -141,6 +145,10 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 */
 	public function get_layout( $context = 'view' ) {
 		$value = $this->has_layout_override( $context ) ? $this->parent_data[ 'layout' ] : $this->parent_data[ 'global_layout' ];
+
+		// Since the global value _can_ be false, we need a fallback for new installs.
+		$value = $value ? $value : $this->get_prop( 'layout', 'edit' );
+
 		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'layout', $value, $this ) : $value;
 	}
 
