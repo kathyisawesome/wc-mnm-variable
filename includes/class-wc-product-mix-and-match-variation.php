@@ -129,7 +129,8 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 * @return string
 	 */
 	public function get_layout_override( $context = 'view' ) {
-		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'layout_override', $this->parent_data[ 'layout_override' ], $this ) : $this->parent_data[ 'layout_override' ];
+		$value = wc_string_to_bool( $this->parent_data[ 'layout_override' ] );
+		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'layout_override', $value, $this ) : $value;
 	}
 
 	/**
@@ -161,7 +162,8 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 * @return string
 	 */
 	public function get_weight_cumulative( $context = 'view' ) {
-		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'weight_cumulative', $this->parent_data[ 'weight_cumulative' ], $this ) : $this->parent_data[ 'weight_cumulative' ];
+		$value = wc_string_to_bool( $this->parent_data[ 'weight_cumulative' ] );
+		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'weight_cumulative', $value, $this ) : $value;
 	}
 
 	/*
