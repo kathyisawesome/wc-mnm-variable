@@ -197,7 +197,7 @@ trait WC_MNM_Container_Child_Items {
 	 *
 	 * @return WC_MNM_Child_Item|false
 	 */
-	private function get_child_item_by_product_id( $child_product_id, $context = 'view' ) {
+	public function get_child_item_by_product_id( $child_product_id, $context = 'view' ) {
 
 		$child_items_by_product = WC_MNM_Helpers::cache_get( $this->get_id(), 'child_items_by_product' );
 

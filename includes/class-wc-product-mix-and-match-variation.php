@@ -24,16 +24,18 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 * @var array
 	 */
 	protected $parent_data = array(
-		'layout_override'           => false,
-		'layout'                    => 'tabular',
-		'add_to_cart_form_location' => 'default',
-		'share_content'             => false,
-		'priced_per_product'        => false,
-		'discount'                  => 0,
-		'packing_mode'              => 'together',
-		'weight_cumulative'         => false,
-		'content_source'            => 'products',
-		'child_category_ids'        => [],
+		'layout_override'                  => false,
+		'layout'                           => 'tabular',
+		'add_to_cart_form_location'        => 'default',
+		'global_layout'                    => 'tabular',
+		'global_add_to_cart_form_location' => 'default',
+		'share_content'                    => false,
+		'priced_per_product'               => false,
+		'discount'                         => 0,
+		'packing_mode'                     => 'together',
+		'weight_cumulative'                => false,
+		'content_source'                   => 'products',
+		'child_category_ids'               => [],
 	);
 
 
@@ -116,7 +118,8 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 * @return string
 	 */
 	public function get_add_to_cart_form_location( $context = 'view' ) {
-		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'add_to_cart_form_location', $this->parent_data[ 'add_to_cart_form_location' ], $this ) : $this->parent_data[ 'add_to_cart_form_location' ];
+		$value = $this->has_layout_override( $context ) ? $this->parent_data[ 'add_to_cart_form_location' ] : $this->parent_data[ 'global_add_to_cart_form_location' ];
+		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'add_to_cart_form_location', $layout, $this ) : $layout;
 	}
 
 	/**
@@ -126,7 +129,8 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 * @return string
 	 */
 	public function get_layout_override( $context = 'view' ) {
-		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'layout_override', $this->parent_data[ 'layout_override' ], $this ) : $this->parent_data[ 'layout_override' ];
+		$value = wc_string_to_bool( $this->parent_data[ 'layout_override' ] );
+		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'layout_override', $value, $this ) : $value;
 	}
 
 	/**
@@ -136,7 +140,8 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 * @return string
 	 */
 	public function get_layout( $context = 'view' ) {
-		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'layout', $this->parent_data[ 'layout' ], $this ) : $this->parent_data[ 'layout' ];
+		$value = $this->has_layout_override( $context ) ? $this->parent_data[ 'layout' ] : $this->parent_data[ 'global_layout' ];
+		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'layout', $value, $this ) : $value;
 	}
 
 	/**
@@ -157,7 +162,8 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 * @return string
 	 */
 	public function get_weight_cumulative( $context = 'view' ) {
-		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'weight_cumulative', $this->parent_data[ 'weight_cumulative' ], $this ) : $this->parent_data[ 'weight_cumulative' ];
+		$value = wc_string_to_bool( $this->parent_data[ 'weight_cumulative' ] );
+		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'weight_cumulative', $value, $this ) : $value;
 	}
 
 	/*
@@ -207,6 +213,18 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 */
 	public function is_sharing_content( $context = 'view' ) {
 		return $this->get_share_content( $context );
+	}
+
+
+	/**
+	 * Checks if this particular variation is visible. Invisible variations are enabled and can be selected, but no price / stock info is displayed.
+	 * Instead, a suitable 'unavailable' message is displayed.
+	 * Invisible by default: Disabled variations and variations with an empty price AND no child items.
+	 *
+	 * @return bool
+	 */
+	public function variation_is_visible() {
+		return apply_filters( 'woocommerce_variation_is_visible', 'publish' === get_post_status( $this->get_id() ) && '' !== $this->get_price() && $this->has_child_items(), $this->get_id(), $this->get_parent_id(), $this );
 	}
 
 }

@@ -197,6 +197,7 @@ module.exports = function(grunt) {
 				'!.gitcreds',
 				'!.gitignore',
 				'!.gitmodules',
+				'!.nvmrc',
 				'!sftp-config.json',
 				'!**.sublime-workspace',
 				'!**.sublime-project',
@@ -259,7 +260,7 @@ module.exports = function(grunt) {
 
 		// bump version numbers (replace with version in package.json)
 		replace: {
-			version: {
+			release: {
 				src: [
 				'readme.txt',
 				'<%= pkg.name %>.php'
@@ -368,6 +369,6 @@ module.exports = function(grunt) {
 	grunt.registerTask( 'dev', [ 'replace:prerelease', 'assets' ] );
 	grunt.registerTask( 'build', [ 'dev', 'addtextdomain', 'makepot' ] );
 	grunt.registerTask( 'prerelease', [ 'build', 'zip', 'clean' ] );
-	grunt.registerTask( 'release', [ 'replace:version', 'assets', 'addtextdomain', 'makepot', 'build', 'zip', 'clean' ] );
+	grunt.registerTask( 'release', [ 'replace:release', 'assets', 'addtextdomain', 'makepot', 'build', 'zip', 'clean' ] );
 
 };

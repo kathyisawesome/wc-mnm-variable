@@ -3,10 +3,10 @@
  * Plugin Name: WooCommerce Mix and Match - Variable Mix and Match
  * Plugin URI: 
  * Description: Variable mix and match product type
- * Version: 1.0.0-rc.3
+ * Version: 1.0.0-rc.9
  * Author: Kathy Darling
  * Author URI: http://kathyisawesome.com/
- * Text Domain: wc-mnm-variable-mix-and-match
+ * Text Domain: wc-mnm-variable
  * Domain Path: /languages
  * 
  * WC requires at least: 6.9.0
@@ -26,8 +26,8 @@ use Automattic\Jetpack\Constants;
 
 class WC_MNM_Variable {
 
-	const VERSION = '1.0.0-rc.3';
-	const REQ_MNM_VERSION = '2.2.0-beta-3';
+	const VERSION = '1.0.0-rc.9';
+	const REQ_MNM_VERSION = '2.2.0';
 	const REQ_WC_VERSION  = '6.9.0'; // @todo -check this.
 
 	/**
@@ -64,7 +64,7 @@ class WC_MNM_Variable {
 		$this->includes();
 
 		// Load template actions/functions later.
-		add_action( 'after_setup_theme', [ $this, 'template_includes' ] );
+		add_action( 'after_setup_theme', [ $this, 'template_includes' ], 20 );
 
 		// Include admin class to handle all back-end functions.
 		if ( is_admin() ) {
@@ -120,6 +120,11 @@ class WC_MNM_Variable {
 
 		// Use the default variable product handler.
 		add_filter( 'woocommerce_add_to_cart_handler', [ $this, 'add_to_cart_handler' ], 10, 2 );
+
+		/**
+		 * Ajax handlers
+		 */
+		add_action( 'wc_ajax_mnm_get_variation_container_form', array( $this, 'get_container_form' ) );
 
 	}
 
@@ -261,7 +266,7 @@ class WC_MNM_Variable {
 	 * @param int $product_id
 	 * @return string $type Will be mapped to the name of the WC_Product_* class which should be instantiated to create an instance of this product.
 	 */
-	public static function product_type_query( $product_type, $product_id ) {
+	public function product_type_query( $product_type, $product_id ) {
 
 		$cache_key    = WC_Cache_Helper::get_cache_prefix( 'product_' . $product_id ) . '_type_' . $product_id;
 		$product_type = wp_cache_get( $cache_key, 'products' );
@@ -307,7 +312,7 @@ class WC_MNM_Variable {
 	 * @param int $product_id
 	 * @return string $classname The name of the WC_Product_* class which should be instantiated to create an instance of this product.
 	 */
-	public static function set_variation_class( $classname, $product_type, $post_type, $product_id ) {
+	public function set_variation_class( $classname, $product_type, $post_type, $product_id ) {
 
 		$cache_key           = WC_Cache_Helper::get_cache_prefix( 'product_' . $product_id ) . '_type_' . $product_id;
 		$cached_product_type = wp_cache_get( $cache_key, 'products' );
@@ -358,9 +363,10 @@ class WC_MNM_Variable {
 	 */
 	public function available_variation( $data, $product, $variation ) {
 
-		// @todo - should we always add this? Seems like it could be a lot of data in the HTML... maybe only include the form when sharing contents?
-		if ( /* Constants::is_defined( 'WC_DOING_AJAX' ) && */ $variation->is_type( 'mix-and-match-variation' ) && $product->is_type( 'variable-mix-and-match' ) ) {
-			$data[ 'mix_and_match_html' ]               = $this->get_variation_template_html( $variation );
+		if ( $variation->is_type( 'mix-and-match-variation' ) && $product->is_type( 'variable-mix-and-match' ) ) {
+			if ( apply_filters( 'wc_mnm_eager_load_variations', true, $product ) || did_action( 'wc_ajax_get_variation' ) ) {
+				$data[ 'mix_and_match_html' ] = $this->get_variation_template_html( $variation );
+			}
 			$data[ 'mix_and_match_min_container_size' ] = $variation->get_min_container_size();
 			$data[ 'mix_and_match_max_container_size' ] = $variation->get_min_container_size();
 		}
@@ -401,7 +407,9 @@ class WC_MNM_Variable {
 		wp_register_script( 'wc-mnm-add-to-cart-variation', $script_url, array( 'wc-add-to-cart-mnm', 'jquery-blockui' ), $script_version, true );
 
 		$l10n = array( 
-			'wc_ajax_url' => \WC_AJAX::get_endpoint( '%%endpoint%%' )
+			'wc_ajax_url'     => \WC_AJAX::get_endpoint( '%%endpoint%%' ),
+			'i18n_form_error' => __( 'Failed to initialize form. If this issue persists, please reload the page and try again.', 'wc-mnm-variable' ),
+			'form_nonce'      => wp_create_nonce( 'wc_mnm_container_form' ),
 		);
 
 		wp_localize_script( 'wc-mnm-add-to-cart-variation', 'WC_MNM_VARIATION_ADD_TO_CART_PARAMS', $l10n );
@@ -450,36 +458,6 @@ class WC_MNM_Variable {
 		return 'default';
 	}
 	
-
-
-	/*
-	|--------------------------------------------------------------------------
-	| Ajax callbacks.
-	|--------------------------------------------------------------------------
-	*/
-	
-	/**
-	 * Return the specific MNM variation template
-	 *
-	 * @param  mixed int|WC_Product $product
-	 * @return string
-	 */
-	public function get_variation_template_html( $product ) {
-		
-		if ( is_numeric( $product ) ) {
-			$product = wc_get_product( intval( $product ) );
-		}
-
-		$html = '';
-		
-		if ( $product && $product->is_type( 'mix-and-match-variation' ) ) {
-			ob_start();
-			do_action( 'wc_mnm_variation_add_to_cart', $product );
-			$html = ob_get_clean();
-		}
-		
-		return $html;
-	}
 
 	/*
 	|--------------------------------------------------------------------------
@@ -557,6 +535,75 @@ class WC_MNM_Variable {
 		return $product_type;
 	}
 	
+
+	/*
+	|--------------------------------------------------------------------------
+	| Ajax callbacks.
+	|--------------------------------------------------------------------------
+	*/
+	
+	/**
+	 * Return the specific MNM variation template
+	 *
+	 * @param  mixed int|WC_Product $product
+	 * @return string
+	 */
+	public function get_variation_template_html( $product ) {
+		
+		if ( is_numeric( $product ) ) {
+			$product = wc_get_product( intval( $product ) );
+		}
+
+		$html = '';
+		
+		if ( $product && $product->is_type( 'mix-and-match-variation' ) ) {
+			ob_start();
+			do_action( 'wc_mnm_variation_add_to_cart', $product );
+			$html = ob_get_clean();
+		}
+		
+		return $html;
+	}
+
+	/**
+	 * Form content used to populate variation.
+	 */
+	public function get_container_form() {
+
+		$product_id = isset( $_POST[ 'product_id' ] ) ? intval( $_POST[ 'product_id' ] ) : 0;
+		$product = wc_get_product( $product_id );
+
+		if ( ! $product ) {
+			$error = esc_html__( 'This product does not exist and so can not be configured', 'wc-mnm-variable' );
+			wp_send_json_error( $error );
+		}
+
+		// Initialize form state based on the URL params.
+		$request = ! empty ( $_POST[ 'request' ] ) ? wc_clean( $_POST[ 'request' ] ) : '';
+
+		if ( ! empty( $request ) ) {
+			parse_str(html_entity_decode( $request), $params );
+			$_REQUEST = array_merge( $_REQUEST, $params );
+		}
+
+		// Initialize form state based on the actual configuration of the container.
+		$configuration = ! empty ( $_POST[ 'configuration' ] ) ? wc_clean( $_POST[ 'configuration' ] ) : array();
+
+		if ( ! empty( $configuration ) ) {
+			$_REQUEST = array_merge( $_REQUEST, WC_Mix_and_Match()->cart->rebuild_posted_container_form_data( $configuration, $product ) );
+		}
+		
+		/*
+		 * `wc_mnm_container_form_fragments` filter
+		 * 
+		 * @param  array $fragments
+		 * @param  $product WC_Product
+		 */
+		$response = apply_filters( 'wc_mnm_container_form_fragments', array( 'div.wc-mnm-container-form' => self::get_instance()->get_variation_template_html( $product ) ), $product );
+
+		wp_send_json_success( $response );
+	}
+
 
 	/*
 	|--------------------------------------------------------------------------
