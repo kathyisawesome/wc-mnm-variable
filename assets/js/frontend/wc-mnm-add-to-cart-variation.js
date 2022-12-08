@@ -37,6 +37,7 @@
     // Listen for radio change.
     $form.on( 'change.wc-mnm-variable-form', '.wc-mnm-variations :radio', { mnmVariationForm: self }, self.onChange );
 
+    // Finally display the form when requested.
     $form.on( 'wc_mnm_display_variation_form', { mnmVariationForm: self }, self.displayForm );
 
     // Stash the configuration for later.
@@ -84,24 +85,24 @@
 	 */
   WC_MNM_Variation_Form.prototype.onChange = function( event ) {
 
-		var form = event.data.mnmVariationForm;
+    var form = event.data.mnmVariationForm;
 
     // Set the scroll flag.
     form.scroll = true;
 
-		form.$form.find( 'input[name="variation_id"], input.variation_id' ).val( '' ).trigger( 'change' );
-		form.$form.find( '.wc-no-matching-variations' ).remove();
+    form.$form.find( 'input[name="variation_id"], input.variation_id' ).val( '' ).trigger( 'change' );
+    form.$form.find( '.wc-no-matching-variations' ).remove();
 
-		if ( form.useAjax ) {
-			form.$form.trigger( 'check_radio_variations' );
-		} else {
-			form.$form.trigger( 'woocommerce_variation_select_change' );
-			form.$form.trigger( 'check_radio_variations' );
-		}
+    if ( form.useAjax ) {
+      form.$form.trigger( 'check_radio_variations' );
+    } else {
+      form.$form.trigger( 'woocommerce_variation_select_change' );
+      form.$form.trigger( 'check_radio_variations' );
+    }
 
-		// Custom event for when variation selection has been changed
-		form.$form.trigger( 'woocommerce_variation_has_changed' );
-	};
+    // Custom event for when variation selection has been changed
+    form.$form.trigger( 'woocommerce_variation_has_changed' );
+  };
 
   /**
    * Custom callback to tell Woo to check variations with our radio attributes.
@@ -112,7 +113,9 @@
     form.$form.trigger( 'check_variations', chosenAttributes );
   };
 
-  // When variation is found, load the MNM form.
+  /**
+   * When variation is found, load the MNM form.
+   */
   WC_MNM_Variation_Form.prototype.onFoundVariation = function( event, variation ) {
 
     let form = event.data.mnmVariationForm;
@@ -174,8 +177,9 @@
 
   };
 
-
-  // When variation is found, load the MNM form.
+  /**
+   * Render the MNM form.
+   */
   WC_MNM_Variation_Form.prototype.displayForm = function( event, variation ) {
 
     if ( variation.mix_and_match_html ) {
