@@ -181,7 +181,7 @@ class WC_MNM_Variable_Product_Data {
 			array(
 				'id'            => 'wc_mnm_variable_form_location',
 				'wrapper_class' => 'mnm_container_layout_options show_if_wc_mnm_variable_layout_override_yes hide_if_wc_mnm_variable_layout_override_no hidden',
-				'label'         => esc_html__( 'Layout', 'wc-mnm-variable' ),
+				'label'         => esc_html__( 'Add to cart ', 'wc-mnm-variable' ),
 				'value'	        => $vmnm_product_object->get_add_to_cart_form_location( 'edit' ),
 				'options'       => WC_Product_Mix_and_Match::get_add_to_cart_form_location_options(),
 			)
