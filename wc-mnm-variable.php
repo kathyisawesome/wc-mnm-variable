@@ -164,7 +164,13 @@ class WC_MNM_Variable {
 	 * Include admin files.
 	 */
 	public function admin_includes() {
-		include_once 'includes/admin/metaboxes/class-wc-mnm-variable-product-data.php';	
+		include_once 'includes/admin/metaboxes/class-wc-mnm-variable-product-data.php';
+
+		// Product Import/Export.
+		if ( WC_MNM_Core_Compatibility::is_wc_version_gte( '3.1' ) ) {
+			include_once 'includes/admin/export/class-wc-mnm-variable-product-export.php';
+			include_once 'includes/admin/import/class-wc-mnm-variable-product-import.php';
+		}
 	}
 
 
