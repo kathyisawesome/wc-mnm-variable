@@ -512,8 +512,8 @@ class WC_MNM_Variable_Product_Data {
 
 		// Search args.
 		$args = array(
-			'id'                => 'wc_mnm_variation_categories[' . $loop . ']',
-			'name'              => 'wc_mnm_variation_categories[' . $loop . '][]',
+			'id'                => 'wc_mnm_variation_allowed_categories[' . $loop . ']',
+			'name'              => 'wc_mnm_variation_allowed_categories[' . $loop . '][]',
 			'class'             => 'wc-mnm-enhanced-select wc-mnm-category-search',
 			'wrapper_class'     => 'form-field wc_mnm_variable_allowed_categories_field show_if_wc_mnm_variation_content_source_categories hide_if_wc_mnm_variation_content_source_products',
 			'label'             => __( 'Select categories', 'wc-mnm-variable' ),
