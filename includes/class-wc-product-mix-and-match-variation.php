@@ -123,7 +123,7 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 		// Since the global value _can_ be false, we need a fallback for new installs.
 		$value = $value ? $value : $this->get_prop( 'add_to_cart_form_location', 'edit' );
 
-		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'add_to_cart_form_location', $layout, $this ) : $layout;
+		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'add_to_cart_form_location', $value, $this ) : $value;
 	}
 
 	/**
