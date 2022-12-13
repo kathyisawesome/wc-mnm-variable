@@ -461,7 +461,7 @@ class WC_MNM_Variable_Product_Data {
 		);
 
 		// Generate some data for the select2 input.
-		$child_items = 'products' === $variation_object->get_content_source( 'edit' ) ? $variation_object->get_child_items( 'edit' ) : [];
+		$child_items = ! $variation_object->is_sharing_content( 'edit' ) && 'products' === $variation_object->get_content_source( 'edit' ) ? $variation_object->get_child_items( 'edit' ) : [];
 
 		// Exclude all but simple and variation products.
 		$product_types = wc_get_product_types();
@@ -498,7 +498,7 @@ class WC_MNM_Variable_Product_Data {
 		wc_mnm_wp_enhanced_select( $args );
 
 		// Generate some data for the select2 input.
-		$selected_cats = $variation_object->get_child_category_ids( 'edit' );
+		$selected_cats = ! $variation_object->is_sharing_content( 'edit' ) ? $variation_object->get_child_category_ids( 'edit' ) : [];
 
 		$values = array();
 
