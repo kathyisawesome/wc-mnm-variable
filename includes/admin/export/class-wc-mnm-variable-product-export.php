@@ -30,7 +30,7 @@ class WC_MNM_Variable_Product_Export {
 	public static function init() {
 
 		// Register and query mix and match variations.
-		add_filter( 'woocommerce_exporter_product_types', array( __CLASS__, 'register_susbcription_variation_type' ) );
+		add_filter( 'woocommerce_exporter_product_types', array( __CLASS__, 'register_mix_and_match_variation_type' ) );
 		add_filter( 'woocommerce_product_export_product_query_args', array( __CLASS__, 'filter_export_query' ) );
 
 		// Add CSV columns for exporting container data.
@@ -66,8 +66,8 @@ class WC_MNM_Variable_Product_Export {
 	 * @param array $types The product type keys and labels.
 	 * @return array $types
 	 */
-	public static function register_susbcription_variation_type( $types ) {
 		$types[ 'mix- and-match-variation'] = __( 'Mix and Match variations', 'wc-mnm-variable' );
+	public static function register_mix_and_match_variation_type( $types ) {
 		return $types;
 	}
 
