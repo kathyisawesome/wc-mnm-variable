@@ -163,26 +163,23 @@ class WC_MNM_Variable_Product_Import {
 
 		if ( $product instanceof WC_Product && $product->is_type( 'variable-mix-and-match' ) ) {
 
-			$props = apply_filters(
-				'wc_mnm_variable_import_set_props',
-				array(
-					'share_contents'            => isset( $data['wc_mnm_variable_share_contents'] ) ? intval( $data['wc_mnm_variable_share_contents'] ) : 0,
-					'content_source'            => isset( $data['wc_mnm_content_source'] ) && '' !== $data['wc_mnm_content_source'] ? strval( $data['wc_mnm_content_source'] ) : 'products',
-					'child_category_ids'        => isset( $data['wc_mnm_child_category_ids'] ) && ! empty( $data['wc_mnm_child_category_ids'] ) ? $data['wc_mnm_child_category_ids'] : array(),
-					'child_items'               => isset( $data['wc_mnm_child_items'] ) && ! empty( $data['wc_mnm_child_items'] ) ? $data['wc_mnm_child_items'] : array(),
-					'packing_mode'              => isset( $data['wc_mnm_packing_mode'] ) && '' !== $data['wc_mnm_packing_mode'] ? strval( $data['wc_mnm_packing_mode'] ) : 'together',
-					'weight_cumulative'         => isset( $data['wc_mnm_weight_cumulative'] ) && 1 === intval( $data['wc_mnm_weight_cumulative'] ) ? 'yes' : 'no',
-					'priced_per_product'        => isset( $data['wc_mnm_priced_per_product'] ) && 1 === intval( $data['wc_mnm_priced_per_product'] ) ? 'yes' : 'no',
-					'discount'                  => isset( $data['wc_mnm_discount'] ) && '' !== $data['wc_mnm_discount'] ? strval( $data['wc_mnm_discount'] ) : '',
-					'layout_override'           => isset( $data['wc_mnm_layout_override'] ) && 1 === intval( $data['wc_mnm_layout_override'] ) ? 'yes' : 'no',
-					'layout'                    => isset( $data['wc_mnm_layout'] ) && '' !== $data['wc_mnm_layout'] ? strval( $data['wc_mnm_layout'] ) : 'tabular',
-					'add_to_cart_form_location' => isset( $data['wc_mnm_add_to_cart_form_location'] ) && '' !== $data['wc_mnm_add_to_cart_form_location'] ? strval( $data['wc_mnm_add_to_cart_form_location'] ) : 'default',
-				),
-				$product,
-				$data
-			);
+			$props = WC_MNM_Product_Import::get_parsed_props( $data, $product );
 
-			$product->set_props( $props );
+			/**
+			 * Filter container-type props.
+			 *
+			 * @param  array  $props - Container props.
+			 * @param  WC_Product - The product object.
+			 * @param  array $data - imported data.
+			 * @return array
+			 */
+
+			$props = (array) apply_filters( 'wc_mnm_variable_import_set_props', $props, $product, $data );
+
+			if ( ! empty( $props ) ) {
+				$product->set_props( $props );
+			}
+
 		}
 
 		return $product;
@@ -197,7 +194,7 @@ class WC_MNM_Variable_Product_Import {
 	 */
 	public static function unset_variation_props( $props, $product ) {
 
-		if ( $product && $product->is_type( 'mix-and-match-variation' ) ) {
+		if ( $product instanceof WC_Product && $product->is_type( 'mix-and-match-variation' ) ) {
 			unset( $props['packing_mode'] );
 			unset( $props['weight_cumulative'] );
 			unset( $props['priced_per_product'] );
