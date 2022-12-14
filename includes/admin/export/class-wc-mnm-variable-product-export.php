@@ -150,7 +150,7 @@ class WC_MNM_Variable_Product_Export {
 	public static function export_layout_override( $value, $product ) {
 
 		if ( $product->is_type( 'variable-mix-and-match' ) ) {
-			$value = $product->has_layout_override( 'edit' ) ? 1 : '';
+			$value = $product->has_layout_override( 'edit' ) ? 1 : 0;
 		}
 
 		return $value;
