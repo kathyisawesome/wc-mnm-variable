@@ -912,14 +912,14 @@ trait WC_MNM_Container {
 			// If a child does not have enough stock, let people know.
 			if ( 'outofstock' === $get_child_items_stock_status ) {
 
-				$availability[ 'availability' ] = _x( 'Insufficient stock', '[Frontend]', 'wc-mnm-variable' );
-				$availability[ 'class' ]        = 'out-of-stock';
+				$availability['availability'] = _x( 'Insufficient stock', '[Frontend]', 'wc-mnm-variable' );
+				$availability['class']        = 'out-of-stock';
 
 			// If a child is on backorder, the parent should appear to be on backorder, too.
 			} elseif ( parent::is_in_stock() && 'onbackorder' === $get_child_items_stock_status ) {
 
-				$availability[ 'availability' ] = _x( 'Available on backorder', '[Frontend]', 'wc-mnm-variable' );
-				$availability[ 'class' ]        = 'available-on-backorder';
+				$availability['availability'] = _x( 'Available on backorder', '[Frontend]', 'wc-mnm-variable' );
+				$availability['class']        = 'available-on-backorder';
 
 			}
 		}
@@ -1012,10 +1012,10 @@ trait WC_MNM_Container {
 	 */
 	public function calculate_price( $args ) {
 
-		$min_or_max = isset( $args[ 'min_or_max' ] ) && in_array( $args[ 'min_or_max' ] , array( 'min', 'max' ) ) ? $args[ 'min_or_max' ] : 'min';
-		$qty        = isset( $args[ 'qty' ] ) ? absint( $args[ 'qty' ] ) : 1;
-		$price_prop = isset( $args[ 'prop' ] ) && in_array( $args[ 'prop' ] , array( 'price', 'regular_price' ) ) ? $args[ 'prop' ] : 'price';
-		$price_calc = isset( $args[ 'calc' ] ) && in_array( $args[ 'calc' ] , array( 'incl_tax', 'excl_tax', 'display', '' ) ) ? $args[ 'calc' ] : '';
+		$min_or_max = isset( $args['min_or_max'] ) && in_array( $args['min_or_max'] , array( 'min', 'max' ) ) ? $args['min_or_max'] : 'min';
+		$qty        = isset( $args['qty'] ) ? absint( $args['qty'] ) : 1;
+		$price_prop = isset( $args['prop'] ) && in_array( $args['prop'] , array( 'price', 'regular_price' ) ) ? $args['prop'] : 'price';
+		$price_calc = isset( $args['calc'] ) && in_array( $args['calc'] , array( 'incl_tax', 'excl_tax', 'display', '' ) ) ? $args['calc'] : '';
 
 		if ( $this->is_priced_per_product() ) {
 
@@ -1063,7 +1063,7 @@ trait WC_MNM_Container {
 					if ( ! empty( $this->pricing_data ) ) {
 						foreach ( $this->pricing_data as $child_item_id => $data ) {
 
-							$item_qty = $qty * $data[ 'slots_filled_' . $min_or_max ];
+							$item_qty = $qty * $data['slots_filled_' . $min_or_max ];
 
 							if ( $item_qty ) {
 								$child_item = $this->get_child_item( $child_item_id );

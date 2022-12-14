@@ -218,7 +218,7 @@ class WC_MNM_Variable {
 	 * @return array
 	 */ 
 	public function product_selector_filter( $product_types ) {
-		$product_types[ 'variable-mix-and-match' ] = __( 'Variable Mix and Match','wc-mnm-variable' );
+		$product_types['variable-mix-and-match'] = __( 'Variable Mix and Match', 'wc-mnm-variable' );
 		return $product_types;
 	}
 
@@ -254,8 +254,8 @@ class WC_MNM_Variable {
 	 * @return array
 	 */
 	public function data_stores( $stores ) {
-		$stores[ 'product-variable-mix-and-match' ]  = 'WC_Product_Variable_Mix_and_Match_Data_Store_CPT';
-		$stores[ 'product-mix-and-match-variation' ] = 'WC_Product_Mix_and_Match_Variation_Data_Store_CPT';
+		$stores['product-variable-mix-and-match']  = 'WC_Product_Variable_Mix_and_Match_Data_Store_CPT';
+		$stores['product-mix-and-match-variation'] = 'WC_Product_Mix_and_Match_Variation_Data_Store_CPT';
 		return $stores;
 	}
 
@@ -371,10 +371,10 @@ class WC_MNM_Variable {
 
 		if ( $variation->is_type( 'mix-and-match-variation' ) && $product->is_type( 'variable-mix-and-match' ) ) {
 			if ( apply_filters( 'wc_mnm_eager_load_variations', true, $product ) || did_action( 'wc_ajax_get_variation' ) ) {
-				$data[ 'mix_and_match_html' ] = $this->get_variation_template_html( $variation );
+				$data['mix_and_match_html'] = $this->get_variation_template_html( $variation );
 			}
-			$data[ 'mix_and_match_min_container_size' ] = $variation->get_min_container_size();
-			$data[ 'mix_and_match_max_container_size' ] = $variation->get_min_container_size();
+			$data['mix_and_match_min_container_size'] = $variation->get_min_container_size();
+			$data['mix_and_match_max_container_size'] = $variation->get_min_container_size();
 		}
 
 		return $data;
@@ -505,7 +505,7 @@ class WC_MNM_Variable {
 		 * They will be added by the container item on 'woocommerce_add_to_cart'.
 		 */
 		if ( WC_Mix_and_Match()->cart->is_cart_session_loaded() ) {
-			if ( isset( $cart_item_data[ 'is_order_again_mnm_item' ] ) ) {
+			if ( isset( $cart_item_data['is_order_again_mnm_item'] ) ) {
 				return false;
 			}
 		}
@@ -576,7 +576,7 @@ class WC_MNM_Variable {
 	 */
 	public function get_container_form() {
 
-		$product_id = isset( $_POST[ 'product_id' ] ) ? intval( $_POST[ 'product_id' ] ) : 0;
+		$product_id = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
 		$product = wc_get_product( $product_id );
 
 		if ( ! $product ) {
@@ -585,15 +585,15 @@ class WC_MNM_Variable {
 		}
 
 		// Initialize form state based on the URL params.
-		$request = ! empty ( $_POST[ 'request' ] ) ? wc_clean( $_POST[ 'request' ] ) : '';
+		$request = ! empty( $_POST['request'] ) ? wc_clean( $_POST['request'] ) : '';
 
 		if ( ! empty( $request ) ) {
-			parse_str(html_entity_decode( $request), $params );
+			parse_str( html_entity_decode( $request ), $params );
 			$_REQUEST = array_merge( $_REQUEST, $params );
 		}
 
 		// Initialize form state based on the actual configuration of the container.
-		$configuration = ! empty ( $_POST[ 'configuration' ] ) ? wc_clean( $_POST[ 'configuration' ] ) : array();
+		$configuration = ! empty( $_POST['configuration'] ) ? wc_clean( $_POST['configuration'] ) : array();
 
 		if ( ! empty( $configuration ) ) {
 			$_REQUEST = array_merge( $_REQUEST, WC_Mix_and_Match()->cart->rebuild_posted_container_form_data( $configuration, $product ) );

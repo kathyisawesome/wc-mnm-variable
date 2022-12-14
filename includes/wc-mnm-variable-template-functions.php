@@ -218,7 +218,7 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 
 			<fieldset id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $class );?>">
 
-				<legend><?php printf( esc_html_x( 'Choose %s', '[Frontend] attribute label', 'wc-mnm-variable' ), wc_attribute_label( $args[ 'attribute' ] ) ); ?></legend>
+				<legend><?php printf( esc_html_x( 'Choose %s', '[Frontend] attribute label', 'wc-mnm-variable' ), wc_attribute_label( $args['attribute'] ) ); ?></legend>
 
 				<?php wc_setup_loop( ['columns' => 3 ] ); ?>
 				<?php woocommerce_product_loop_start(); ?>
@@ -231,8 +231,8 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 						
 						$attributes = $variation->get_variation_attributes( false );
 						$value      = reset( $attributes ); // get_attribute() returns the pretty term label, which isn't viable for a value attribute.
-						$label      = $variation->get_attribute( $args[ 'attribute' ] );
-						$input_id   = sanitize_title( $args[ 'attribute' ] . '-' . $value );
+						$label      = $variation->get_attribute( $args['attribute'] );
+						$input_id   = sanitize_title( $args['attribute'] . '-' . $value );
 
 						// This handles < 2.4.0 bw compatibility where text attributes were not sanitized.
 						$checked = sanitize_title( $args['selected'] ) === $args['selected'] ? checked( $args['selected'], sanitize_title( $value ), false ) : checked( $args['selected'], $value, false );	

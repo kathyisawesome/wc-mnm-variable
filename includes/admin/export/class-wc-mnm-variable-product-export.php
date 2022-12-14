@@ -62,7 +62,7 @@ class WC_MNM_Variable_Product_Export {
 	 * @return array $types
 	 */
 	public static function register_mix_and_match_variation_type( $types ) {
-		$types[ 'mix and-match-variation'] = __( 'Mix and Match variations', 'wc-mnm-variable' );
+		$types['mix and-match-variation'] = __( 'Mix and Match variations', 'wc-mnm-variable' );
 		return $types;
 	}
 
@@ -78,20 +78,20 @@ class WC_MNM_Variable_Product_Export {
 	 * @return array
 	 */
 	public static function filter_export_query( $args ) {
-		if ( ! isset( $args[ 'type' ] ) || empty( $args[ 'type' ] ) || ! is_array( $args[ 'type' ] ) ) {
+		if ( ! isset( $args['type'] ) || empty( $args['type'] ) || ! is_array( $args['type'] ) ) {
 			return $args;
 		}
 
 		$export_mix_and_match_variations = false;
 		$export_variations               = false;
 
-		foreach ( $args[ 'type' ] as $index => $product_type ) {
+		foreach ( $args['type'] as $index => $product_type ) {
 			if ( 'mix-and-match-variation' === $product_type ) {
 				$export_mix_and_match_variations = true;
 
 				// All variation products are exported with the 'variation' key so remove the uneeded `mix-and-match-variation`.
 				// Further filtering by product type will be handled by the query args (see below).
-				unset( $args[ 'type' ][ $index ] );
+				unset( $args['type'][ $index ] );
 			} elseif ( 'variation' === $product_type ) {
 				$export_variations = true;
 			}
@@ -99,7 +99,7 @@ class WC_MNM_Variable_Product_Export {
 
 		// Exporting mix and match variations but not standard variations. Exclude child variations of variable products.
 		if ( $export_mix_and_match_variations && ! $export_variations ) {
-			$args[ 'parent_exclude' ] = wc_get_products(
+			$args['parent_exclude'] = wc_get_products(
 				array(
 					'type'   => 'variable',
 					'limit'  => -1,
@@ -107,10 +107,10 @@ class WC_MNM_Variable_Product_Export {
 				)
 			);
 
-			$args[ 'type' ][] = 'variation';
+			$args['type'][] = 'variation';
 		// Exporting standard product variations but not mix and match variations. Exclude child variations of variable mix and match products.
 		} elseif ( $export_variations && ! $export_mix_and_match_variations ) {
-			$args[ 'parent_exclude' ] = wc_get_products(
+			$args['parent_exclude'] = wc_get_products(
 				array(
 					'type'   => 'variable-mix-and-match',
 					'limit'  => -1,
@@ -130,7 +130,7 @@ class WC_MNM_Variable_Product_Export {
 	 */
 	public static function add_columns( $columns ) {
 
-		$columns[ 'wc_mnm_variable_share_contents' ] = __( 'Variable MnM Share Contents', 'wc-mnm-variable' );
+		$columns['wc_mnm_variable_share_contents'] = __( 'Variable MnM Share Contents', 'wc-mnm-variable' );
 
 		/**
 		 * Mix and Match Export columns.

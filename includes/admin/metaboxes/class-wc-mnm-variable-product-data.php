@@ -66,8 +66,8 @@ class WC_MNM_Variable_Product_Data {
 	 */
 	public static function product_type_options( $options ) {
 
-		if ( isset( $options[ 'nyp' ] ) ) {
-			$options[ 'nyp' ][ 'wrapper_class' ] .= ' hide_if_variable-mix-and-match';
+		if ( isset( $options['nyp'] ) ) {
+			$options['nyp']['wrapper_class'] .= ' hide_if_variable-mix-and-match';
 		}
 
 		return $options;
@@ -86,7 +86,7 @@ class WC_MNM_Variable_Product_Data {
 		global $post, $product_object, $vmnm_product_object;
 
 		// Force variations tab to show.
-		$tabs[ 'variations' ][ 'class' ][]  = 'show_if_variable-mix-and-match';
+		$tabs['variations']['class'][]  = 'show_if_variable-mix-and-match';
 		$tabs['inventory']['class'][] = 'show_if_variable-mix-and-match'; // Cannot add same to shipping tab as it hide shipping on simple products. Use JS instead.
 
 		/*
@@ -100,7 +100,7 @@ class WC_MNM_Variable_Product_Data {
 			$vmnm_product_object = $product_object;
 		}
 
-		$tabs[ 'vmnm_options' ] = array(
+		$tabs['vmnm_options'] = array(
 			'label'    => __( 'Mix and Match','wc-mnm-variable' ),
 			'target'   => 'variable_mix_and_match_product_data',
 			'class'    => array( 'show_if_variable-mix-and-match', 'vmnm_product_tab', 'vmnm_product_options', 'mnm_product_options' ),
@@ -240,8 +240,8 @@ class WC_MNM_Variable_Product_Data {
 	
 			// Exclude all but simple and variation products.
 			$product_types = wc_get_product_types();
-			unset( $product_types[ 'simple' ] );
-			unset( $product_types[ 'variation' ] );
+			unset( $product_types['simple'] );
+			unset( $product_types['variation'] );
 			$product_types = array_keys( $product_types );
 	
 			$values = array();
@@ -465,8 +465,8 @@ class WC_MNM_Variable_Product_Data {
 
 		// Exclude all but simple and variation products.
 		$product_types = wc_get_product_types();
-		unset( $product_types[ 'simple' ] );
-		unset( $product_types[ 'variation' ] );
+		unset( $product_types['simple'] );
+		unset( $product_types['variation'] );
 		$product_types = array_keys( $product_types );
 
 		$values = array();
@@ -556,23 +556,23 @@ class WC_MNM_Variable_Product_Data {
 		if ( $product->is_type( 'variable-mix-and-match' ) ) {
 
 			$props = array(
-				'layout_override'           => isset( $_POST[ 'wc_mnm_variable_layout_override' ] ),
-				'layout'                    => isset( $_POST[ 'wc_mnm_variable_layout' ] ) ? wc_clean( $_POST[ 'wc_mnm_variable_layout' ] ) : 'tabular',
-				'add_to_cart_form_location' => isset( $_POST[ 'wc_mnm_variable_form_location' ] ) ? wc_clean( $_POST[ 'wc_mnm_variable_form_location' ] ) : 'default',
-				'share_content'             => isset( $_POST[ 'wc_mnm_variable_share_content' ] ) && 'yes' === wc_clean( $_POST[ 'wc_mnm_variable_share_content' ] ),
-				'priced_per_product'        => isset( $_POST[ 'wc_mnm_variable_per_product_pricing' ] ) && 'yes' === wc_clean( $_POST[ 'wc_mnm_variable_per_product_pricing' ] ),
+				'layout_override'           => isset( $_POST['wc_mnm_variable_layout_override'] ),
+				'layout'                    => isset( $_POST['wc_mnm_variable_layout'] ) ? wc_clean( $_POST['wc_mnm_variable_layout'] ) : 'tabular',
+				'add_to_cart_form_location' => isset( $_POST['wc_mnm_variable_form_location'] ) ? wc_clean( $_POST['wc_mnm_variable_form_location'] ) : 'default',
+				'share_content'             => isset( $_POST['wc_mnm_variable_share_content'] ) && 'yes' === wc_clean( $_POST['wc_mnm_variable_share_content'] ),
+				'priced_per_product'        => isset( $_POST['wc_mnm_variable_per_product_pricing'] ) && 'yes' === wc_clean( $_POST['wc_mnm_variable_per_product_pricing'] ),
 				'packing_mode'              => 'together',
-				'weight_cumulative'         => isset( $_POST[ 'wc_mnm_weight_cumulative' ] ) && 'cumulative' === wc_clean( $_POST[ 'wc_mnm_weight_cumulative' ] ),
-				'content_source'            => isset( $_POST[ 'wc_mnm_variable_content_source' ] ) ? wc_clean( $_POST[ 'wc_mnm_variable_content_source' ] ) : 'products',
+				'weight_cumulative'         => isset( $_POST['wc_mnm_weight_cumulative'] ) && 'cumulative' === wc_clean( $_POST['wc_mnm_weight_cumulative'] ),
+				'content_source'            => isset( $_POST['wc_mnm_variable_content_source'] ) ? wc_clean( $_POST['wc_mnm_variable_content_source'] ) : 'products',
 				'child_items'               => [],
-				'child_category_ids'        => isset( $_POST[ 'wc_mnm_variable_allowed_categories' ] ) ? array_map( 'intval', (array) wp_unslash( $_POST[ 'wc_mnm_variable_allowed_categories' ] ) ) : [],
+				'child_category_ids'        => isset( $_POST['wc_mnm_variable_allowed_categories'] ) ? array_map( 'intval', (array) wp_unslash( $_POST['wc_mnm_variable_allowed_categories'] ) ) : [],
 			);
 
 			// Packing mode.
-			if ( ! empty( $_POST[ 'wc_mnm_packing_mode' ] ) ) {
-				$mode = wc_clean( $_POST[ 'wc_mnm_packing_mode' ] );
-				$mode = 'separate' === $mode && isset( $_POST[ 'wc_mnm_has_physical_container' ] ) ? 'separate_plus' : $mode;
-				$props[ 'packing_mode' ] = $mode;
+			if ( ! empty( $_POST['wc_mnm_packing_mode'] ) ) {
+				$mode = wc_clean( $_POST['wc_mnm_packing_mode'] );
+				$mode = 'separate' === $mode && isset( $_POST['wc_mnm_has_physical_container'] ) ? 'separate_plus' : $mode;
+				$props['packing_mode'] = $mode;
 			}
 
 			if ( ! defined( 'WC_MNM_UPDATING' ) && ! defined( 'WC_MNM_NEEDS_DB_UPDATE' ) ) {
@@ -581,9 +581,9 @@ class WC_MNM_Variable_Product_Data {
 				$props['child_items'] = WC_MNM_Meta_Box_Product_Data::process_child_items_data( $product, ! empty( $_POST['wc_mnm_variable_allowed_products'] ) ? $_POST['wc_mnm_variable_allowed_products'] : [] );
 
 				// Show a notice if the user hasn't selected any items for the container.
-				if ( 'yes' === $props[ 'share_content' ] && apply_filters( 'wc_mnm_display_empty_container_error', true, $product ) ) {
+				if ( 'yes' === $props['share_content'] && apply_filters( 'wc_mnm_display_empty_container_error', true, $product ) ) {
 
-					if ( 'categories' === $props['content_source'] && empty( $props['child_category_ids' ] ) ) {
+					if ( 'categories' === $props['content_source'] && empty( $props['child_category_ids'] ) ) {
 						WC_Admin_Meta_Boxes::add_error( __( 'Please select at least one category to use for this Variable Mix and Match product.', 'wc-mnm-variable' ) );
 					} elseif ( 'products' === $props['content_source'] && empty( $props['child_items'] ) ) {
 						WC_Admin_Meta_Boxes::add_error( __( 'Please select at least one product to use for this Variable Mix and Match product.', 'wc-mnm-variable' ) );
@@ -618,38 +618,38 @@ class WC_MNM_Variable_Product_Data {
 		];
 
 		// Set the min container size.
-		if ( ! empty( $_POST[ 'wc_mnm_variation_min_container_size' ] ) && ! empty( $_POST[ 'wc_mnm_variation_min_container_size' ][$i] ) ) {
-			$props[ 'min_container_size' ] = absint( wc_clean( $_POST[ 'wc_mnm_variation_min_container_size' ][$i] ) );
+		if ( ! empty( $_POST['wc_mnm_variation_min_container_size'] ) && ! empty( $_POST['wc_mnm_variation_min_container_size'][$i] ) ) {
+			$props['min_container_size'] = absint( wc_clean( $_POST['wc_mnm_variation_min_container_size'][$i] ) );
 		}
 
 		// Set the max container size.
-		if ( ! empty( $_POST[ 'wc_mnm_variation_max_container_size' ] ) && ! empty( $_POST[ 'wc_mnm_variation_max_container_size' ][$i] ) ) {
-			$props[ 'max_container_size' ] = absint( wc_clean( $_POST[ 'wc_mnm_variation_max_container_size' ][$i] ) );
+		if ( ! empty( $_POST['wc_mnm_variation_max_container_size'] ) && ! empty( $_POST['wc_mnm_variation_max_container_size'][$i] ) ) {
+			$props['max_container_size'] = absint( wc_clean( $_POST['wc_mnm_variation_max_container_size'][$i] ) );
 		}
 
 		// Make sure the max container size is not smaller than the min size.
-		if ( $props[ 'max_container_size' ] > 0 && $props[ 'max_container_size' ] < $props[ 'min_container_size' ] ) {
-			$props[ 'max_container_size' ] = $props[ 'min_container_size' ];
+		if ( $props['max_container_size'] > 0 && $props['max_container_size'] < $props['min_container_size'] ) {
+			$props['max_container_size'] = $props['min_container_size'];
 		}
 
 		// Set the per-item discount.
-		if ( ! empty( $_POST[ 'wc_mnm_variation_per_product_discount' ] ) && ! empty( $_POST[ 'wc_mnm_variation_per_product_discount' ][$i] ) ) {
-			$props[ 'discount' ] = wc_clean( wp_unslash( $_POST[ 'wc_mnm_variation_per_product_discount' ][$i] ) );
+		if ( ! empty( $_POST['wc_mnm_variation_per_product_discount'] ) && ! empty( $_POST['wc_mnm_variation_per_product_discount'][$i] ) ) {
+			$props['discount'] = wc_clean( wp_unslash( $_POST['wc_mnm_variation_per_product_discount'][$i] ) );
 		}
 
 		// Set the content source.
-		if ( ! empty( $_POST[ 'wc_mnm_variation_content_source' ] ) && ! empty( $_POST[ 'wc_mnm_variation_content_source' ][$i] ) ) {
-			$props[ 'content_source' ] = wc_clean( $_POST[ 'wc_mnm_variation_content_source' ][$i] );
+		if ( ! empty( $_POST['wc_mnm_variation_content_source'] ) && ! empty( $_POST['wc_mnm_variation_content_source'][$i] ) ) {
+			$props['content_source'] = wc_clean( $_POST['wc_mnm_variation_content_source'][$i] );
 		}
 
 		// Set the child category IDs.
-		if ( ! empty( $_POST[ 'wc_mnm_variation_allowed_categories' ] ) && ! empty( $_POST[ 'wc_mnm_variation_allowed_categories' ][$i] ) ) {
-			$props[ 'child_category_ids' ] = wc_clean( wp_unslash( $_POST[ 'wc_mnm_variation_allowed_categories' ][$i] ) );
+		if ( ! empty( $_POST['wc_mnm_variation_allowed_categories'] ) && ! empty( $_POST['wc_mnm_variation_allowed_categories'][$i] ) ) {
+			$props['child_category_ids'] = wc_clean( wp_unslash( $_POST['wc_mnm_variation_allowed_categories'][$i] ) );
 		}
 
 		// Set the child items.
-		if ( ! empty( $_POST[ 'wc_mnm_variation_allowed_products' ] ) && ! empty( $_POST[ 'wc_mnm_variation_allowed_products' ][$i] ) ) {
-			$props[ 'child_items' ] = WC_MNM_Meta_Box_Product_Data::process_child_items_data( $variation, $_POST[ 'wc_mnm_variation_allowed_products' ][$i] );
+		if ( ! empty( $_POST['wc_mnm_variation_allowed_products'] ) && ! empty( $_POST['wc_mnm_variation_allowed_products'][$i] ) ) {
+			$props['child_items'] = WC_MNM_Meta_Box_Product_Data::process_child_items_data( $variation, $_POST['wc_mnm_variation_allowed_products'][$i] );
 		}
 
 		$variation->set_props( $props );

@@ -119,7 +119,7 @@ class WC_MNM_Variable_Product_Import {
 		$columns[ __( 'Variable MnM Share Contents', 'wc-mnm-variable' ) ] = 'wc_mnm_variable_share_contents';
 
 		// Always add English mappings.
-		$columns[ 'Variable MnM Share Contents' ] = 'wc_mnm_variable_share_contents';
+		$columns['Variable MnM Share Contents'] = 'wc_mnm_variable_share_contents';
 
 		return apply_filters( 'wc_mnm_variable_csv_product_import_mapping_default_columns', $columns );
 	}
@@ -171,13 +171,13 @@ class WC_MNM_Variable_Product_Import {
 	public static function unset_variation_props( $props, $product ) {
 
 		if ( $product && $product->is_type( 'mix-and-match-variation' ) ) {
-			unset( $props[ 'packing_mode' ] );
-			unset( $props[ 'weight_cumulative' ] );
-			unset( $props[ 'priced_per_product' ] );
-			unset( $props[ 'discount' ] );  
-			unset( $props[ 'layout_override' ] );
-			unset( $props[ 'layout' ] );                    
-			unset( $props[ 'add_to_cart_form_location' ] ); 
+			unset( $props['packing_mode'] );
+			unset( $props['weight_cumulative'] );
+			unset( $props['priced_per_product'] );
+			unset( $props['discount'] );  
+			unset( $props['layout_override'] );
+			unset( $props['layout'] );                    
+			unset( $props['add_to_cart_form_location'] ); 
 		}
 
 		return $props;

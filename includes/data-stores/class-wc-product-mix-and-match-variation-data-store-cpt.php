@@ -146,7 +146,7 @@ class WC_Product_Mix_and_Match_Variation_Data_Store_CPT extends WC_Product_Varia
 
 			// Get a global value for layout/location props (always use global options in customizer).
 			if ( $this->is_global_prop( $product, $property ) ) {   
-				$parent_data[ 'global_' . $property ] = get_option( $this->global_props[$property] );
+				$parent_data['global_' . $property ] = get_option( $this->global_props[$property] );
 			}
 
 			$parent_data[ $property ] = get_post_meta( $parent_id, $meta_key, true );

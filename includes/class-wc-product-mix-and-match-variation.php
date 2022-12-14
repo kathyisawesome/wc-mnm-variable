@@ -68,7 +68,7 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 * @return bool
 	 */
 	public function get_share_content( $context = 'view' ) {
-		$value = wc_string_to_bool( $this->parent_data[ 'share_content' ] );
+		$value = wc_string_to_bool( $this->parent_data['share_content'] );
 		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'share_content', $value, $this ) : $value;
 	}
 
@@ -83,7 +83,7 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 
 		// Inherit value from parent if sharing content.
 		if ( $this->is_sharing_content( $context ) ) {
-			$value = 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'content_source', $this->parent_data[ 'content_source' ], $this ) : $this->parent_data[ 'content_source' ];
+			$value = 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'content_source', $this->parent_data['content_source'], $this ) : $this->parent_data['content_source'];
 		} else {
 			$value = $this->get_prop( 'content_source', $context );
 		}
@@ -102,7 +102,7 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 
 		// Inherit value from parent if sharing content.
 		if ( $this->is_sharing_content( $context ) ) {
-			$value = 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'child_category_ids', $this->parent_data[ 'child_category_ids' ], $this ) : $this->parent_data[ 'child_category_ids' ];
+			$value = 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'child_category_ids', $this->parent_data['child_category_ids'], $this ) : $this->parent_data['child_category_ids'];
 		} else {
 			$value = $this->get_prop( 'child_category_ids', $context );
 		}
@@ -118,7 +118,7 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 * @return string
 	 */
 	public function get_add_to_cart_form_location( $context = 'view' ) {
-		$value = $this->has_layout_override( $context ) ? $this->parent_data[ 'add_to_cart_form_location' ] : $this->parent_data[ 'global_add_to_cart_form_location' ];
+		$value = $this->has_layout_override( $context ) ? $this->parent_data['add_to_cart_form_location'] : $this->parent_data['global_add_to_cart_form_location'];
 
 		// Since the global value _can_ be false, we need a fallback for new installs.
 		$value = $value ? $value : $this->get_prop( 'add_to_cart_form_location', 'edit' );
@@ -133,7 +133,7 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 * @return string
 	 */
 	public function get_layout_override( $context = 'view' ) {
-		$value = wc_string_to_bool( $this->parent_data[ 'layout_override' ] );
+		$value = wc_string_to_bool( $this->parent_data['layout_override'] );
 		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'layout_override', $value, $this ) : $value;
 	}
 
@@ -144,7 +144,7 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 * @return string
 	 */
 	public function get_layout( $context = 'view' ) {
-		$value = $this->has_layout_override( $context ) ? $this->parent_data[ 'layout' ] : $this->parent_data[ 'global_layout' ];
+		$value = $this->has_layout_override( $context ) ? $this->parent_data['layout'] : $this->parent_data['global_layout'];
 
 		// Since the global value _can_ be false, we need a fallback for new installs.
 		$value = $value ? $value : $this->get_prop( 'layout', 'edit' );
@@ -159,7 +159,7 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 * @return bool
 	 */
 	public function get_packing_mode( $context = 'view' ) {
-		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'packing_mode', $this->parent_data[ 'packing_mode' ], $this ) : $this->parent_data[ 'packing_mode' ];
+		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'packing_mode', $this->parent_data['packing_mode'], $this ) : $this->parent_data['packing_mode'];
 		return $this->get_prop( 'packing_mode', $context );
 	}
 
@@ -170,7 +170,7 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 * @return string
 	 */
 	public function get_weight_cumulative( $context = 'view' ) {
-		$value = wc_string_to_bool( $this->parent_data[ 'weight_cumulative' ] );
+		$value = wc_string_to_bool( $this->parent_data['weight_cumulative'] );
 		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'weight_cumulative', $value, $this ) : $value;
 	}
 

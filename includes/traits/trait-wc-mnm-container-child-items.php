@@ -280,7 +280,7 @@ trait WC_MNM_Container_Child_Items {
                 );
 				$props['container_id'] = $this->get_id();
 				$new_item = new WC_MNM_Child_Item( $props, $this );
-				$incoming_id = $props[ 'variation_id' ] ? $props[ 'variation_id' ] : $props[ 'product_id' ];
+				$incoming_id = $props['variation_id'] ? $props['variation_id'] : $props['product_id'];
 			}
 
 			$incoming_ids[] = $incoming_id; // Store for later comparison.
