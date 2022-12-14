@@ -32,6 +32,9 @@ class WC_MNM_Variable_Product_Import {
 		add_filter( 'woocommerce_csv_product_import_mapping_options', array( __CLASS__, 'map_columns' ) );
 		add_filter( 'woocommerce_csv_product_import_mapping_default_columns', array( __CLASS__, 'add_columns_to_mapping_screen' ) );
 
+		// Parse columns.
+		add_filter( 'woocommerce_product_importer_formatting_callbacks', array( __CLASS__, 'append_formatting_callbacks' ), 10, 2 );
+
 		// Set Variable MnM-type props.
 		add_filter( 'woocommerce_product_import_pre_insert_product_object', array( __CLASS__, 'set_variable_mnm_props' ), 10, 2 );
 
@@ -124,6 +127,30 @@ class WC_MNM_Variable_Product_Import {
 		return apply_filters( 'wc_mnm_variable_csv_product_import_mapping_default_columns', $columns );
 	}
 
+	/**
+	 * Set formatting (decoding) callback for data.
+	 *
+	 * @param  array                    $callbacks
+	 * @param  WC_Product_CSV_Importer  $importer
+	 * @return array
+	 */
+	public static function append_formatting_callbacks( $callbacks, $importer ) {
+
+		$mnm_callbacks = array( 
+			'wc_mnm_variable_share_contents' => array( $importer, 'parse_bool_field' ),
+		);
+
+		$mapped_keys_reverse             = array_flip( $importer->get_mapped_keys() );
+
+		// Add all our callbacks by array index.
+		foreach( $mnm_callbacks as $mnm_key => $mnm_callback ) {
+			if ( isset( $mapped_keys_reverse[$mnm_key] ) ) {
+				$callbacks[$mapped_keys_reverse[$mnm_key]] = $mnm_callback;
+			}
+		}
+
+		return $callbacks;
+	}
 
 	/**
 	 * Set container-type props.
