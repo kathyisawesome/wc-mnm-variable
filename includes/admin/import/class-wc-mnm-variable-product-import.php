@@ -154,6 +154,8 @@ class WC_MNM_Variable_Product_Import {
 			unset( $props[ 'add_to_cart_form_location' ] ); 
 		}
 
+		return $props;
+
 	}
 
 }
