@@ -144,7 +144,7 @@ class WC_MNM_Variable_Product_Import {
 	 */
 	public static function unset_variation_props( $props, $product ) {
 
-		if ( $product instanceof WC_Product && $product->is_type( 'mix-and-match-variation' ) ) {
+		if ( $product && $product->is_type( 'mix-and-match-variation' ) ) {
 			unset( $props[ 'packing_mode' ] );
 			unset( $props[ 'weight_cumulative' ] );
 			unset( $props[ 'priced_per_product' ] );
