@@ -71,10 +71,10 @@ class WC_MNM_Variable_Product_Import {
 	 */
 	public static function map_columns( $columns ) {
 
-		$columns['mix-and-match'] = array(
+		$columns['variable-mix-and-match'] = array(
 				'name'    => __( 'Variable Mix and Match Products', 'wc-mnm-variable' ),
 				'options' => array(
-					'wc_mnm_variable_share_contents'            => __( 'Variable MnM Share Contents', 'wc-mnm-variable' ),
+					'wc_mnm_variable_share_contents' => __( 'Variable MnM Share Contents', 'wc-mnm-variable' ),
 				)
 			);
 
@@ -93,7 +93,7 @@ class WC_MNM_Variable_Product_Import {
 		$columns[ __( 'Variable MnM Share Contents', 'wc-mnm-variable' ) ] = 'wc_mnm_variable_share_contents';
 
 		// Always add English mappings.
-		$columns[ 'Variable MnM Share Contents' ]             = 'wc_mnm_variable_share_contents';
+		$columns[ 'Variable MnM Share Contents' ] = 'wc_mnm_variable_share_contents';
 
 		return apply_filters( 'wc_mnm_variable_csv_product_import_mapping_default_columns', $columns );
 	}
