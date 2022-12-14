@@ -20,11 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_MNM_Variable_Product_Import {
 
 	/**
-	 * var WC_Product_CSV_Importer Cl
-	 */
-	private $importer = false;
-
-	/**
 	 * Hook in.
 	 */
 	public static function init() {
