@@ -20,11 +20,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_MNM_Variable_Product_Export {
 
 	/**
-	 * var WC_Product_CSV_Exporter Cl
-	 */
-	private $exporter = false;
-
-	/**
 	 * Hook in.
 	 */
 	public static function init() {
