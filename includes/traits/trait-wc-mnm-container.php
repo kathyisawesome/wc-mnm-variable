@@ -462,7 +462,7 @@ trait WC_MNM_Container {
 	 * @return bool
 	 */
 	public function is_nyp() {
-		if ( is_null ( $this->is_nyp ) ) {
+		if ( is_null( $this->is_nyp ) ) {
 			$this->is_nyp = WC_Mix_and_Match()->compatibility->is_nyp( $this );
 		}
 		return $this->is_nyp;
@@ -1220,17 +1220,20 @@ trait WC_MNM_Container {
 	 */
 	public function get_data_attributes( $args = array() ) {
 
-		$attributes = wp_parse_args( $args, array(
-			'per_product_pricing' => $this->is_priced_per_product() ? 'true'        :  'false',
-			'container_id'        => $this->get_id(),
-			'min_container_size'  => $this->get_min_container_size(),
-			'max_container_size'  => $this->get_max_container_size(),
-			'base_price'          => wc_get_price_to_display( $this, array( 'price' => $this->get_price() ) ),
-			'base_regular_price'  => wc_get_price_to_display( $this, array( 'price' => $this->get_regular_price() ) ),
-			'price_data'          => json_encode( $this->get_container_price_data() ),
-			'input_name'          => wc_mnm_get_child_input_name( $this->get_id() ),
-			'context'             => is_admin() ? 'edit' : 'add-to-cart',
-		) );
+		$attributes = wp_parse_args(
+			$args,
+			array(
+				'per_product_pricing' => $this->is_priced_per_product() ? 'true'        :  'false',
+				'container_id'        => $this->get_id(),
+				'min_container_size'  => $this->get_min_container_size(),
+				'max_container_size'  => $this->get_max_container_size(),
+				'base_price'          => wc_get_price_to_display( $this, array( 'price' => $this->get_price() ) ),
+				'base_regular_price'  => wc_get_price_to_display( $this, array( 'price' => $this->get_regular_price() ) ),
+				'price_data'          => json_encode( $this->get_container_price_data() ),
+				'input_name'          => wc_mnm_get_child_input_name( $this->get_id() ),
+				'context'             => is_admin() ? 'edit' : 'add-to-cart',
+			)
+		);
 
 		/**
 		 * `wc_mnm_container_data_attributes` Data attribues filter.

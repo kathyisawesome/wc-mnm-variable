@@ -624,7 +624,7 @@ class WC_MNM_Variable {
 	 * @return string
 	 */
 	public function get_plugin_url() {
-		return trailingslashit( plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename(__FILE__) ) );
+		return trailingslashit( plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename( __FILE__ ) ) );
 	}
 
 

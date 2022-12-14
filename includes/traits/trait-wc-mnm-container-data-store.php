@@ -357,7 +357,8 @@ trait WC_MNM_Container_Data_Store {
 							'variation_id' => $item_data['variation_id'],
 							'container_id' => $product->get_id(),
 						),
-						$product );
+                        $product 
+                    );
 				}
 
 			} else {

@@ -214,7 +214,7 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 
 		$available_variations  = $product ? $product->get_available_variations( 'objects' ) : [];
 
-		if ( ! empty ( $available_variations ) ) { ?>
+		if ( ! empty( $available_variations ) ) { ?>
 
 			<fieldset id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $class );?>">
 
