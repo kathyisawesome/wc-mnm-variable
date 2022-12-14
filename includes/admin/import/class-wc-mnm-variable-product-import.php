@@ -24,7 +24,9 @@ class WC_MNM_Variable_Product_Import {
 	 */
 	public static function init() {
 
-		add_filter( 'woocommerce_product_import_process_item_data', array( __CLASS__, 'import_mix_and_match_variations' ) );
+		//  Handle Mix and Match variations.
+		add_filter( 'woocommerce_product_import_process_item_data', array( __CLASS__, 'import_as_variation' ) );
+		add_filter( 'woocommerce_product_import_pre_insert_product_object', array( __CLASS__, 'restore_variation_type' ), 0, 2 );
 
 		// Map custom column titles.
 		add_filter( 'woocommerce_csv_product_import_mapping_options', array( __CLASS__, 'map_columns' ) );
@@ -35,8 +37,7 @@ class WC_MNM_Variable_Product_Import {
 
 		// Remove props for variations.
 		add_filter( 'wc_mnm_import_set_props', array( __CLASS__, 'unset_variation_props' ), 10, 2 );
-
-		
+	
 	}
 
 	/**
@@ -47,16 +48,45 @@ class WC_MNM_Variable_Product_Import {
 	 * like a variation.
 	 * 
 	 * @props WooCommerce Subscriptions
+	 * @see WC_Product_Importer::get_product_object()
 	 *
 	 * @param array $data The product's import data.
 	 * @return array $data
 	 */
-	public static function import_mix_and_match_variations( $data ) {
+	public static function import_as_variation( $data ) {
 		if ( isset( $data['type'] ) && 'mix-and-match-variation' === $data['type'] ) {
 			$data['type'] = 'variation';
+			$data['mix-and-match-variation'] = true; // Store original type for later.
 		}
 
 		return $data;
+	}
+
+	/**
+	 * After Woo Core has updated the post type, switch the product object back to WC_Product_Mix_and_Match_Variation
+	 *
+	 * @param WC_Product
+	 * @param  array $data     Item data.
+	 * @return WC_Product|WP_Error
+	 */
+	public static function restore_variation_type( $product, $data ) {
+
+		if ( ! empty( $data['mix-and-match-variation'] ) ) {
+			try {
+
+				$old_props = array_replace_recursive( $product->get_data(), $product->get_changes() );
+
+				// Switch product type to Mix and Match variation product object.
+				$product = wc_get_product_object( 'mix-and-match-variation', $product->get_id() );
+
+				$product->set_props( $old_props );
+
+			} catch ( WC_Data_Exception $e ) {
+				return new WP_Error( 'woocommerce_product_csv_importer_' . $e->getErrorCode(), $e->getMessage(), array( 'status' => 401 ) );
+			}
+		}
+
+		return $product;
 	}
 
 	/**
