@@ -66,8 +66,8 @@ class WC_MNM_Variable_Product_Export {
 	 * @param array $types The product type keys and labels.
 	 * @return array $types
 	 */
-		$types[ 'mix- and-match-variation'] = __( 'Mix and Match variations', 'wc-mnm-variable' );
 	public static function register_mix_and_match_variation_type( $types ) {
+		$types[ 'mix and-match-variation'] = __( 'Mix and Match variations', 'wc-mnm-variable' );
 		return $types;
 	}
 
