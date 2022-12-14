@@ -30,10 +30,6 @@ class WC_MNM_Variable_Product_Import {
 		add_filter( 'woocommerce_csv_product_import_mapping_options', array( __CLASS__, 'map_columns' ) );
 		add_filter( 'woocommerce_csv_product_import_mapping_default_columns', array( __CLASS__, 'add_columns_to_mapping_screen' ) );
 
-		// Parse Variable MnM items.
-		add_filter( 'woocommerce_product_importer_parsed_data', array( __CLASS__, 'parse_child_category_ids' ), 10, 2 );
-		add_filter( 'woocommerce_product_importer_parsed_data', array( __CLASS__, 'parse_child_items' ), 10, 2 );
-
 		// Set Variable MnM-type props.
 		add_filter( 'woocommerce_product_import_pre_insert_product_object', array( __CLASS__, 'set_variable_mnm_props' ), 10, 2 );
 
