@@ -88,7 +88,7 @@ class WC_MNM_Variable_Product_Export {
 			if ( 'mix-and-match-variation' === $product_type ) {
 				$export_mix_and_match_variations = true;
 
-				// All variation products are exported with the 'variation' key so remove the uneeded `mix-and-match-variation`.
+				// All variation products are exported with the 'variation' key so remove the unneeded `mix-and-match-variation`.
 				// Further filtering by product type will be handled by the query args (see below).
 				unset( $args['type'][ $index ] );
 			} elseif ( 'variation' === $product_type ) {
