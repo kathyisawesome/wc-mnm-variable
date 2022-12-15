@@ -98,9 +98,12 @@ class WC_MNM_Variable_Product_Export {
 
 		// Exporting mix and match variations but not standard variations. Exclude child variations of variable products.
 		if ( $export_mix_and_match_variations && ! $export_variations ) {
+
+			// For now, there's no other way to exclude variations of other variable-ish types.
+			// This does mean our variations will export when attempting to export subscription_variation products
 			$args['parent_exclude'] = wc_get_products(
 				array(
-					'type'   => 'variable',
+					'type'   => [ 'variable', 'variable-subscription' ], 
 					'limit'  => -1,
 					'return' => 'ids',
 				)
