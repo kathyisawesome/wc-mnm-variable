@@ -198,7 +198,7 @@ class WC_MNM_Variable_Product_Export {
 	public static function export_share_contents( $value, $product ) {
 
 		if ( $product->is_type( 'variable-mix-and-match' ) ) {
-			$value = $product->is_sharing_content( 'edit' ) ? 1 : '';
+			$value = $product->is_sharing_content( 'edit' ) ? 1 : 0;
 		}
 
 		return $value;
@@ -281,7 +281,7 @@ class WC_MNM_Variable_Product_Export {
 	public static function export_weight_cumulative( $value, $product ) {
 
 		if ( $product->is_type( 'variable-mix-and-match' ) ) {
-			$value = $product->get_weight_cumulative( 'edit' ) ? 1 : '';
+			$value = $product->get_weight_cumulative( 'edit' ) ? 1 : 0;
 		}
 
 		return $value;
