@@ -32,11 +32,10 @@ class WC_MNM_Variable_Product_Export {
 		add_filter( 'woocommerce_product_export_column_names', array( __CLASS__, 'add_columns' ) );
 		add_filter( 'woocommerce_product_export_product_default_columns', array( __CLASS__, 'add_columns' ) );
 
-		// Repurpose some columns from Mix and Match core.
+		// Repurpose some columns from Mix and Match core, after core runs.
 		add_filter( 'woocommerce_product_export_product_column_wc_mnm_layout_override', array( __CLASS__, 'export_layout_override' ), 20, 2 );
 		add_filter( 'woocommerce_product_export_product_column_wc_mnm_layout', array( __CLASS__, 'export_layout' ), 20, 2 );
 		add_filter( 'woocommerce_product_export_product_column_wc_mnm_add_to_cart_form_location', array( __CLASS__, 'export_add_to_cart_form_location' ), 20, 2 );
-
 		add_filter( 'woocommerce_product_export_product_column_wc_mnm_content_source', array( __CLASS__, 'export_content_source' ), 20, 2 );
 		add_filter( 'woocommerce_product_export_product_column_wc_mnm_child_category_ids', array( __CLASS__, 'export_child_category_ids' ), 20, 2 );
 		add_filter( 'woocommerce_product_export_product_column_wc_mnm_child_items', array( __CLASS__, 'export_child_items' ), 20, 2 );
