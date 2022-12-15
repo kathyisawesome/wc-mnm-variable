@@ -163,7 +163,13 @@ class WC_MNM_Variable_Product_Import {
 
 		if ( $product instanceof WC_Product && $product->is_type( 'variable-mix-and-match' ) ) {
 
+			// Inherit some props.
 			$props = WC_MNM_Product_Import::get_parsed_props( $data, $product );
+
+			// Add the unique variable mix and match props.
+			if ( isset( $data['wc_mnm_variable_share_content'] ) ) {
+				$props['share_content'] = $data['wc_mnm_variable_share_content'];
+			}
 
 			/**
 			 * Filter container-type props.
