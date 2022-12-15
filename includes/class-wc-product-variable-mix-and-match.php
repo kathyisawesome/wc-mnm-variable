@@ -110,7 +110,7 @@ class WC_Product_Variable_Mix_and_Match extends WC_Product_Variable {
 	 * @return string
 	 */
 	public function set_share_content( $value ) {
-		   $this->set_prop( 'share_content', wc_string_to_bool( $value ) );
+		$this->set_prop( 'share_content', wc_string_to_bool( $value ) );
 	}
 
 	/*

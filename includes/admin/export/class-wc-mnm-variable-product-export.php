@@ -43,7 +43,7 @@ class WC_MNM_Variable_Product_Export {
 		add_filter( 'woocommerce_product_export_product_column_wc_mnm_weight_cumulative', array( __CLASS__, 'export_weight_cumulative' ), 20, 2 );
 
 		// "Variable MnM Items" column data.
-		add_filter( 'woocommerce_product_export_product_column_wc_mnm_variable_share_contents', array( __CLASS__, 'export_share_contents' ), 10, 2 );
+		add_filter( 'woocommerce_product_export_product_column_wc_mnm_variable_share_content', array( __CLASS__, 'export_share_content' ), 10, 2 );
 
 		// "MnM Variations Items" column data - Remove data that is inherited from parent
 		add_filter( 'woocommerce_product_export_product_column_wc_mnm_content_source', array( __CLASS__, 'remove_inherited_content' ), 20, 2 );
@@ -132,7 +132,7 @@ class WC_MNM_Variable_Product_Export {
 	 */
 	public static function add_columns( $columns ) {
 
-		$columns['wc_mnm_variable_share_contents'] = __( 'Variable MnM Share Contents', 'wc-mnm-variable' );
+		$columns['wc_mnm_variable_share_content'] = __( 'Variable MnM Share Content', 'wc-mnm-variable' );
 
 		/**
 		 * Mix and Match Export columns.
@@ -197,7 +197,7 @@ class WC_MNM_Variable_Product_Export {
 	 * @param  WC_Product  $product
 	 * @return mixed       $value
 	 */
-	public static function export_share_contents( $value, $product ) {
+	public static function export_share_content( $value, $product ) {
 
 		if ( $product->is_type( 'variable-mix-and-match' ) ) {
 			$value = $product->is_sharing_content( 'edit' ) ? 1 : 0;

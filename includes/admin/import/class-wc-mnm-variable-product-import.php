@@ -33,7 +33,7 @@ class WC_MNM_Variable_Product_Import {
 		add_filter( 'woocommerce_csv_product_import_mapping_default_columns', array( __CLASS__, 'add_columns_to_mapping_screen' ) );
 
 		// Parse columns.
-		add_filter( 'woocommerce_product_importer_formatting_callbacks', array( __CLASS__, 'append_formatting_callbacks' ), 10, 2 );
+		add_filter( 'woocommerce_product_importer_formatting_callbacks', array( __CLASS__, 'append_formatting_callbacks' ), 20, 2 );
 
 		// Set Variable MnM-type props.
 		add_filter( 'woocommerce_product_import_pre_insert_product_object', array( __CLASS__, 'set_variable_mnm_props' ), 10, 2 );
@@ -103,7 +103,7 @@ class WC_MNM_Variable_Product_Import {
 		$columns['variable-mix-and-match'] = array(
 				'name'    => __( 'Variable Mix and Match Products', 'wc-mnm-variable' ),
 				'options' => array(
-					'wc_mnm_variable_share_contents' => __( 'Variable MnM Share Contents', 'wc-mnm-variable' ),
+					'wc_mnm_variable_share_content' => __( 'Variable MnM Share Content', 'wc-mnm-variable' ),
 				)
 			);
 
@@ -119,10 +119,10 @@ class WC_MNM_Variable_Product_Import {
 	 */
 	public static function add_columns_to_mapping_screen( $columns ) {
 
-		$columns[ __( 'Variable MnM Share Contents', 'wc-mnm-variable' ) ] = 'wc_mnm_variable_share_contents';
+		$columns[ __( 'Variable MnM Share Content', 'wc-mnm-variable' ) ] = 'wc_mnm_variable_share_content';
 
 		// Always add English mappings.
-		$columns['Variable MnM Share Contents'] = 'wc_mnm_variable_share_contents';
+		$columns['Variable MnM Share Content'] = 'wc_mnm_variable_share_content';
 
 		return apply_filters( 'wc_mnm_variable_csv_product_import_mapping_default_columns', $columns );
 	}
@@ -137,10 +137,10 @@ class WC_MNM_Variable_Product_Import {
 	public static function append_formatting_callbacks( $callbacks, $importer ) {
 
 		$mnm_callbacks = array( 
-			'wc_mnm_variable_share_contents' => array( $importer, 'parse_bool_field' ),
+			'wc_mnm_variable_share_content' => array( $importer, 'parse_bool_field' ),
 		);
 
-		$mapped_keys_reverse             = array_flip( $importer->get_mapped_keys() );
+		$mapped_keys_reverse = array_flip( $importer->get_mapped_keys() );
 
 		// Add all our callbacks by array index.
 		foreach( $mnm_callbacks as $mnm_key => $mnm_callback ) {
@@ -150,6 +150,7 @@ class WC_MNM_Variable_Product_Import {
 		}
 
 		return $callbacks;
+
 	}
 
 	/**
