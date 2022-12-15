@@ -61,7 +61,7 @@ class WC_MNM_Variable_Product_Export {
 	 * @return array $types
 	 */
 	public static function register_mix_and_match_variation_type( $types ) {
-		$types['mix and-match-variation'] = __( 'Mix and Match variations', 'wc-mnm-variable' );
+		$types['mix-and-match-variation'] = __( 'Mix and Match variations', 'wc-mnm-variable' );
 		return $types;
 	}
 
