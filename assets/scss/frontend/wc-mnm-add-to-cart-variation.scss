@@ -1,7 +1,9 @@
 @import '../mixins.scss';
 
 .variable_mnm_form {
+
     .wc-mnm-variations {
+        padding: .5em;
         margin-bottom: 1.5em;
         ul.products li.product {
             margin-bottom: 0em
