@@ -134,7 +134,10 @@
 
       } else {
 
-        form.$form.find( '.single_mnm_variation' ).html( '<div class="processing" /> ');
+        form.$form.trigger( 'wc_mnm_variation_form_loading', [ variation, self ] );
+
+        let $target = form.$form.find( '.single_variation_wrap' );
+        form.block( $target );
 
         $.ajax( {
           url: WC_MNM_VARIATION_ADD_TO_CART_PARAMS.wc_ajax_url.toString().replace( '%%endpoint%%', 'mnm_get_variation_container_form' ),
@@ -164,6 +167,8 @@
             } else {
               window.alert( response.data );
             }
+
+            form.unblock( $target );
     
           },
           fail: function() {
@@ -214,7 +219,7 @@
       $( event.target ).find( '.single_mnm_variation' ).html('');
     }
 
-  };
+  };  
 
   // Uncheeck all radio buttons when reset.
   WC_MNM_Variation_Form.prototype.onReset = function( event ) {
@@ -274,6 +279,40 @@
     };
 
   };
+
+  /**
+	 * Check if a node is blocked for processing.
+	 *
+	 * @param {JQuery Object} $node
+	 * @return {bool} True if the DOM Element is UI Blocked, false if not.
+	 */
+  WC_MNM_Variation_Form.prototype.is_blocked = function( $node ) {
+		return $node.is( '.processing' ) || $node.parents( '.processing' ).length;
+	};
+
+	/**
+	 * Block a node visually for processing.
+	 *
+	 * @param {JQuery Object} $node
+	 */
+  WC_MNM_Variation_Form.prototype.block = function( $node ) {
+		if ( !  WC_MNM_Variation_Form.prototype.is_blocked( $node ) ) {
+			$node.addClass( 'processing' ).block( {
+        message: null,
+        theme: true      
+			} );
+		}
+	};
+
+	/**
+	 * Unblock a node after processing is complete.
+	 *
+	 * @param {JQuery Object} $node
+	 */
+  WC_MNM_Variation_Form.prototype.unblock = function( $node ) {
+		$node.removeClass( 'processing' ).unblock();
+	};
+
 
   /*-----------------------------------------------------------------*/
   /*  Helpers.                                                       */

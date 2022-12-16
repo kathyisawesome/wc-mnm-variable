@@ -1,3 +1,5 @@
+@import '../mixins.scss';
+
 .variable_mnm_form {
     .wc-mnm-variations {
         margin-bottom: 1.5em;
@@ -26,5 +28,25 @@
 
     .wc_mnm_variation_out_of_stock .wc_mnm_variation > *:not(.mnm_cart) {
         opacity: 50%;
+    }
+
+    .single_variation_wrap.processing {
+        position: relative;
+    }
+
+    .blockUI.blockOverlay {
+        @include loader();
+        z-index: 1000;
+        border: medium none;
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+        background-color: #FFFFFF;
+        opacity: 0.6;
+        cursor: wait;
+        position: absolute;
     }
 }
