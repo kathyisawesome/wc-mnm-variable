@@ -21,7 +21,7 @@ class WC_Product_Variable_Mix_and_Match extends WC_Product_Variable {
 	 * @var array
 	 */
 	protected $extended_data = array(
-		'share_content' => false,
+		'share_content' => true,
 	);
 
 
@@ -58,7 +58,7 @@ class WC_Product_Variable_Mix_and_Match extends WC_Product_Variable {
 	 * @return string
 	 */
 	public function get_share_content( $context = 'view' ) {
-		return $this->get_prop( 'share_content', $context );
+		return true;
 	}
 
 	/**

@@ -34,7 +34,7 @@ class WC_MNM_Variable_Product_Data {
 
 		// Adds the vmnm product options.
 		add_action( 'wc_mnm_admin_variable_product_options', [ __CLASS__, 'container_layout_options' ], 10, 2 );
-		add_action( 'wc_mnm_admin_variable_product_options', [ __CLASS__, 'share_content_options' ], 20, 2 );
+	//	add_action( 'wc_mnm_admin_variable_product_options', [ __CLASS__, 'share_content_options' ], 20, 2 );
 		add_action( 'wc_mnm_admin_variable_product_options', [ __CLASS__, 'allowed_contents_options' ], 30, 2 );
 	//	add_action( 'wc_mnm_admin_variable_product_options', [ __CLASS__, 'pricing_options' ], 40, 2 );
 		
@@ -43,7 +43,7 @@ class WC_MNM_Variable_Product_Data {
 
 	//	add_action( 'wc_mnm_variation_options', [ __CLASS__, 'variation_discount_options' ], 10, 3 );
 		add_action( 'wc_mnm_variation_options', [ __CLASS__, 'variation_size_options' ], 20, 3 );
-		add_action( 'wc_mnm_variation_options', [ __CLASS__, 'variation_content_options' ], 30, 3 );
+	//	add_action( 'wc_mnm_variation_options', [ __CLASS__, 'variation_content_options' ], 30, 3 );
 		
 		// Save handlers.
 		add_action( 'woocommerce_admin_process_product_object', [ __CLASS__, 'save_product' ] );
@@ -217,7 +217,7 @@ class WC_MNM_Variable_Product_Data {
 	 */
 	public static function allowed_contents_options( $post_id, $vmnm_product_object ) { ?>
 
-		<div class="form-row form-row-full show_if_wc_mnm_variable_share_content_yes hide_if_wc_mnm_variable_share_content_no">
+		<div class="form-row form-row-full">
 
 			<?php
 
@@ -559,8 +559,8 @@ class WC_MNM_Variable_Product_Data {
 				'layout_override'           => isset( $_POST['wc_mnm_variable_layout_override'] ),
 				'layout'                    => isset( $_POST['wc_mnm_variable_layout'] ) ? wc_clean( $_POST['wc_mnm_variable_layout'] ) : 'tabular',
 				'add_to_cart_form_location' => isset( $_POST['wc_mnm_variable_form_location'] ) ? wc_clean( $_POST['wc_mnm_variable_form_location'] ) : 'default',
-				'share_content'             => isset( $_POST['wc_mnm_variable_share_content'] ) && 'yes' === wc_clean( $_POST['wc_mnm_variable_share_content'] ),
 				'priced_per_product'        => isset( $_POST['wc_mnm_variable_per_product_pricing'] ) && 'yes' === wc_clean( $_POST['wc_mnm_variable_per_product_pricing'] ),
+			//	'share_content'             => isset( $_POST['wc_mnm_variable_share_content'] ) && 'yes' === wc_clean( $_POST['wc_mnm_variable_share_content'] ),
 				'packing_mode'              => 'together',
 				'weight_cumulative'         => isset( $_POST['wc_mnm_weight_cumulative'] ) && 'cumulative' === wc_clean( $_POST['wc_mnm_weight_cumulative'] ),
 				'content_source'            => isset( $_POST['wc_mnm_variable_content_source'] ) ? wc_clean( $_POST['wc_mnm_variable_content_source'] ) : 'products',

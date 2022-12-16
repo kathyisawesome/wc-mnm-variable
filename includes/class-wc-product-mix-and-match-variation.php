@@ -29,7 +29,7 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 		'add_to_cart_form_location'        => 'default',
 		'global_layout'                    => 'tabular',
 		'global_add_to_cart_form_location' => 'default',
-		'share_content'                    => false,
+		'share_content'                    => true,
 		'priced_per_product'               => false,
 		'discount'                         => 0,
 		'packing_mode'                     => 'together',
@@ -68,8 +68,7 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 * @return bool
 	 */
 	public function get_share_content( $context = 'view' ) {
-		$value = wc_string_to_bool( $this->parent_data['share_content'] );
-		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'share_content', $value, $this ) : $value;
+		return true;
 	}
 
 
