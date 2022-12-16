@@ -224,7 +224,7 @@
   // Uncheeck all radio buttons when reset.
   WC_MNM_Variation_Form.prototype.onReset = function( event ) {
 
-    var form = event.data.mnmVariationForm;
+    let form = event.data.mnmVariationForm;
 
     // Woo core's first pass at checking variations will not find the match because it is looking specifically for its <select> elements.
     if ( ! form.initialized ) {
