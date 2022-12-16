@@ -134,7 +134,7 @@
 
       } else {
 
-        form.$form.trigger( 'wc_mnm_variation_form_loading', [ variation, self ] );
+        form.$form.trigger( 'wc_mnm_variation_form_loading', [ variation ] );
 
         let $target = form.$form.find( '.single_variation_wrap' );
         form.block( $target );
