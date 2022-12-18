@@ -203,7 +203,7 @@
       $target.toggleClass( 'wc_mnm_variation_out_of_stock', ! variation.is_in_stock ).html( $template_html );
 
       // Fire MNM scripts.
-      $( event.target ).trigger( 'wc-mnm-initialize' );
+      $( event.target ).trigger( 'wc-mnm-initialize.mix-and-match' );
 
       // Finally, show the elements.
       $target.removeClass( 'processing' ).show();
@@ -347,13 +347,13 @@
   };
 
   $(function() {
-    $( document ).on( 'wc-mnm-variable-initialize', '.variable_mnm_form', function() {
+    $( document ).on( 'wc-mnm-initialize.variable-mix-and-match', '.variable_mnm_form', function() {
       $( this ).wc_mnm_variation_form();
     } );
   
     $( '.variable_mnm_form' ).each(
       function() {
-        $( this ).trigger( 'wc-mnm-variable-initialize' );
+        $( this ).trigger( 'wc-mnm-initialize.variable-mix-and-match' );
       }
     );
   } );
