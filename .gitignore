@@ -1,9 +1,12 @@
-node_modules/
+assets/css/
+build/
 build/
 deploy/
-package-lock.json
-assets/css/
+languages/
+node_modules/
+vendor/
 assets/js/frontend/*.min.js
 assets/js/admin/*.min.js
-languages/
 bookmarks.json
+composer.lock
+package-lock.json
