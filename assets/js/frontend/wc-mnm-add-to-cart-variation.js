@@ -15,6 +15,7 @@
 		self.xhr           = false;
 		self.scroll        = false;
     self.html_forms    = []; // Keyed by variation ID.
+    self.validation_context = $form.data( 'validation_context' ) || 'add-to-cart';
 
     self.storedConfig  = [];
 
@@ -145,7 +146,7 @@
           data: {
             product_id : variation.variation_id,
             dataType: 'json',
-            request: window.location.search.substr(1),
+            validation_context: form.validation_context,
           },
           success: function( response ) {
     

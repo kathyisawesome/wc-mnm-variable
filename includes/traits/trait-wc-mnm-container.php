@@ -1231,7 +1231,6 @@ trait WC_MNM_Container {
 				'base_regular_price'  => wc_get_price_to_display( $this, array( 'price' => $this->get_regular_price() ) ),
 				'price_data'          => json_encode( $this->get_container_price_data() ),
 				'input_name'          => wc_mnm_get_child_input_name( $this->get_id() ),
-				'context'             => is_admin() ? 'edit' : 'add-to-cart',
 			)
 		);
 
