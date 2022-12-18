@@ -1223,7 +1223,7 @@ trait WC_MNM_Container {
 		$attributes = wp_parse_args(
 			$args,
 			array(
-				'per_product_pricing' => $this->is_priced_per_product() ? 'true'        :  'false',
+				'per_product_pricing' => $this->is_priced_per_product() ? 'true' :  'false',
 				'container_id'        => $this->get_id(),
 				'min_container_size'  => $this->get_min_container_size(),
 				'max_container_size'  => $this->get_max_container_size(),
