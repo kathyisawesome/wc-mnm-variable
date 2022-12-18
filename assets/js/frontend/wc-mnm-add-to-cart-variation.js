@@ -6,18 +6,18 @@
   var WC_MNM_Variation_Form = function( $form ) {
 		var self = this;
 
-    self.$form         = $form;
-    self.$selectors    = $form.find( '.wc-mnm-variations :radio' );
-    self.$mnmVariation = $form.find( '.single_mnm_variation' );
+    self.$form              = $form;
+    self.$selectors         = $form.find( '.wc-mnm-variations :radio' );
+    self.$mnmVariation      = $form.find( '.single_mnm_variation' );
     
-    self.variationData = $form.data( 'product_variations' );
-		self.useAjax       = false === self.variationData;
-		self.xhr           = false;
-		self.scroll        = false;
-    self.html_forms    = []; // Keyed by variation ID.
+    self.variationData      = $form.data( 'product_variations' );
+		self.useAjax            = false === self.variationData;
+		self.xhr                = false;
+		self.scroll             = false;
+    self.html_forms         = []; // Keyed by variation ID.
     self.validation_context = $form.data( 'validation_context' ) || 'add-to-cart';
 
-    self.storedConfig  = [];
+    self.storedConfig       = [];
 
     // Add MNM container class.
     self.$form.addClass( 'mnm_form variations_form' );
@@ -203,7 +203,7 @@
       $target.toggleClass( 'wc_mnm_variation_out_of_stock', ! variation.is_in_stock ).html( $template_html );
 
       // Fire MNM scripts.
-      $( event.target ).wc_mnm_form();
+      $( event.target ).trigger( 'wc-mnm-initialize' );
 
       // Finally, show the elements.
       $target.removeClass( 'processing' ).show();
@@ -347,9 +347,15 @@
   };
 
   $(function() {
-      $( '.variable_mnm_form' ).each( function() {
-        $( this ).wc_mnm_variation_form();
-      } );
+    $( document ).on( 'wc-mnm-variable-initialize', '.variable_mnm_form', function() {
+      $( this ).wc_mnm_variation_form();
+    } );
+  
+    $( '.variable_mnm_form' ).each(
+      function() {
+        $( this ).trigger( 'wc-mnm-variable-initialize' );
+      }
+    );
   } );
 
 } )( jQuery, window, document );
