@@ -39,7 +39,7 @@
     $form.on( 'change.wc-mnm-variable-form', '.wc-mnm-variations :radio', { mnmVariationForm: self }, self.onChange );
 
     // Finally display the form when requested.
-    $form.on( 'wc_mnm_variation_form_loaded', { mnmVariationForm: self }, self.displayForm );
+    $form.on( 'wc_mnm_variation_form_load', { mnmVariationForm: self }, self.displayForm );
 
     // Stash the configuration for later.
     $form.on( 'wc-mnm-container-quantities-updated', function(event, container) {
@@ -131,7 +131,7 @@
 
       if ( variation.mix_and_match_html ) {
 
-        form.$form.trigger( 'wc_mnm_variation_form_loaded', [ variation ] );  
+        form.$form.trigger( 'wc_mnm_variation_form_load', [ variation ] );  
 
       } else {
 
@@ -158,7 +158,7 @@
                 // Add response to variation object.
                 variation.mix_and_match_html = response.data[ 'div.wc-mnm-container-form' ];
 
-                form.$form.trigger( 'wc_mnm_variation_form_loaded', [ variation ] );
+                form.$form.trigger( 'wc_mnm_variation_form_load', [ variation ] );
 
                 // Store the HTML for later.
                 form.html_forms[ variation.variation_id ] = variation.mix_and_match_html;
@@ -214,7 +214,7 @@
         });
       }
 
-      $( event.target ).trigger( 'wc_mnm_variation_found', [ variation ] );
+      $( event.target ).trigger( 'wc_mnm_variation_form_loaded', [ variation ] );
 
     } else {
       $( event.target ).find( '.single_mnm_variation' ).html('');
