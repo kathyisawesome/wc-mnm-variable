@@ -1242,13 +1242,7 @@ trait WC_MNM_Container {
 		 */
 		$attributes = (array) apply_filters( 'wc_mnm_container_data_attributes', wp_parse_args( $args, $attributes ), $this );
 
-		$data = '';
-
-		foreach ( $attributes as $a => $att ) {
-			$data .= sprintf( 'data-%s="%s" ', esc_attr( $a ), esc_attr( $att ) );
-		}
-
-		return $data;
+		return wc_mnm_prefix_data_attribute_keys( $attributes );
 	}
 
 
