@@ -270,3 +270,69 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 
 	}
 }
+
+/*--------------------------------------------------------*/
+/*  Variable Mix and Match edit container template functions       */
+/*--------------------------------------------------------*/
+
+if ( ! function_exists( 'wc_mnm_template_edit_variable_container_order_item' ) ) {
+
+	/**
+	 * Edit container template for Mix and Match products.
+	 * 
+	 * @param WC_Product_Mix_and_Match
+	 * @param WC_Order_Item $order_item
+	 * @param WC_Order $order
+	 * @param  string $source The originating source loading this template
+	 */
+	function wc_mnm_template_edit_variable_container_order_item( $product, $order_item, $order, $source ) {
+
+		global $product;
+
+		if ( $order_item instanceof WC_Order_Item_Product ) {
+			// Need to get the parent product object in this case.
+			$product = apply_filters( 'woocommerce_order_item_product', wc_get_product( $order_item->get_product_id() ), $order_item );
+		}
+
+		if ( ! $product || ! $product->is_type( 'variable-mix-and-match' ) ) {
+			return;
+		}
+
+		$classes = array(
+			'variable_mnm_form',
+			'cart',
+			'cart_group',
+			'edit_container',
+			'layout_' . $product->get_layout(),
+		);
+
+		/**
+		 * Form classes.
+		 *
+		 * @param array - The classes that will print in the <form> tag.
+		 * @param obj $product WC_Mix_And_Match of parent product
+		 */
+		$classes = apply_filters( 'wc_mnm_edit_form_classes', $classes, $product );
+
+		// Get Available variations?
+		$get_variations = count( $product->get_children() ) <= apply_filters( 'woocommerce_ajax_variation_threshold', 30, $product );
+			
+		wc_get_template(
+			'edit-order-item/edit-variable-container.php',
+			array(
+				'order_item'           => $order_item,
+				'order'                => $order,
+				'classes'              => $classes,
+				'available_variations' => $get_variations ? $product->get_available_variations(): false,
+				'attributes'           => $product->get_variation_attributes(),
+				'selected_attributes'  => $product->get_default_attributes(),
+				'classes'              => $classes,
+				'source'               => $source,
+			),
+			'',
+			WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
+		);
+
+	}
+
+}
