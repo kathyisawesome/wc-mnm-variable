@@ -410,7 +410,7 @@ class WC_MNM_Variable {
 		$script_url     = $this->get_plugin_url() . $script_path;
 		$script_version = WC_Mix_and_Match()->get_file_version( $this->get_plugin_path() . $script_path, self::VERSION );
 
-		wp_register_script( 'wc-mnm-add-to-cart-variation', $script_url, array( 'wc-add-to-cart-mnm', 'jquery-blockui' ), $script_version, true );
+		wp_register_script( 'wc-mnm-add-to-cart-variation', $script_url, [ 'wc-add-to-cart-variation', 'wc-add-to-cart-mnm', 'jquery-blockui' ], $script_version, true );	
 
 		$params = array( 
 			'wc_ajax_url'     => \WC_AJAX::get_endpoint( '%%endpoint%%' ),
