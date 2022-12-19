@@ -1,4 +1,4 @@
-/*global WC_MNM_VARIATION_ADD_TO_CART_PARAMS */
+/*global WC_MNM_ADD_TO_CART_VARIATION_PARAMS */
 ;(function ( $, window, document, undefined ) {
 	/**
 	 * WC_MNM_Variation_Form class which handles variation forms and attributes.
@@ -141,7 +141,7 @@
         form.block( $target );
 
         $.ajax( {
-          url: WC_MNM_VARIATION_ADD_TO_CART_PARAMS.wc_ajax_url.toString().replace( '%%endpoint%%', 'mnm_get_variation_container_form' ),
+          url: WC_MNM_ADD_TO_CART_VARIATION_PARAMS.wc_ajax_url.toString().replace( '%%endpoint%%', 'mnm_get_variation_container_form' ),
           type: 'POST',
           data: {
             product_id        : variation.variation_id,
@@ -173,7 +173,7 @@
     
           },
           fail: function() {
-            window.alert( WC_MNM_VARIATION_ADD_TO_CART_PARAMS.i18n_form_error );
+            window.alert( WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_form_error );
           }
         } );
 
@@ -339,7 +339,7 @@
    * Function to call wc_mnm_variation_form on jquery selector.
    */
   $.fn.wc_mnm_variation_form = function() {
-    if ( typeof WC_MNM_VARIATION_ADD_TO_CART_PARAMS !== 'undefined' && typeof wc_add_to_cart_variation_params !== 'undefined' && typeof wc_mnm_params !== 'undefined' ) {
+    if ( typeof WC_MNM_ADD_TO_CART_VARIATION_PARAMS !== 'undefined' && typeof wc_add_to_cart_variation_params !== 'undefined' && typeof wc_mnm_params !== 'undefined' ) {
       $( this ).wc_variation_form();
       new WC_MNM_Variation_Form( this );
     }
