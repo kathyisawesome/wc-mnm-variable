@@ -2,7 +2,7 @@
   "title": "WooCommerce Mix and Match Products - Variable Mix and Match",
   "name": "wc-mnm-variable",
   "version": "1.0.0-rc.1",
-  "description": "Require Mix and Match child items to be in quantity multiples, ie: 6,12,18,etc.",
+  "description": "Make different sized Mix and Match packs all in once place!",
   "main": "Gruntfile.js",
   "license": "GPL-3.0",
   "repository": {
