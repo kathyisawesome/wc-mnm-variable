@@ -38,6 +38,11 @@ class WC_MNM_Variable {
 	protected static $_instance = null;
 
 	/**
+	 * var int $current_variation_id
+	 */
+	private $current_variation_id = 0;
+
+	/**
 	 * Main WC_MNM_Variable instance.
 	 *
 	 * Ensures only one instance of WC_MNM_Variable is loaded or can be loaded.
@@ -126,6 +131,30 @@ class WC_MNM_Variable {
 		 */
 		add_action( 'wc_ajax_mnm_get_variation_container_form', array( $this, 'get_container_form' ) );
 
+		/**
+		 * Edit in admin
+		 */
+		// Load scripts in admin context.
+		add_action( 'wc_mnm_container_editing_enqueue_scripts', [ $this, 'load_edit_scripts' ] );
+
+		// Tells core that the Variable product is also editable.
+		add_filter( 'wc_mnm_is_container_order_item_editable', [ $this, 'variable_is_editable' ], 10, 2 );
+
+		// Force tabular layout of attributes when editing in admin.
+		add_action( 'wc_mnm_edit_container_order_item_in_shop_order', array( __CLASS__, 'force_edit_container_styles' ), 0, 4 );
+		add_action( 'wc_mnm_edit_container_order_item_in_shop_subscription', array( __CLASS__, 'force_edit_container_styles' ), 0, 4 );
+		
+		// Force variations into tabular layout when editing in admin.
+		add_action( 'wc_mnm_variation_add_to_cart', [ $this, 'force_edit_variation_styles' ], 0 );
+		
+		// Admin order style tweaks for variable mix and match.
+		add_action( 'admin_enqueue_scripts', [ $this, 'admin_inline_styles' ], 20 );
+
+		// Preload the current variation.
+		add_filter( 'woocommerce_available_variation', [ $this, 'preload_order_item_variation' ], 20, 3 );
+
+		// Handle change variation.
+		add_filter( 'wc_mnm_get_product_from_edit_order_item', [ $this, 'switch_variation' ], 10, 4 );
 	}
 
 	/**
@@ -392,7 +421,7 @@ class WC_MNM_Variable {
 	/**
 	 * Register scripts
 	 */
-	public function frontend_scripts() {
+	public function frontend_scripts( $auto_enqueue = false ) {
 		$suffix         = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '': '.min';
 		$style_path    = 'assets/css/frontend/wc-mnm-add-to-cart-variation' . $suffix . '.css';
 		$style_url     = $this->get_plugin_url() . $style_path;
@@ -404,6 +433,23 @@ class WC_MNM_Variable {
 
 		if ( $suffix ) {
 			wp_style_add_data( 'wc-mnm-add-to-cart-variation', 'suffix', '.min' );
+		}
+
+		// We need a core script and it isn't registered in the admin. A bit hacky, but no other way to do this.
+		if ( is_admin() ) {
+			$script_url = apply_filters( 'woocommerce_get_asset_url', plugins_url( 'assets/js/frontend/add-to-cart-variation' . $suffix . '.js' , WC_PLUGIN_FILE ), 'assets/js/frontend/add-to-cart-variation' );
+			wp_register_script( 'wc-add-to-cart-variation', $script_url, [ 'jquery', 'wp-util', 'jquery-blockui' ], Constants::get_constant( 'WC_VERSION' ) );
+			// We also need the wp.template for this script :).
+			wc_get_template( 'single-product/add-to-cart/variation.php' );
+
+			$params = array(
+				'wc_ajax_url'                      => WC_AJAX::get_endpoint( '%%endpoint%%' ),
+				'i18n_no_matching_variations_text' => esc_attr__( 'Sorry, no products matched your selection. Please choose a different combination.', 'woocommerce' ),
+				'i18n_make_a_selection_text'       => esc_attr__( 'Please select some product options before adding this product to your cart.', 'woocommerce' ),
+				'i18n_unavailable_text'            => esc_attr__( 'Sorry, this product is unavailable. Please choose a different combination.', 'woocommerce' ),
+			);
+
+			wp_localize_script( 'wc-add-to-cart-variation', 'wc_add_to_cart_variation_params', $params );
 		}
 
 		$script_path    = 'assets/js/frontend/wc-mnm-add-to-cart-variation' . $suffix . '.js';
@@ -420,6 +466,10 @@ class WC_MNM_Variable {
 
 		wp_localize_script( 'wc-mnm-add-to-cart-variation', 'WC_MNM_ADD_TO_CART_VARIATION_PARAMS', $params );
 
+		if ( $auto_enqueue ) {
+			$this->load_scripts();
+		}
+
 	}
 
 
@@ -434,7 +484,8 @@ class WC_MNM_Variable {
         wp_enqueue_script( 'wc-mnm-add-to-cart-variation' );
 
 		// We also need the wp.template for this script :).
-		add_action( 'wp_print_footer_scripts', [ $this, 'print_script_template' ] );
+		$hook = is_admin() ? 'admin_print_footer_scripts' : 'wp_print_footer_scripts';
+		add_action( $hook, [ $this, 'print_script_template' ] );
 
 	}
 
@@ -576,8 +627,8 @@ class WC_MNM_Variable {
 	 */
 	public function get_container_form() {
 
-		$product_id = isset( $_POST['product_id'] ) ? intval( $_POST['product_id'] ) : 0;
-		$product = wc_get_product( $product_id );
+		$variation_id = isset( $_POST['variation_id'] ) ? intval( $_POST['variation_id'] ) : 0;
+		$product = wc_get_product( $variation_id );
 
 		if ( ! $product ) {
 			$error = esc_html__( 'This product does not exist and so can not be configured', 'wc-mnm-variable' );
@@ -585,12 +636,12 @@ class WC_MNM_Variable {
 		}
 
 		// Initialize form state based on the URL params.
-		$request = ! empty( $_POST['request'] ) ? wc_clean( $_POST['request'] ) : '';
-
-		if ( ! empty( $request ) ) {
-			parse_str( html_entity_decode( $request ), $params );
+		if ( ! empty( $_POST['request'] ) ) {
+			parse_str( parse_url( $_POST['request'], PHP_URL_QUERY ), $params );
 			$_REQUEST = array_merge( $_REQUEST, $params );
 		}
+
+		unset( $_REQUEST['request'] );
 
 		// Initialize form state based on the actual configuration of the container.
 		$configuration = ! empty( $_POST['configuration'] ) ? wc_clean( $_POST['configuration'] ) : array();
@@ -599,6 +650,7 @@ class WC_MNM_Variable {
 			$_REQUEST = array_merge( $_REQUEST, WC_Mix_and_Match()->cart->rebuild_posted_container_form_data( $configuration, $product ) );
 		}
 		
+		error_log(json_encode( $_REQUEST ));
 		/*
 		 * `wc_mnm_container_form_fragments` filter
 		 * 
@@ -610,13 +662,145 @@ class WC_MNM_Variable {
 		wp_send_json_success( $response );
 	}
 
+	/*
+	|--------------------------------------------------------------------------
+	| Admin Edit.
+	|--------------------------------------------------------------------------
+	*/
+
+	/**
+	 * Load the scripts required for order editing.
+	 * 
+	 * @param int $item_id The subscription line item ID.
+	 * @param WC_Order_Item|array $item The subscription line item.
+	 * @param WC_Subscription $subscription The subscription.
+	 */
+	public function load_edit_scripts() {
+		$this->frontend_scripts( true );
+	}
+
+	/**
+	 * Enable admin editing for Variable Mix and Match
+	 *
+	 * @param bool $is_editable
+	 * @param WC_Product
+	 * @return bool
+	 */
+	public function variable_is_editable( $is_editable, $product ) {
+
+		if ( $product && $product->is_type( 'variable-mix-and-match' ) ) {
+			$is_editable = true;
+		}
+
+		return $is_editable;
+
+	}
+
+	/**
+	 * Force default tabular attributes layout.
+	 * 
+	 * @param  $product  WC_Product_Mix_and_Match_Variation
+	 * @param  $order_item WC_Order_Item
+	 * @param  $order      WC_Order
+	 * @param  string $source The originating source loading this template
+	 */
+	public static function force_edit_container_styles( $product, $order_item, $order, $source ) {
+		if ( 'metabox' === $source ) {
+			add_filter( 'wc_mnm_variation_swatches_threshold', '__return_zero' );
+		}	
+	}
+
+	/**
+	 * Force tabular layout for variations which do not inherit the filtered layout of the parent product.
+	 */
+	public function force_edit_variation_styles() {
+
+		if ( wp_doing_ajax() && isset( $_POST['source'] ) && 'metabox' === wc_clean( $_POST['source'] ) ) {
+			add_filter( 'woocommerce_product_variation_get_layout', function() { return 'tabular'; }, 9999 );
+			add_filter( 'woocommerce_product_is_visible', '__return_false', 9999 );
+		}
+		
+	}
+
+
+	/**
+	 * Register scripts
+	 */
+	public function admin_inline_styles() {
+
+		// Inline styles.
+		$custom_css = "
+			.wc-mnm-backbone-modal form.edit_container > .single_variation_wrap {
+				margin-left: 0 !important;
+				margin-right: 0 !important;
+			}
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .single_variation {
+				padding: 1em;
+			}
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation > :not(.mnm_reset):not(.mnm_status) {
+				padding: 0 1em 1em 1em;
+			}
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .mnm_reset {
+				margin-left: 1em;
+			   margin-right: 1em;
+			}
+			.wc-mnm-backbone-modal form.edit_container .blockUI.blockOverlay::before { border: none; }
+		";
+		wp_add_inline_style( 'wc-mnm-admin-order-style', $custom_css );
+
+	}
+	
+	/**
+	 * Pre-load the current order item's variation.
+	 * 
+	 * @param array $data
+	 * @param WC_Product_Variable_Mix_and_Match
+	 * @param WC_Product_Mix_and_Match_Variation
+	 */
+	public function preload_order_item_variation( $data, $product, $variation ) {
+
+		if ( 
+			$variation->is_type( 'mix-and-match-variation' )
+			&& $product->is_type( 'variable-mix-and-match' )
+			&& ( doing_action( 'wc_ajax_mnm_get_edit_container_order_item_form' ) || doing_action( 'wp_ajax_woocommerce_mnm_get_edit_container_order_item_form' ) )
+			&& isset( $_REQUEST['container_id'] )
+			&& intval( $_REQUEST['container_id'] ) === $variation->get_id() )
+		{
+				$data[ 'mix_and_match_html' ] = WC_MNM_Variable::get_instance()->get_variation_template_html( $variation );
+		}
+
+		return $data;
+
+	}	
+
+	/**
+	 * Switch the product object if variation.
+	 * 
+	 * @param obj WC_Product $product
+	 * @param obj WC_Order_Item
+	 * @param obj WC_Order
+	 * @param  string $source The originating source loading this template
+	 * @return WC_Product
+	 */
+	public static function switch_variation( $product, $container_item, $subscription, $source ) {
+
+		error_log('ok switch it up');
+		error_log(json_encode($_POST));
+
+		// Detect a variation switch.
+		if ( ! empty ( $_POST[ 'variation_id' ] ) && intval( $_POST[ 'variation_id' ] ) !== $container_item->get_variation_id() ) {
+			$product = wc_get_product( intval( $_POST[ 'variation_id' ] ) );
+		}
+
+		return $product;
+
+	}
 
 	/*
 	|--------------------------------------------------------------------------
 	| Helpers.
 	|--------------------------------------------------------------------------
 	*/
-
 
 	/**
 	 * Plugin URL.

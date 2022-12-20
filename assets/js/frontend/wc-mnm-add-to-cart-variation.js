@@ -48,7 +48,7 @@
     // Persist config when switching between variations.
     $form.on( 'wc-mnm-initializing', function(event, container) {
 
-      if ( container.child_items.length && Object.keys( self.storedConfig ).length ) {
+     if ( container.child_items.length && Object.keys( self.storedConfig ).length ) {
 
         let total_qty = 0;
 
@@ -71,6 +71,8 @@
 
     } );
 
+    // Add data to ajax submit when editing a container.
+    $( document ).on( 'wc_mnm_update_container_order_item_data', { mnmVariationForm: self }, self.addVariationData );
   };
 
   /**
@@ -123,7 +125,7 @@
 
     if ( variation.variation_is_visible  ) {
 
-      if (  'undefined' === variation.mix_and_match_html ) {
+     if (  'undefined' === variation.mix_and_match_html ) {
 
         variation.mix_and_match_html = 'undefined' !== typeof form.html_forms[ variation.variation_id ] ? form.html_forms[ variation.variation_id ] : false;
 
@@ -144,9 +146,11 @@
           url: WC_MNM_ADD_TO_CART_VARIATION_PARAMS.wc_ajax_url.toString().replace( '%%endpoint%%', 'mnm_get_variation_container_form' ),
           type: 'POST',
           data: {
-            product_id        : variation.variation_id,
+            variation_id      : variation.variation_id,
             dataType          : 'json',
             validation_context: form.validation_context,
+            request           : window.location.href,
+            source            : form.$form.data( 'source' ) || ''
           },
           success: function( response ) {
     
@@ -204,6 +208,9 @@
 
       // Fire MNM scripts.
       $( event.target ).trigger( 'wc-mnm-initialize.mix-and-match' );
+
+      // Dynamically store variation ID in place that is automatically include in submit data when editing container.
+      $( event.target ).data( 'variation_id', variation.variation_id );
 
       // Finally, show the elements.
       $target.removeClass( 'processing' ).show();
@@ -280,6 +287,15 @@
     };
 
   };
+
+  /**
+	 * Add variation_id to $_POST
+	 *
+	 */
+  WC_MNM_Variation_Form.prototype.addVariationData = function( event ) {
+    var form = event.data.mnmVariationForm;
+    return { variation_id: form.$form.data( 'variation_id' ) || 0 }
+  }  
 
   /**
 	 * Check if a node is blocked for processing.

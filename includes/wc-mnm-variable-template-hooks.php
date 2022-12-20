@@ -24,3 +24,17 @@ add_action( 'wc_mnm_variation_content_loop', 'wc_mnm_variation_header', 10 );
 add_action( 'wc_mnm_variation_content_loop', 'wc_mnm_content_loop', 20 );
 add_action( 'wc_mnm_variation_content_loop', 'wc_mnm_template_reset_link', 30 );
 add_action( 'wc_mnm_variation_content_loop', 'wc_mnm_template_container_status', 40 );
+
+
+/*-----------------------------------------------------------------------------------*/
+/*  Edit template hooks.                                                                  */
+/*-----------------------------------------------------------------------------------*/
+
+// Edit container form - stripped down add to cart form.
+add_action( 'wc_mnm_edit_container_order_item_in_shop_order', 'wc_mnm_template_edit_variable_container_order_item', 10, 4 );
+add_action( 'wc_mnm_edit_container_order_item_in_shop_subscription', 'wc_mnm_template_edit_variable_container_order_item', 10, 4 );
+
+// Port variation add to cart elements.
+add_action( 'wc_mnm_edit_container_order_item_single_variation', 'woocommerce_single_variation', 10 );
+add_action( 'wc_mnm_edit_container_order_item_single_variation', 'wc_mnm_template_single_variation', 20 );
+
