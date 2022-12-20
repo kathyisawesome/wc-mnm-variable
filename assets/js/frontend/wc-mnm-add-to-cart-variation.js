@@ -294,8 +294,8 @@
 	 */
   WC_MNM_Variation_Form.prototype.addVariationData = function( event ) {
     var form = event.data.mnmVariationForm;
-    return { variation_id: form.$form.data( 'variation_id' ) || 0 }
-  }  
+    return { variation_id: form.$form.data( 'variation_id' ) || 0 };
+  };
 
   /**
 	 * Check if a node is blocked for processing.
