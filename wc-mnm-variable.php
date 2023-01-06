@@ -628,7 +628,14 @@ class WC_MNM_Variable {
 	public function get_container_form() {
 
 		$variation_id = isset( $_POST['variation_id'] ) ? intval( $_POST['variation_id'] ) : 0;
-		$product = wc_get_product( $variation_id );
+		
+		/**
+		 * `wc_mnm_get_ajax_product_variation` filter for editing variation object.
+		 * 
+		 * @param obj WC_Product_Variation $product
+		 */
+		$product = apply_filters( 'wc_mnm_get_ajax_product_variation', wc_get_product( $variation_id ) );
+
 
 		if ( ! $product ) {
 			$error = esc_html__( 'This product does not exist and so can not be configured', 'wc-mnm-variable' );
