@@ -412,15 +412,16 @@ class WC_MNM_Variable_Meta_Box_Variable_Product_Data {
 		woocommerce_wp_text_input(
 			array(
 				'id'            => 'wc_mnm_variation_min_container_size[' . $loop . ']',
-				'label'         => __( 'Minimum Container Size','wc-mnm-variable' ),
+				'label'         => __( 'Container Size','wc-mnm-variable' ),
 				'wrapper_class' => 'mnm_container_size_options form-row form-row-first',
-				'description'   => __( 'Minimum quantity for Mix and Match containers.','wc-mnm-variable' ),
+				'description'   => __( 'Required quantity for Mix and Match containers.','wc-mnm-variable' ),
 				'type'          => 'number',
 				'value'         => $variation_object->get_min_container_size( 'edit' ),
 				'desc_tip'      => true
 			)
 		);
-		woocommerce_wp_text_input(
+		/*
+			woocommerce_wp_text_input(
 			array(
 				'id'            => 'wc_mnm_variation_max_container_size[' . $loop . ']',
 				'label'         => __( 'Maximum Container Size','wc-mnm-variable' ),
@@ -431,6 +432,7 @@ class WC_MNM_Variable_Meta_Box_Variable_Product_Data {
 				'desc_tip'      => true
 			)
 		);
+		*/
 
 	}
 
@@ -623,9 +625,11 @@ class WC_MNM_Variable_Meta_Box_Variable_Product_Data {
 		}
 
 		// Set the max container size.
-		if ( ! empty( $_POST['wc_mnm_variation_max_container_size'] ) && ! empty( $_POST['wc_mnm_variation_max_container_size'][$i] ) ) {
-			$props['max_container_size'] = absint( wc_clean( $_POST['wc_mnm_variation_max_container_size'][$i] ) );
-		}
+		//if ( ! empty( $_POST['wc_mnm_variation_max_container_size'] ) && ! empty( $_POST['wc_mnm_variation_max_container_size'][$i] ) ) {
+		//	$props['max_container_size'] = absint( wc_clean( $_POST['wc_mnm_variation_max_container_size'][$i] ) );
+		//}
+		// For now, in the absence of per-item pricing support, keep container size fixed.
+		$props['max_container_size'] = $props['min_container_size'];
 
 		// Make sure the max container size is not smaller than the min size.
 		if ( $props['max_container_size'] > 0 && $props['max_container_size'] < $props['min_container_size'] ) {
