@@ -325,7 +325,6 @@ if ( ! function_exists( 'wc_mnm_template_edit_variable_container_order_item' ) )
 				'classes'              => $classes,
 				'available_variations' => $get_variations ? $product->get_available_variations(): false,
 				'attributes'           => $product->get_variation_attributes(),
-				'selected_attributes'  => $product->get_default_attributes(),
 				'classes'              => $classes,
 				'source'               => $source,
 			),
