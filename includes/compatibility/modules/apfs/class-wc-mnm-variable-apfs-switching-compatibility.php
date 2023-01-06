@@ -30,9 +30,6 @@ if ( ! class_exists( 'WC_MNM_Variable_APFS_Switching_Compatibility' ) ) :
 		 * Hooks for MNM support.
 		 */
 		public static function add_hooks() {
-
-			// Add extra 'Allow Switching' options. See 'WCS_ATT_Admin::allow_switching_options'.
-			add_filter( 'woocommerce_subscriptions_allow_switching_options', array( __CLASS__, 'add_container_switching_options' ), 11 );
 			
 			// Add variations to switch link.
 			add_filter( 'wc_mnm_get_posted_container_form_data', array( __CLASS__, 'get_posted_container_form_data' ), 10, 3 );
@@ -40,30 +37,6 @@ if ( ! class_exists( 'WC_MNM_Variable_APFS_Switching_Compatibility' ) ) :
 			// Add current variation ID to switch link.
 			add_filter( 'woocommerce_subscriptions_switch_url', array( __CLASS__, 'container_type_switch_configuration_url' ), 10, 4 );
 
-		}
-
-		/**
-		 * Add extra 'Allow Switching' options for content switching of Mix and Match containers
-		 *
-		 * @See: 'WCS_ATT_Admin::allow_switching_options'.
-		 *
-		 * @param  array  $data
-		 * @return array
-		 */
-		public static function add_container_switching_options( $data ) {
-
-			$switch_option_mnm_contents = get_option( WC_Subscriptions_Admin::$option_prefix . '_allow_switching_mnm_variable', '' );
-
-			if ( '' === $switch_option_mnm_contents ) {
-				update_option( WC_Subscriptions_Admin::$option_prefix . '_allow_switching_mnm_variable', 'yes' );
-			}
-
-			$data[] = array(
-				'id'    => 'mnm_variations',
-				'label' => __( 'Between Mix and Match Variations', 'wc-mnm-variable' ),
-			);
-
-			return $data;
 		}
 
 
