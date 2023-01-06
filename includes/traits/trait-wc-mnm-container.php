@@ -1125,65 +1125,65 @@ trait WC_MNM_Container {
 
 		if ( empty( $this->container_price_data ) ) {
 
-			$container_price_data = array();
+			$container_price_data                                    = array();
 
-			$raw_container_price_min         = $this->get_container_price( 'min', true );
-			$raw_container_price_max         = $this->get_container_price( 'max', true );
-			$raw_container_regular_price_min = $this->get_container_regular_price( 'min', true );
-			$raw_container_regular_price_max = $this->get_container_regular_price( 'max', true );
+			$raw_container_price_min                                 = $this->get_container_price( 'min', true );
+			$raw_container_price_max                                 = $this->get_container_price( 'max', true );
+			$raw_container_regular_price_min                         = $this->get_container_regular_price( 'min', true );
+			$raw_container_regular_price_max                         = $this->get_container_regular_price( 'max', true );
 
-			$container_price_data['per_product_pricing']         = $this->is_priced_per_product() ? 'yes' : 'no';
+			$container_price_data['per_product_pricing']             = $this->is_priced_per_product() ? 'yes': 'no';
 
 			$container_price_data['raw_container_price_min']         = (double) $raw_container_price_min;
-			$container_price_data['raw_container_price_max']         = '' === $raw_container_price_max ? '' : (double) $raw_container_price_max;
+			$container_price_data['raw_container_price_max']         = '' === $raw_container_price_max ? '': (double) $raw_container_price_max;
 
 			// Deprecated data keys.
 			$container_price_data['raw_container_min_price']         = $container_price_data['raw_container_price_min'];
 			$container_price_data['raw_container_price']             = $container_price_data['raw_container_price_max'];
 			$container_price_data['raw_container_min_regular_price'] = (double) $raw_container_regular_price_min;
-			$container_price_data['raw_container_regular_price']     = '' === $raw_container_regular_price_max ? '' : (double) $raw_container_regular_price_max;
+			$container_price_data['raw_container_regular_price']     = '' === $raw_container_regular_price_max ? '': (double) $raw_container_regular_price_max;
 			
-			$container_price_data['price_string']                = '%s';
-			$container_price_data['is_purchasable']              = $this->is_purchasable() ? 'yes' : 'no';
-			$container_price_data['is_in_stock']                 = $this->is_in_stock() ? 'yes' : 'no';
+			$container_price_data['price_string']                    = '%s';
+			$container_price_data['is_purchasable']                  = $this->is_purchasable() ? 'yes'                                                            : 'no';
+			$container_price_data['is_in_stock']                     = $this->is_in_stock() ? 'yes'                                                               : 'no';
 
-			$container_price_data['show_free_string']            =  ( $this->is_priced_per_product() ? apply_filters( 'wc_mnm_show_free_string', false, $this ) : true ) ? 'yes' : 'no';
+			$container_price_data['show_free_string']                = ( $this->is_priced_per_product() ? apply_filters( 'wc_mnm_show_free_string', false, $this ): true ) ? 'yes': 'no';
 
-			$container_price_data['prices']                      = array();
-			$container_price_data['regular_prices']              = array();
+			$container_price_data['prices']                          = array();
+			$container_price_data['regular_prices']                  = array();
 
-			$container_price_data['prices_tax']                  = array();
+			$container_price_data['prices_tax']                      = array();
 
-			$container_price_data['quantities']                  = array();
+			$container_price_data['quantities']                      = array();
 
-			$container_price_data['product_ids']                 = array();
+			$container_price_data['product_ids']                     = array();
 
-			$container_price_data['is_sold_individually']        = array();
+			$container_price_data['is_sold_individually']            = array();
 
-			$container_price_data['base_price']                  = $this->get_price();
-			$container_price_data['base_regular_price']          = $this->get_regular_price();
-			$container_price_data['base_price_tax']              = WC_MNM_Product_Prices::get_tax_ratios( $this );
+			$container_price_data['base_price']                      = $this->get_price();
+			$container_price_data['base_regular_price']              = $this->get_regular_price();
+			$container_price_data['base_price_tax']                  = WC_MNM_Product_Prices::get_tax_ratios( $this );
 
-			$container_price_data['price']                       = $container_price_data['base_price'];
-			$container_price_data['regular_price']               = $container_price_data['base_regular_price'];
-			$container_price_data['price_tax']                   = $container_price_data['base_price_tax'];
+			$container_price_data['price']                           = $container_price_data['base_price'];
+			$container_price_data['regular_price']                   = $container_price_data['base_regular_price'];
+			$container_price_data['price_tax']                       = $container_price_data['base_price_tax'];
 
-			$totals = new stdClass;
+			$totals                                                  = new stdClass;
 
-			$totals->price          = 0.0;
-			$totals->regular_price  = 0.0;
-			$totals->price_incl_tax = 0.0;
-			$totals->price_excl_tax = 0.0;
+			$totals->price                                           = 0.0;
+			$totals->regular_price                                   = 0.0;
+			$totals->price_incl_tax                                  = 0.0;
+			$totals->price_excl_tax                                  = 0.0;
 
-			$container_price_data['base_price_subtotals']       = $totals;
-			$container_price_data['base_price_totals']          = $totals;
+			$container_price_data['base_price_subtotals']            = $totals;
+			$container_price_data['base_price_totals']               = $totals;
 
-			$container_price_data['addons_totals']              = $totals;
+			$container_price_data['addons_totals']                   = $totals;
 
-			$container_price_data['subtotals']                  = $totals;
-			$container_price_data['totals']                     = $totals;
+			$container_price_data['subtotals']                       = $totals;
+			$container_price_data['totals']                          = $totals;
 
-			$child_items                           = $this->get_child_items();
+			$child_items                                             = $this->get_child_items();
 
 			if ( empty( $child_items ) ) {
 				return;
