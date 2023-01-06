@@ -638,7 +638,13 @@ trait WC_MNM_Container {
 	 */
 	public function is_on_sale( $context = 'view' ) {
 
-		$is_on_sale = parent::is_on_sale( $context ) || $this->has_discount( $context );
+		$is_on_sale = false;
+
+		if ( 'update-price' !== $context && $this->is_priced_per_product() ) {
+			$is_on_sale = parent::is_on_sale( $context ) || ( $this->has_discount( $context ) && $this->get_min_raw_regular_price( $context ) > 0 );
+		} else {
+			$is_on_sale = parent::is_on_sale( $context );
+		}
 
 		/**
 		 * `wc_mnm_container_is_on_sale` filter
