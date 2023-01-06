@@ -150,7 +150,8 @@
             dataType          : 'json',
             validation_context: form.validation_context,
             request           : window.location.href,
-            source            : form.$form.data( 'source' ) || ''
+            source            : form.$form.data( 'source' ) || '',
+            extra_data        : form.$form.data( 'extra_data' ) || ''
           },
           success: function( response ) {
     
