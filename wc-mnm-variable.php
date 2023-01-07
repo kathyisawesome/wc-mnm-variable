@@ -656,8 +656,7 @@ class WC_MNM_Variable {
 		if ( ! empty( $configuration ) ) {
 			$_REQUEST = array_merge( $_REQUEST, WC_Mix_and_Match()->cart->rebuild_posted_container_form_data( $configuration, $product ) );
 		}
-		
-		error_log(json_encode( $_REQUEST ));
+
 		/*
 		 * `wc_mnm_container_form_fragments` filter
 		 * 
