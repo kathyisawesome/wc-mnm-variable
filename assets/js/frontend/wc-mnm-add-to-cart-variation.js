@@ -45,23 +45,24 @@
     $form.on( 'wc-mnm-container-quantities-updated', function(event, container) {
       self.storedConfig = container.api.get_container_config();
     } );
-    // Persist config when switching between variations.
+    // Persist config when switching between variations (as much as possible given  quantities).
     $form.on( 'wc-mnm-initializing', function(event, container) {
 
-     if ( container.child_items.length && Object.keys( self.storedConfig ).length ) {
+      let storedConfig     = self.storedConfig; // Set here as child_item.update_quantity() is going to wipe out the container.storedConfig on first pass through for loop.
+      let maxContainerSize = container.api.get_max_container_size();
 
-        let total_qty = 0;
+      if ( ! isNaN( maxContainerSize ) && container.child_items.length && Object.keys( storedConfig ).length ) {
 
         // Add up quantities.
         for ( let child_item of container.child_items ) {
 
-          let new_qty = self.storedConfig[ child_item.get_item_id() ] || 0;
+          let slotsRemaining = maxContainerSize - container.api.get_container_size();
+          let newQty         = storedConfig[ child_item.get_item_id() ] || 0;
 
-          child_item.update_quantity( new_qty );
-
-          total_qty += child_item.get_quantity();
-
-          if ( total_qty >= container.api.get_max_container_size() ) {
+          if ( slotsRemaining - newQty >= 0 ) {
+            child_item.update_quantity( newQty );
+          } else {
+            child_item.update_quantity( slotsRemaining );
             break;
           }
 
