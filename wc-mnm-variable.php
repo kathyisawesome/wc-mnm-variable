@@ -9,6 +9,10 @@
  * Text Domain: wc-mnm-variable
  * Domain Path: /languages
  * 
+ * GitHub Plugin URI: https://github.com/kathyisawesome/wc-mnm-variable
+ * Primary Branch: trunk
+ * Release Asset: true
+ * 
  * WC requires at least: 6.9.0
  * WC tested up to: 7.0.0
  * Requires at least: 5.9.0
