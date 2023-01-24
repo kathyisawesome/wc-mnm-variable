@@ -42,35 +42,41 @@
     $form.on( 'wc_mnm_variation_form_load', { mnmVariationForm: self }, self.displayForm );
 
     // Stash the configuration for later.
-    $form.on( 'wc-mnm-container-quantities-updated', function(event, container) {
-      self.storedConfig = container.api.get_container_config();
-    } );
+    $form.on(
+        'wc-mnm-container-quantities-updated',
+        function(event, container) {
+        self.storedConfig = container.api.get_container_config();
+        } 
+    );
     // Persist config when switching between variations (as much as possible given  quantities).
-    $form.on( 'wc-mnm-initializing', function(event, container) {
+    $form.on(
+        'wc-mnm-initializing',
+        function(event, container) {
 
-      let storedConfig     = self.storedConfig; // Set here as child_item.update_quantity() is going to wipe out the container.storedConfig on first pass through for loop.
-      let maxContainerSize = container.api.get_max_container_size();
+        let storedConfig     = self.storedConfig; // Set here as child_item.update_quantity() is going to wipe out the container.storedConfig on first pass through for loop.
+        let maxContainerSize = container.api.get_max_container_size();
 
-      if ( ! isNaN( maxContainerSize ) && container.child_items.length && Object.keys( storedConfig ).length ) {
+        if ( ! isNaN( maxContainerSize ) && container.child_items.length && Object.keys( storedConfig ).length ) {
 
-        // Add up quantities.
-        for ( let child_item of container.child_items ) {
+          // Add up quantities.
+          for ( let child_item of container.child_items ) {
 
-          let slotsRemaining = maxContainerSize - container.api.get_container_size();
-          let newQty         = storedConfig[ child_item.get_item_id() ] || 0;
+            let slotsRemaining = maxContainerSize - container.api.get_container_size();
+            let newQty         = storedConfig[ child_item.get_item_id() ] || 0;
 
-          if ( slotsRemaining - newQty >= 0 ) {
-            child_item.update_quantity( newQty );
-          } else {
-            child_item.update_quantity( slotsRemaining );
-            break;
+            if ( slotsRemaining - newQty >= 0 ) {
+              child_item.update_quantity( newQty );
+            } else {
+              child_item.update_quantity( slotsRemaining );
+              break;
+            }
+
           }
 
         }
 
-      }
-
-    } );
+        } 
+    );
 
     // Add data to ajax submit when editing a container.
     $( document ).on( 'wc_mnm_update_container_order_item_data', { mnmVariationForm: self }, self.addVariationData );
@@ -143,18 +149,19 @@
         let $target = form.$form.find( '.single_variation_wrap' );
         form.block( $target );
 
-        $.ajax( {
-          url: WC_MNM_ADD_TO_CART_VARIATION_PARAMS.wc_ajax_url.toString().replace( '%%endpoint%%', 'mnm_get_variation_container_form' ),
-          type: 'POST',
-          data: {
+        $.ajax(
+            {
+            url: WC_MNM_ADD_TO_CART_VARIATION_PARAMS.wc_ajax_url.toString().replace( '%%endpoint%%', 'mnm_get_variation_container_form' ),
+            type: 'POST',
+            data: {
             variation_id      : variation.variation_id,
             dataType          : 'json',
             validation_context: form.validation_context,
             request           : window.location.href,
             source            : form.$form.data( 'source' ) || '',
             extra_data        : form.$form.data( 'extra_data' ) || ''
-          },
-          success: function( response ) {
+            },
+            success: function( response ) {
     
             if ( response.success && response.data ) {
     
@@ -177,11 +184,12 @@
 
             form.unblock( $target );
     
-          },
-          fail: function() {
+            },
+            fail: function() {
             window.alert( WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_form_error );
-          }
-        } );
+            }
+            } 
+        );
 
       }      
 
@@ -199,9 +207,11 @@
       let $target = $( event.target ).find( '.single_mnm_variation' );
       let template = wp.template( 'wc-mnm-variation-template' );
       
-      let $template_html = template( {
+    let $template_html = template(
+        {
         variation: variation
-      } );
+        } 
+    );
       $template_html = $template_html.replace( '/*<![CDATA[*/', '' );
       $template_html = $template_html.replace( '/*]]>*/', '' );
 
@@ -218,15 +228,17 @@
       $target.removeClass( 'processing' ).show();
 
       if ( ! $target.wcMNMisInViewport() && this.scroll && false !== $( document.body ).triggerHandler( 'wc_mnm_scroll_to_variation' ) ) {
-        $('html,body').animate({
-          scrollTop: $target.offset().top
-        });
+        $( 'html,body' ).animate(
+            {
+            scrollTop: $target.offset().top
+            }
+        );
       }
 
       $( event.target ).trigger( 'wc_mnm_variation_form_loaded', [ variation ] );
 
     } else {
-      $( event.target ).find( '.single_mnm_variation' ).html('');
+      $( event.target ).find( '.single_mnm_variation' ).html( '' );
     }
 
   };  
@@ -270,7 +282,8 @@
     var count  = 0;
     var chosen = 0;
 
-    $form.find( '.wc-mnm-variations' ).each( function() {
+    $form.find( '.wc-mnm-variations' ).each(
+        function() {
         var attribute_name = $( this ).find( 'input:radio' ).first().attr( 'name' );
         var value          = $( this ).find( 'input:checked' ).val() || '';
 
@@ -280,7 +293,8 @@
 
         count ++;
         data[ attribute_name ] = value;
-    });
+        }
+    );
 
     return {
         'count'      : count,
@@ -316,10 +330,12 @@
 	 */
   WC_MNM_Variation_Form.prototype.block = function( $node ) {
 		if ( !  WC_MNM_Variation_Form.prototype.is_blocked( $node ) ) {
-			$node.addClass( 'processing' ).block( {
-        message: null,
-        theme: true      
-			} );
+			$node.addClass( 'processing' ).block(
+                {
+                message: null,
+                theme: true      
+                } 
+            );
 		}
 	};
 
@@ -342,10 +358,10 @@
     if ( ! this.length ) {
       return true;
     }
-    var elementTop = $(this).offset().top;
-    var elementBottom = elementTop + $(this).outerHeight();
-    var viewportTop = $(window).scrollTop();
-    var viewportBottom = viewportTop + $(window).height();
+    var elementTop = $( this ).offset().top;
+    var elementBottom = elementTop + $( this ).outerHeight();
+    var viewportTop = $( window ).scrollTop();
+    var viewportBottom = viewportTop + $( window ).height();
     return elementBottom > viewportTop && elementTop < viewportBottom;
   };
 
@@ -364,16 +380,22 @@
     return this;
   };
 
-  $(function() {
-    $( document ).on( 'wc-mnm-initialize.variable-mix-and-match', '.variable_mnm_form', function() {
-      $( this ).wc_mnm_variation_form();
-    } );
+$(
+    function() {
+    $( document ).on(
+        'wc-mnm-initialize.variable-mix-and-match',
+        '.variable_mnm_form',
+        function() {
+        $( this ).wc_mnm_variation_form();
+        } 
+    );
   
     $( '.variable_mnm_form' ).each(
-      function() {
-        $( this ).trigger( 'wc-mnm-initialize.variable-mix-and-match' );
-      }
+        function() {
+          $( this ).trigger( 'wc-mnm-initialize.variable-mix-and-match' );
+        }
     );
-  } );
+    } 
+);
 
 } )( jQuery, window, document );

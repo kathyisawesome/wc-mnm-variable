@@ -4,7 +4,8 @@ module.exports = function(grunt) {
 	require( 'load-grunt-tasks' )( grunt );
 
 	// Project configuration.
-	grunt.initConfig( {
+	grunt.initConfig(
+        {
 		pkg: grunt.file.readJSON( 'package.json' ),
 
 		// Setting folder templates.
@@ -321,7 +322,8 @@ module.exports = function(grunt) {
 			}
 		}
 
-    } );
+        } 
+    );
 
 	// Register tasks.
 	grunt.registerTask(

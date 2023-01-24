@@ -795,7 +795,7 @@ class WC_MNM_Variable {
 	public static function switch_variation( $product, $container_item, $subscription, $source ) {
 
 		// Detect a variation switch.
-		if ( ! empty ( $_POST[ 'variation_id' ] ) && intval( $_POST[ 'variation_id' ] ) !== $container_item->get_variation_id() ) {
+		if ( ! empty( $_POST[ 'variation_id' ] ) && intval( $_POST[ 'variation_id' ] ) !== $container_item->get_variation_id() ) {
 			$product = wc_get_product( intval( $_POST[ 'variation_id' ] ) );
 		}
 
