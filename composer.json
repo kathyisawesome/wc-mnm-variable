@@ -1,8 +1,33 @@
 {
-    "name": "kathyisawesome/wc-mnm-variable",
-    "description": "Variable Mix and Match Products.",
-    "homepage": "https://github.com/kathyisawesome/wc-mnm-variable",
-    "type": "wordpress-plugin",
-    "license": "GPL-3.0-or-later"
+  "name": "kathyisawesome/wc-mnm-variable",
+  "description": "Variable Mix and Match Products.",
+  "homepage": "https://github.com/kathyisawesome/wc-mnm-variable",
+  "type": "wordpress-plugin",
+  "license": "GPL-3.0-or-later",
+  "require-dev": {
+      "woocommerce/woocommerce-sniffs": "0.1.3"
+    },
+    "scripts": {
+      "phpcs": [
+          "phpcs . -s -p -n --sniffs=PEAR.Functions.FunctionCallSignature"
+      ],
+      "phpcs-pre-commit": [
+        "phpcs . -s -p -n"
+      ],
+      "phpcb": [
+          "phpcbf . --sniffs=PEAR.Functions.FunctionCallSignature"
+      ]
+    },
+    "config": {
+      "allow-plugins": {
+          "composer/installers": true,
+          "dealerdirect/phpcodesniffer-composer-installer": true
+      }
+    },
+    "extra": {
+      "scripts-description": {
+            "phpcs": "Analyze code against the WordPress coding standards with PHP_CodeSniffer",
+            "phpcb": "Fix coding standards warnings/errors automatically with PHP Code Beautifier"
+      }
+    }
 }
-  
