@@ -48,21 +48,6 @@ if ( ! function_exists( 'wc_mnm_variable_template_add_to_cart' ) ) {
 		// Get Available variations?
 		$get_variations = count( $product->get_children() ) <= apply_filters( 'woocommerce_ajax_variation_threshold', 30, $product );
 
-		$classes = array(
-			'variable_mnm_form',
-			'cart',
-			'cart_group',
-			'layout_' . $product->get_layout(),
-		);
-	
-		/**
-		 * Form classes.
-		 *
-		 * @param array - The classes that will print in the <form> tag.
-		 * @param obj $product WC_Product_Variable_Mix_And_Match of parent product
-		 */
-		$classes = (array) apply_filters( 'wc_mnm_form_wrapper_classes', $classes, $product );
-
 		// Load the template.
 		wc_get_template(
 			'single-product/add-to-cart/variable-mnm.php',
@@ -70,7 +55,7 @@ if ( ! function_exists( 'wc_mnm_variable_template_add_to_cart' ) ) {
 				'available_variations' => $get_variations ? $product->get_available_variations() : false,
 				'attributes'           => $product->get_variation_attributes(),
 				'selected_attributes'  => $product->get_default_attributes(),
-				'classes'              => $classes,
+				'classes'              => wc_mnm_get_form_classes( array( 'variable_mnm_form' ), $product ),
 			),
 			'',
 			WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
@@ -301,22 +286,6 @@ if ( ! function_exists( 'wc_mnm_template_edit_variable_container_order_item' ) )
 			return;
 		}
 
-		$classes = array(
-			'variable_mnm_form',
-			'cart',
-			'cart_group',
-			'edit_container',
-			'layout_' . $product->get_layout(),
-		);
-
-		/**
-		 * Form classes.
-		 *
-		 * @param array - The classes that will print in the <form> tag.
-		 * @param obj $product WC_Mix_And_Match of parent product
-		 */
-		$classes = apply_filters( 'wc_mnm_edit_form_classes', $classes, $product );
-
 		// Get Available variations?
 		$get_variations = count( $product->get_children() ) <= apply_filters( 'woocommerce_ajax_variation_threshold', 30, $product );
 			
@@ -325,10 +294,9 @@ if ( ! function_exists( 'wc_mnm_template_edit_variable_container_order_item' ) )
 			array(
 				'order_item'           => $order_item,
 				'order'                => $order,
-				'classes'              => $classes,
+				'classes'              => wc_mnm_get_form_classes( array( 'variable_mnm_form', 'edit_container' ), $product ),
 				'available_variations' => $get_variations ? $product->get_available_variations(): false,
 				'attributes'           => $product->get_variation_attributes(),
-				'classes'              => $classes,
 				'source'               => $source,
 			),
 			'',

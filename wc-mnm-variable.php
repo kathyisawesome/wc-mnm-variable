@@ -31,7 +31,7 @@ use Automattic\Jetpack\Constants;
 class WC_MNM_Variable {
 
 	const VERSION = '1.0.0-rc.4';
-	const REQ_MNM_VERSION = '2.3.0-beta.4';
+	const REQ_MNM_VERSION = '2.4.0-beta.1';
 	const REQ_WC_VERSION  = '6.9.0'; // @todo -check this.
 
 	/**
