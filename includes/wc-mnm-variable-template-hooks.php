@@ -9,7 +9,7 @@
 defined( 'ABSPATH' ) || exit;
 
 // Add to cart template.
-add_action( 'woocommerce_variable-mix-and-match_add_to_cart', 'wc_setup_loop' );
+add_action( 'woocommerce_variable-mix-and-match_add_to_cart', 'wc_setup_loop', 0 );
 add_action( 'woocommerce_variable-mix-and-match_add_to_cart', 'wc_mnm_variable_template_add_to_cart' );
 
 // Single product template for Mix and Match. Form location: After summary.
