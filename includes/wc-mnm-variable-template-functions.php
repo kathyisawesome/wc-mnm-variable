@@ -138,10 +138,17 @@ if ( ! function_exists( 'wc_mnm_template_single_variation' ) ) {
 if ( ! function_exists( 'wc_mnm_variation_header' ) ) {
 
 	/**
-	 * Output placeholders for the single variation.
+	 * Output prompt for the single variation.
 	 */
-	function wc_mnm_variation_header() {
-		echo '<h2>' . esc_html__( 'Choose selections', 'wc-mnm-variable' ) . '</h2>';
+	function wc_mnm_variation_header( $variation ) {
+		wc_get_template(
+			'single-product/mnm/variation-header.php',
+			array(
+				'variation' => $variation,
+			),
+			'',
+			WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
+		);
 	}
 }
 
