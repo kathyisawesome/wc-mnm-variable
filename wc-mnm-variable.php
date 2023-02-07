@@ -767,13 +767,14 @@ class WC_MNM_Variable {
 	 * @param array $data
 	 * @param WC_Product_Variable_Mix_and_Match
 	 * @param WC_Product_Mix_and_Match_Variation
+	 * @return array
 	 */
 	public function preload_order_item_variation( $data, $product, $variation ) {
 
 		if ( 
 			$variation->is_type( 'mix-and-match-variation' )
 			&& $product->is_type( 'variable-mix-and-match' )
-			&& ( doing_action( 'wc_ajax_mnm_get_edit_container_order_item_form' ) || doing_action( 'wp_ajax_woocommerce_mnm_get_edit_container_order_item_form' ) )
+			&& WC_MNM_Ajax::is_container_edit_request()
 			&& isset( $_REQUEST['container_id'] )
 			&& intval( $_REQUEST['container_id'] ) === $variation->get_id() )
 		{
