@@ -243,9 +243,9 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 								}
 							?>
 
-							<?php echo wp_kses_post( $label ); ?>
+							<span class="variation-title"><?php echo wp_kses_post( $label ); ?></span>
 
-							<p class="price"><?php echo wp_kses_post( $variation->get_price_html() ); ?></p>
+							<span class="variation-price price"><?php echo wp_kses_post( $variation->get_price_html() ); ?></span>
 					
 						</label>
 						

@@ -3,7 +3,9 @@
 .variable_mnm_form {
 
     .wc-mnm-variations {
-        padding: .5em;
+        border-color: initial;
+        border-width: 1px 0 0 0;
+        padding: .5em 0;
         margin-bottom: 1.5em;
         ul.products li.product {
             margin-bottom: 0em
@@ -19,13 +21,26 @@
             border-color: var( --wc-highligh-text, #ccc );
             padding: .5em;
             display: block;
+            text-align: center;
+
+            img {
+                margin-bottom: 1.25em;
+            }
+
+            .variation-title {
+                font-size: 1.25em;
+                font-weight: bold;
+            }
+
         }
-            label:hover {
+        label:hover {
+            background-color: var( --wc-secondary, #ebe9eb );
             cursor: pointer;
         }
-            input:checked + label {
+        input:checked + label {
             border-color: var( --wc-primary, #a46497 );
         }
+        
     }
 
     .wc_mnm_variation_out_of_stock .wc_mnm_variation > *:not(.mnm_cart) {
