@@ -74,6 +74,7 @@ class WC_MNM_Variable {
 
 		// Load template actions/functions later.
 		add_action( 'template_redirect', [ $this, 'template_includes' ], -1 );
+		add_action( 'wp_ajax_wc_mnm_get_edit_container_order_item_form', [ $this, 'template_includes' ], -1 );
 
 		// Include admin class to handle all back-end functions.
 		if ( is_admin() ) {
