@@ -293,6 +293,15 @@ if ( ! function_exists( 'wc_mnm_template_edit_variable_container_order_item' ) )
 			return;
 		}
 
+		// Merge the variation's attributes into $_REQUEST to pre-select the correct attributes.
+		// @todo - Is there a better way to do this?
+		$variation = $order_item->get_product();
+		
+		if ( $variation && $variation->is_type( 'mix-and-match-variation' ) ) {
+			$attributes = $variation->get_variation_attributes();
+			$_REQUEST = array_merge( $_REQUEST, $variation->get_variation_attributes() );
+		}
+
 		// Get Available variations?
 		$get_variations = count( $product->get_children() ) <= apply_filters( 'woocommerce_ajax_variation_threshold', 30, $product );
 			
