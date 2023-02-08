@@ -762,7 +762,7 @@ class WC_MNM_Variable {
 	}
 	
 	/**
-	 * Pre-load the current order item's variation.
+	 * Pre-load the current order item's variation form.
 	 * 
 	 * @param array $data
 	 * @param WC_Product_Variable_Mix_and_Match
