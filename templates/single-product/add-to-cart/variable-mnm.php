@@ -47,7 +47,7 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 			?>
 
 		<?php else: ?>
-			<table class="variations" cellspacing="0" role="presentation">
+			<table class="variations wc-mnm-variations" cellspacing="0" role="presentation">
 				<tbody>
 					<?php foreach ( $attributes as $attribute_name => $options ) : ?>
 						<tr>
