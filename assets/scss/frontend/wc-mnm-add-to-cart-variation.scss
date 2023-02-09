@@ -8,7 +8,15 @@
         padding: .5em 0;
         margin-bottom: 1.5em;
         ul.products li.product {
-            margin-bottom: 0em
+            margin-bottom: 0em;
+
+            // APFS patch.
+            .wcsatt-sub-options {
+                .price, .woocommerce-Price-amount {
+                font-size: 1em;
+                font-size: 1rem;
+                }
+            }
         }
     }
     .single_variation .woocommerce-variation-availability { display: none; }
