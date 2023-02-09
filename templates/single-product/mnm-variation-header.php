@@ -2,7 +2,7 @@
 /**
  * The template for displaying mix and match allowed pproduct content within loops for variations.
  *
- * This template can be overridden by copying it to yourtheme/woocommerce/single-product/mnm/variation-header.php.
+ * This template can be overridden by copying it to yourtheme/woocommerce/single-product/mnm-variation-header.php.
  *
  * HOWEVER, on occasion WooCommerce will need to update template files and you
  * (the theme developer) will need to copy the new files to your theme to

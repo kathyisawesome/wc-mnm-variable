@@ -146,7 +146,7 @@ if ( ! function_exists( 'wc_mnm_variation_header' ) ) {
 	 */
 	function wc_mnm_variation_header( $variation ) {
 		wc_get_template(
-			'single-product/mnm/variation-header.php',
+			'single-product/mnm-variation-header.php',
 			array(
 				'variation' => $variation,
 			),
