@@ -193,7 +193,7 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 				'selected'         => false,
 				'name'             => '',
 				'id'               => '',
-				'class'            => 'variations wc-mnm-variations',
+				'class'            => 'wc-mnm-variations-field',
 			)
 		);
 
@@ -219,12 +219,11 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 
 				<legend><?php printf( esc_html_x( 'Choose %s', '[Frontend] attribute label', 'wc-mnm-variable' ), wc_attribute_label( $args['attribute'] ) ); ?></legend>
 
-				<?php wc_setup_loop( ['columns' => 3 ] ); ?>
-				<?php woocommerce_product_loop_start(); ?>
+				<ul class="variations wc-mnm-variations <?php echo esc_attr( count( $available_variations ) % 3 === 0 ? 'columns-3' : 'columns-2' ); ?>">
 
 				<?php foreach ( $available_variations as $variation ) : ?>
 					
-					<li class="product product-type-mix-and-match-variation <?php echo esc_attr( wc_get_loop_class() );?>">
+					<li class="variation product-type-mix-and-match-variation">
 
 						<?php
 						
