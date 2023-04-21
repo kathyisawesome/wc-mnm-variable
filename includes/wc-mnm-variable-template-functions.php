@@ -134,45 +134,8 @@ if ( ! function_exists( 'wc_mnm_template_single_variation' ) ) {
 		}
 
 		if ( $product && $product->is_type( 'variable-mix-and-match' ) ) {
-			echo '<div class="woocommerce-variation single_mnm_variation"></div>';
+			echo '<div class="mix-and-match-root woocommerce-variation single_mnm_variation" data-product_id=""></div>';		
 		}
-	}
-}
-
-if ( ! function_exists( 'wc_mnm_variation_header' ) ) {
-
-	/**
-	 * Output prompt for the single variation.
-	 */
-	function wc_mnm_variation_header( $variation ) {
-		wc_get_template(
-			'single-product/mnm-variation-header.php',
-			array(
-				'variation' => $variation,
-			),
-			'',
-			WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
-		);
-	}
-}
-
-
-if ( ! function_exists( 'wc_mnm_template_variation_add_to_cart_button' ) ) {
-
-	/**
-	 * Output the add to cart button for variations.
-	 * 
-	 * @param WC_Product_Mix_and_Match_Variation $variation
-	 */
-	function wc_mnm_template_variation_add_to_cart_button( $variation ) {
-		wc_get_template(
-			'single-product/add-to-cart/mnm-variation-add-to-cart-button.php',
-			array(
-				'variation' => $variation,
-			),
-			'',
-			WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
-		);
 	}
 }
 

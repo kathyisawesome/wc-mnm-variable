@@ -403,11 +403,12 @@ class WC_MNM_Variable {
 	public function available_variation( $data, $product, $variation ) {
 
 		if ( $variation->is_type( 'mix-and-match-variation' ) && $product->is_type( 'variable-mix-and-match' ) ) {
-			if ( (bool) apply_filters( 'wc_mnm_eager_load_variations', false, $product ) || did_action( 'wc_ajax_get_variation' ) ) {
-				$data['mix_and_match_html'] = $this->get_variation_template_html( $variation );
-			}
-			$data['mix_and_match_min_container_size'] = $variation->get_min_container_size();
-			$data['mix_and_match_max_container_size'] = $variation->get_min_container_size();
+			$data['mix_and_match'] = [
+				'min_container_size' => $variation->get_min_container_size(),
+				'max_container_size' => $variation->get_min_container_size(),
+				'data_attributes'    => $variation->get_data_attributes( [], false ),
+			];
+
 		}
 
 		return $data;
@@ -487,27 +488,7 @@ class WC_MNM_Variable {
         wp_enqueue_script( 'wc-add-to-cart-mnm' );
         wp_enqueue_script( 'wc-mnm-add-to-cart-variation' );
 
-		// We also need the wp.template for this script :).
-		$hook = is_admin() ? 'admin_print_footer_scripts' : 'wp_print_footer_scripts';
-		add_action( $hook, [ $this, 'print_script_template' ] );
-
 	}
-
-
-	/**
-	 * Load the script template once.
-	 */
-	public function print_script_template() {
-
-		wc_get_template(
-            'single-product/add-to-cart/mnm-variation.php',
-            array(),
-            '',
-            $this->get_plugin_path() . 'templates/'
-        );
-
-	}
-
 
 	/**
 	 * Force form location to be default

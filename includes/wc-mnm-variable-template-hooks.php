@@ -15,15 +15,8 @@ add_action( 'woocommerce_variable-mix-and-match_add_to_cart', 'wc_mnm_variable_t
 // Single product template for Mix and Match. Form location: After summary.
 add_action( 'woocommerce_after_single_product_summary', 'wc_mnm_variable_template_add_to_cart_after_summary', -1000 );
 
-// Variation contents loop.
-add_action( 'wc_mnm_variation_add_to_cart', 'wc_mnm_variation_add_to_cart' );
-
 // Display MNM variation contents.
 add_action( 'woocommerce_single_variation', 'wc_mnm_template_single_variation', 15 );
-add_action( 'wc_mnm_variation_content_loop', 'wc_mnm_variation_header', 10 );
-add_action( 'wc_mnm_variation_content_loop', 'wc_mnm_content_loop', 20 );
-add_action( 'wc_mnm_variation_content_loop', 'wc_mnm_template_reset_link', 30 );
-add_action( 'wc_mnm_variation_content_loop', 'wc_mnm_template_container_status', 40 );
 
 
 /*-----------------------------------------------------------------------------------*/
