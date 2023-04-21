@@ -476,6 +476,39 @@ class WC_MNM_Variable {
 
 		wp_localize_script( 'wc-mnm-add-to-cart-variation', 'WC_MNM_ADD_TO_CART_VARIATION_PARAMS', $params );
 
+		// React script.
+		$script_path = 'build/index.js';
+		$script_url  = untrailingslashit( $this->get_plugin_url() ) . '/' . $script_path;
+
+		$script_asset_path = $this->get_plugin_path() . '/build/index.asset.php';
+		$script_asset      = file_exists( $script_asset_path )
+			? require $script_asset_path
+			: array(
+				'dependencies' => array(),
+				'version'      => WC_Mix_and_Match()->get_file_version( $this->get_plugin_path() . '/' . $script_path ),
+			);
+
+		wp_register_script(
+			'wc-mnm-add-to-cart-reatified',
+			$script_url,
+			$script_asset[ 'dependencies' ],
+			$script_asset[ 'version' ],
+			true
+		);
+
+
+		$params = array( 
+			'wc_ajax_url'     => \WC_AJAX::get_endpoint( '%%endpoint%%' ),
+			'i18n_form_error' => __( 'Failed to initialize form. If this issue persists, please reload the page and try again.', 'reactified' ),
+			'form_nonce'      => wp_create_nonce( 'wc_mnm_container_form' ),
+			'display_thumbnails' => wc_string_to_bool( get_option( 'wc_mnm_display_thumbnail', 'yes' ) ),
+			'display_short_description' => wc_string_to_bool( get_option( 'wc_mnm_display_short_description', 'no' ) ),
+			'display_plus_minus_buttons' => wc_string_to_bool( get_option( 'wc_mnm_display_plus_minus_buttons', 'no' ) ),
+		);
+
+		wp_localize_script( 'wc-mnm-add-to-cart-reatified', 'WC_MNM_ADD_TO_CART_REACT_PARAMS', $params );
+
+
 		if ( $auto_enqueue ) {
 			$this->load_scripts();
 		}
@@ -487,12 +520,10 @@ class WC_MNM_Variable {
 	 * Load the script anywhere the MNN add to cart button is displayed
 	 */
 	public function load_scripts() {
-
-		wp_enqueue_script( 'jquery-blockui' );
 		wp_enqueue_script( 'wc-add-to-cart-variation' );
         wp_enqueue_script( 'wc-add-to-cart-mnm' );
         wp_enqueue_script( 'wc-mnm-add-to-cart-variation' );
-
+		wp_enqueue_script( 'wc-mnm-add-to-cart-reatified' );
 	}
 
 	/**
