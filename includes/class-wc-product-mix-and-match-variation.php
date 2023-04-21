@@ -173,57 +173,6 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'weight_cumulative', $value, $this ) : $value;
 	}
 
-	/**
-	 * Return all child items
-	 * these are the items that are allowed to be in the container
-	 * 
-	 * For variations, if sharing content, cache the result on the parent so it runs 1x.
-	 *
-	 * @return WC_MNM_Child_Item[]
-	 */
-	public function get_child_items( $context = 'view' ) {
-
-		$cache_id = $this->is_sharing_content( $context ) ? $this->get_parent_id() : $this->get_id();
-
-		if ( $this->get_id() && ! $this->has_child_item_changes() ) {
-			$this->child_items = WC_MNM_Helpers::cache_get( $cache_id, 'child_items' );
-		}
-
-		if ( null === $this->child_items ) {
-
-			$this->child_items = [];
-
-			$child_items = $this->data_store->read_child_items( $this );
-
-			// Sanity check that the products do exist.
-			foreach ( $child_items as $item_key => $child_item ) {
-
-				if ( $child_item && $child_item->exists() ) {
-
-					if ( ! $child_item->is_visible() ) {
-						continue;
-					}
-
-					$this->child_items[ $item_key ] = $child_item;
-
-				}
-
-			}
-
-			WC_Mix_and_Match_Helpers::cache_set( $cache_id, $this->child_items, 'child_items' );
-
-		}
-
-		/**
-		 * 'wc_mnm_child_items' filter.
-		 *
-		 * @param  WC_MNM_Child_Item[]       $child_items
-		 * @param  WC_Product_Mix_and_Match  $this
-		 */
-		return 'view' === $context ? apply_filters( 'wc_mnm_child_items', $this->child_items, $this ) : $this->child_items;
-
-	}
-
 	/*
 	|--------------------------------------------------------------------------
 	| Setters.
