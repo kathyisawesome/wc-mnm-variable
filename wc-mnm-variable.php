@@ -159,6 +159,11 @@ class WC_MNM_Variable {
 
 		// Handle change variation.
 		add_filter( 'wc_mnm_get_product_from_edit_order_item', [ $this, 'switch_variation' ], 10, 4 );
+
+		/**
+		 * REST API
+		 */
+		add_filter( 'wc_mnm_child_item_rest_response', [ $this, 'rest_prepare_child_item' ], 10, 3 );	
 	}
 
 	/**
@@ -783,6 +788,121 @@ class WC_MNM_Variable {
 
 		return $product;
 
+	}
+
+	/*
+	|--------------------------------------------------------------------------
+	| REST API.
+	|--------------------------------------------------------------------------
+	*/
+
+	/**
+	 * Filter the data for a response.
+	 *
+	 * The dynamic portion of the hook name, $this->post_type,
+	 * refers to object type being prepared for the response.
+	 *
+	 * @param array $data The array of child item data added to the response.
+	 * @param  obj WC_MNM_Child_Item $child_item of child item
+	 * @param  obj WC_Product_Mix_and_Match $container_product
+	 * @return array
+	 */
+	public function rest_prepare_child_item( $data, $child_item, $container_product ) {
+
+		$additional_data = array(
+			'min_qty'            => $child_item->get_quantity( 'min' ),
+			'max_qty'            => $child_item->get_quantity( 'max' ),
+			'step_qty'           => $child_item->get_quantity( 'step' ),
+			'qty'                => $child_item->get_quantity(),
+			'availability'       => $child_item->get_product()->get_availability(),
+			'purchasable'        => $child_item->get_product()->is_purchasable(),
+			'in_stock'           => $child_item->get_product()->is_in_stock(),
+			'price_html'         => $child_item->get_product()->get_price_html(),
+			'catalog_visibility' => $child_item->get_product()->get_catalog_visibility(),
+			'images'             => self::get_images( $child_item, $container_product ),
+			'name'               => $child_item->get_product()->get_name(),
+			'permalink'          => $child_item->get_product()->get_permalink(),
+			'short_description'  => $child_item->get_product()->get_short_description(),
+		);	
+
+		return array_merge( $data, $additional_data );
+	}
+	
+
+	/**
+	 * Get the images for a child item's product.
+	 *
+	 * @param WC_MNM_Child_Item.
+	 *
+	 * @return array
+	 */
+	protected static function get_images( $child_item, $container_product ) {
+
+		$product = $child_item->get_product();
+
+		/**
+		 * Child item thumbnail size.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $size
+		 * @param  obj WC_MNM_Child_Item $child_item of child item
+		 * @param  obj WC_Product_Mix_and_Match $product
+		 */
+		$image_size    = apply_filters( 'wc_mnm_child_item_thumbnail_size', 'woocommerce_thumbnail', $child_item, $container_product );
+
+		$images         = array();
+		$attachment_ids = array();
+
+		// Add featured image.
+		if ( $product->get_image_id() ) {
+			$attachment_ids[] = $product->get_image_id();
+		}
+
+		// Add gallery images.
+	//	$attachment_ids = array_merge( $attachment_ids, $product->get_gallery_image_ids() );
+
+		// Build image data.
+		foreach ( $attachment_ids as $position => $attachment_id ) {
+			$attachment_post = get_post( $attachment_id );
+			if ( is_null( $attachment_post ) ) {
+				continue;
+			}
+
+			$attachment = wp_get_attachment_image_src( $attachment_id, $image_size );
+			if ( ! is_array( $attachment ) ) {
+				continue;
+			}
+
+			$images[] = array(
+				'id'                => (int) $attachment_id,
+				'date_created'      => wc_rest_prepare_date_response( $attachment_post->post_date, false ),
+				'date_created_gmt'  => wc_rest_prepare_date_response( strtotime( $attachment_post->post_date_gmt ) ),
+				'date_modified'     => wc_rest_prepare_date_response( $attachment_post->post_modified, false ),
+				'date_modified_gmt' => wc_rest_prepare_date_response( strtotime( $attachment_post->post_modified_gmt ) ),
+				'src'               => current( $attachment ),
+				'name'              => get_the_title( $attachment_id ),
+				'alt'               => get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ),
+				'position'          => (int) $position,
+			);
+		}
+
+		// Set a placeholder image if the product has no images set.
+		if ( empty( $images ) ) {
+			$images[] = array(
+				'id'                => 0,
+				'date_created'      => wc_rest_prepare_date_response( current_time( 'mysql' ), false ), // Default to now.
+				'date_created_gmt'  => wc_rest_prepare_date_response( time() ), // Default to now.
+				'date_modified'     => wc_rest_prepare_date_response( current_time( 'mysql' ), false ),
+				'date_modified_gmt' => wc_rest_prepare_date_response( time() ),
+				'src'               => wc_placeholder_img_src(),
+				'name'              => __( 'Placeholder', 'woocommerce' ),
+				'alt'               => __( 'Placeholder', 'woocommerce' ),
+				'position'          => 0,
+			);
+		}
+
+		return $images;
 	}
 
 	/*
