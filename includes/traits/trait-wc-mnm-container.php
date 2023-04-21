@@ -520,7 +520,7 @@ trait WC_MNM_Container {
 	 */
 	public function is_priced_per_product( $context = 'view' ) {
 
-		$is_priced_per_product = $this->get_priced_per_product();
+		$is_priced_per_product = (bool) $this->get_priced_per_product();
 
 		/**
 		 * `wc_mnm_container_is_priced_per_product` filter
@@ -528,7 +528,7 @@ trait WC_MNM_Container {
 		 * @param  bool $is_purchasable
 		 * @param  obj WC_Product_Mix_and_Match $this
 		 */
-		return 'view' === $context ? apply_filters( 'wc_mnm_container_is_priced_per_product', $is_priced_per_product, $this ) : $is_priced_per_product;
+		return 'view' === $context ? (bool) apply_filters( 'wc_mnm_container_is_priced_per_product', $is_priced_per_product, $this ) : $is_priced_per_product;
 	}
 
 
