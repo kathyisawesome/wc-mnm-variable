@@ -477,10 +477,10 @@ class WC_MNM_Variable {
 		wp_localize_script( 'wc-mnm-add-to-cart-variation', 'WC_MNM_ADD_TO_CART_VARIATION_PARAMS', $params );
 
 		// React script.
-		$script_path = 'build/index.js';
+		$script_path = 'assets/dist/frontend/variable-mnm.js';
 		$script_url  = untrailingslashit( $this->get_plugin_url() ) . '/' . $script_path;
 
-		$script_asset_path = $this->get_plugin_path() . '/build/index.asset.php';
+		$script_asset_path = $this->get_plugin_path() . '/assets/dist/frontend/variable-mnm.asset.php';
 		$script_asset      = file_exists( $script_asset_path )
 			? require $script_asset_path
 			: array(
