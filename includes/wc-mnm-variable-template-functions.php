@@ -109,14 +109,28 @@ if ( ! function_exists( 'wc_mnm_variation_add_to_cart' ) ) {
 		*/
 
 		// Load the template.
-		wc_get_template(
-			'single-product/add-to-cart/mnm-variation-add-to-cart.php',
-			array(
-				'variation' => $variation,
-			),
-			'',
-			WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
-		);
+		$cached_key = 'wc_mnm_variation_add_to_cart_' . $variation->get_cache_key();
+
+		$html = get_transient( $cached_key );
+
+		if( false === $html ) {
+			ob_start();
+			// Load the template.
+			wc_get_template(
+				'single-product/add-to-cart/mnm-variation-add-to-cart.php',
+				array(
+					'variation' => $variation,
+				),
+				'',
+				WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
+			);
+
+			$html = ob_get_clean();
+
+			set_transient($cached_key, $html, WEEK_IN_SECONDS);
+		}
+
+		echo $html;
 
 	}
 }

@@ -179,6 +179,9 @@ class WC_MNM_Variable {
 		include_once 'includes/data-stores/class-wc-product-variable-mix-and-match-data-store-cpt.php';
 		include_once 'includes/data-stores/class-wc-product-mix-and-match-variation-data-store-cpt.php';
 
+		// Transients - this is a temporary solution.
+		include_once 'includes/class-wc-mnm-variable-transients.php';
+
 		// Compatibility
 		include_once 'includes/compatibility/class-wc-mnm-variable-compatibility.php';
 
