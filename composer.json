@@ -5,9 +5,16 @@
   "type": "wordpress-plugin",
   "license": "GPL-3.0-or-later",
   "require-dev": {
-      "woocommerce/woocommerce-sniffs": "0.1.3"
+      "woocommerce/woocommerce-sniffs": "0.1.3",
+      "wp-cli/i18n-command": "^2.4"
     },
     "scripts": {
+      "makepot-audit": [
+        "wp --allow-root i18n make-pot . languages/wc-mnm-reactified.pot --slug=wc-mnm-reactified --exclude=\".github,.wordpress-org,node_modules,vendor,build,deploy\" --headers=\"Report-Msgid-Bugs-To: https://woocommerce.com/my-account/tickets/\n\""
+      ],
+      "makepot": [
+        "@makepot-audit --skip-audit"
+      ],
       "phpcs": [
           "phpcs . -s -p -n --sniffs=PEAR.Functions.FunctionCallSignature"
       ],
@@ -26,8 +33,10 @@
     },
     "extra": {
       "scripts-description": {
-            "phpcs": "Analyze code against the WordPress coding standards with PHP_CodeSniffer",
-            "phpcb": "Fix coding standards warnings/errors automatically with PHP Code Beautifier"
+          "makepot-audit": "Make a .pot file with audit to find possible mistakes in translatable strings",
+          "makepot": "Make a .pot file without checking for mistakes",
+          "phpcs": "Analyze code against the WordPress coding standards with PHP_CodeSniffer",
+          "phpcb": "Fix coding standards warnings/errors automatically with PHP Code Beautifier"
       }
     }
 }
