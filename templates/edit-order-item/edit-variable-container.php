@@ -37,7 +37,7 @@ do_action( 'wc_mnm_before_edit_container_order_item_form', $product, $order_item
 	<?php do_action( 'wc_mnm_edit_container_order_item_before_variations_form', $product, $order_item, $order, $source ); ?>
 
 	<?php if ( empty( $available_variations ) && false !== $available_variations ) : ?>
-		<p class="stock out-of-stock"><?php echo esc_html( apply_filters( 'woocommerce_out_of_stock_message', __( 'This product is currently out of stock and unavailable.', 'wc-mnm-subscription-editing' ) ) ); ?></p>
+		<p class="stock out-of-stock"><?php echo esc_html( apply_filters( 'woocommerce_out_of_stock_message', __( 'This product is currently out of stock and unavailable.', 'wc-mnm-variable' ) ) ); ?></p>
 	<?php else : ?>
 		<?php if ( count( $attributes ) === 1 && ! empty( $available_variations ) && count( $available_variations ) <= apply_filters( 'wc_mnm_variation_swatches_threshold', 3, $product ) ) : ?>
 
@@ -69,7 +69,7 @@ do_action( 'wc_mnm_before_edit_container_order_item_form', $product, $order_item
 											'product'   => $product,
 										)
 									);
-									echo end( $attribute_keys ) === $attribute_name ? wp_kses_post( apply_filters( 'woocommerce_reset_variations_link', '<a class="reset_variations" href="#">' . esc_html__( 'Clear', 'wc-mnm-subscription-editing' ) . '</a>' ) ) : '';
+									echo end( $attribute_keys ) === $attribute_name ? wp_kses_post( apply_filters( 'woocommerce_reset_variations_link', '<a class="reset_variations" href="#">' . esc_html__( 'Clear', 'wc-mnm-variable' ) . '</a>' ) ) : '';
 								?>
 							</td>
 						</tr>

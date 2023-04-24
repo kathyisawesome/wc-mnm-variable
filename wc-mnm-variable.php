@@ -451,9 +451,9 @@ class WC_MNM_Variable {
 
 			$params = array(
 				'wc_ajax_url'                      => WC_AJAX::get_endpoint( '%%endpoint%%' ),
-				'i18n_no_matching_variations_text' => esc_attr__( 'Sorry, no products matched your selection. Please choose a different combination.', 'woocommerce' ),
-				'i18n_make_a_selection_text'       => esc_attr__( 'Please select some product options before adding this product to your cart.', 'woocommerce' ),
-				'i18n_unavailable_text'            => esc_attr__( 'Sorry, this product is unavailable. Please choose a different combination.', 'woocommerce' ),
+				'i18n_no_matching_variations_text' => esc_attr__( 'Sorry, no products matched your selection. Please choose a different combination.', 'wc-mnm-variable' ),
+				'i18n_make_a_selection_text'       => esc_attr__( 'Please select some product options before adding this product to your cart.', 'wc-mnm-variable' ),
+				'i18n_unavailable_text'            => esc_attr__( 'Sorry, this product is unavailable. Please choose a different combination.', 'wc-mnm-variable' ),
 			);
 
 			wp_localize_script( 'wc-add-to-cart-variation', 'wc_add_to_cart_variation_params', $params );
