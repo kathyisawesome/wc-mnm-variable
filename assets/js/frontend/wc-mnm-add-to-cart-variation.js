@@ -163,30 +163,30 @@
             },
             success: function( response ) {
     
-            if ( response.success && response.data ) {
-    
-              // Load the Form in the modal. We get fragments returned, but in admin we only need the form.
-              if ( 'undefined' !== typeof response.data[ 'div.wc-mnm-container-form' ] ) {
-    
-                // Add response to variation object.
-                variation.mix_and_match_html = response.data[ 'div.wc-mnm-container-form' ];
+              if ( response.success && response.data ) {
+      
+                // Load the Form in the modal. We get fragments returned, but in admin we only need the form.
+                if ( 'undefined' !== typeof response.data[ 'div.wc-mnm-container-form' ] ) {
+      
+                  // Add response to variation object.
+                  variation.mix_and_match_html = response.data[ 'div.wc-mnm-container-form' ];
 
-                form.$form.trigger( 'wc_mnm_variation_form_load', [ variation ] );
+                  form.$form.trigger( 'wc_mnm_variation_form_load', [ variation ] );
 
-                // Store the HTML for later.
-                form.html_forms[ variation.variation_id ] = variation.mix_and_match_html;
-    
+                  // Store the HTML for later.
+                  form.html_forms[ variation.variation_id ] = variation.mix_and_match_html;
+      
+                }
+          
+              } else {
+                window.alert( response.data );
               }
-        
-            } else {
-              window.alert( response.data );
-            }
 
-            form.unblock( $target );
+              form.unblock( $target );
     
             },
             fail: function() {
-            window.alert( WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_form_error );
+              window.alert( WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_form_error );
             }
             } 
         );
@@ -207,11 +207,11 @@
       let $target = $( event.target ).find( '.single_mnm_variation' );
       let template = wp.template( 'wc-mnm-variation-template' );
       
-    let $template_html = template(
-        {
-        variation: variation
-        } 
-    );
+      let $template_html = template(
+          {
+          variation: variation
+          } 
+      );
       $template_html = $template_html.replace( '/*<![CDATA[*/', '' );
       $template_html = $template_html.replace( '/*]]>*/', '' );
 
