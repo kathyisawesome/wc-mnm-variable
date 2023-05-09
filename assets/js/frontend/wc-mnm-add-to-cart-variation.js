@@ -218,6 +218,28 @@
       // HTML must be loaded first for MNM scripts to catch the container ID.
       $target.toggleClass( 'wc_mnm_variation_out_of_stock', ! variation.is_in_stock ).html( $template_html );
 
+      // Set up some initial values pulled from the URL. It's a bit hacky, but needed if caching templates.
+      let config = $( event.target ).data( 'product_config' );   
+     
+      if ( 'undefined' !== typeof config && Object.keys(config).length > 0 ) {
+        $( event.target ).find( '.mnm-quantity' ).each( function() {
+
+          let text = $(this).attr('name');
+
+          var match = text.match(/\[(\d+)\]/);
+
+          if ( match && match[1] ) {
+            let product_id = match[1];
+
+            if ( 'undefined' !== typeof ( config[product_id] ) ) {
+              $(this).val( config[product_id] );
+            }
+          }
+
+        });
+    
+      }
+
       // Fire MNM scripts.
       $( event.target ).trigger( 'wc-mnm-initialize.mix-and-match' );
 

@@ -48,6 +48,11 @@ if ( ! function_exists( 'wc_mnm_variable_template_add_to_cart' ) ) {
 		// Get Available variations?
 		$get_variations = count( $product->get_children() ) <= apply_filters( 'woocommerce_ajax_variation_threshold', 30, $product );
 
+		// Input name. Technically, this should be the variation's ID, but as long as nobody is filtering it, it will be fine.
+		$name = wc_mnm_get_child_input_name( $product->get_id() );
+
+		$config = isset( $_GET[$name] ) ? array_map( 'intval', $_GET[$name] ) : [];
+
 		// Load the template.
 		wc_get_template(
 			'single-product/add-to-cart/variable-mnm.php',
@@ -56,6 +61,7 @@ if ( ! function_exists( 'wc_mnm_variable_template_add_to_cart' ) ) {
 				'attributes'           => $product->get_variation_attributes(),
 				'selected_attributes'  => $product->get_default_attributes(),
 				'classes'              => wc_mnm_get_form_classes( array( 'variable_mnm_form' ), $product ),
+				'config'               => $config,
 			),
 			'',
 			WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
@@ -113,7 +119,7 @@ if ( ! function_exists( 'wc_mnm_variation_add_to_cart' ) ) {
 
 		$html = get_transient( $cached_key );
 
-		if( false === $html ) {
+		if ( false === $html ) {
 			ob_start();
 			// Load the template.
 			wc_get_template(
@@ -321,7 +327,18 @@ if ( ! function_exists( 'wc_mnm_template_edit_variable_container_order_item' ) )
 
 		// Get Available variations?
 		$get_variations = count( $product->get_children() ) <= apply_filters( 'woocommerce_ajax_variation_threshold', 30, $product );
-			
+
+		$config = [];
+
+		// Input name.
+		$name = wc_mnm_get_child_input_name( $variation->get_id() );
+
+		// Initialize form state based on the actual configuration of the container.
+		$configuration = WC_Mix_and_Match_Order::get_current_container_configuration( $order_item, $order );
+
+		// Rebuild config.
+		$config = WC_Mix_and_Match()->cart->rebuild_posted_container_form_data( $configuration );
+
 		wc_get_template(
 			'edit-order-item/edit-variable-container.php',
 			array(
@@ -331,6 +348,7 @@ if ( ! function_exists( 'wc_mnm_template_edit_variable_container_order_item' ) )
 				'available_variations' => $get_variations ? $product->get_available_variations(): false,
 				'attributes'           => $product->get_variation_attributes(),
 				'source'               => $source,
+				'config'               => $config,
 			),
 			'',
 			WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
