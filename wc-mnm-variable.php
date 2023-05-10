@@ -504,6 +504,7 @@ class WC_MNM_Variable {
 			'display_thumbnails' => wc_string_to_bool( get_option( 'wc_mnm_display_thumbnail', 'yes' ) ),
 			'display_short_description' => wc_string_to_bool( get_option( 'wc_mnm_display_short_description', 'no' ) ),
 			'display_plus_minus_buttons' => wc_string_to_bool( get_option( 'wc_mnm_display_plus_minus_buttons', 'no' ) ),
+			'num_columns'                => (int) apply_filters( 'wc_mnm_grid_layout_columns', get_option( 'wc_mnm_number_columns', 3 ) ),
 		);
 
 		wp_localize_script( 'wc-mnm-add-to-cart-reatified', 'WC_MNM_ADD_TO_CART_REACT_PARAMS', $params );

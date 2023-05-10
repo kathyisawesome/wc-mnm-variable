@@ -20,9 +20,12 @@ function ChildItems( {childItems} ) {
     
     const config = useContext(ConfigContext);
 
+    const num_columns = WC_MNM_ADD_TO_CART_REACT_PARAMS.num_columns;
+    const has_rows = childItems.length > num_columns ? 'has-multilpe-rows' : ''
+
     return (      
 
-        <div className='wc-block-grid has-3-columns has-multiple-rows'>
+        <div className={`wc-block-grid has-${num_columns}-columns ${has_rows}`}>
 
             <ul className="wc-block-grid__products">
 
