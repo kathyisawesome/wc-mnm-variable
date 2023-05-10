@@ -433,7 +433,7 @@ class WC_MNM_Variable {
 	 */
 	public function frontend_scripts( $auto_enqueue = false ) {
 		$suffix         = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '': '.min';
-		$style_path    = 'assets/css/frontend/wc-mnm-add-to-cart-variation' . $suffix . '.css';
+		$style_path    = 'assets/dist/frontend/style-variable-mnm.css';
 		$style_url     = $this->get_plugin_url() . $style_path;
 		$style_version = WC_Mix_and_Match()->get_file_version( $this->get_plugin_path() . $style_path, self::VERSION );
 
@@ -498,11 +498,11 @@ class WC_MNM_Variable {
 
 
 		$params = array( 
-			'wc_ajax_url'     => \WC_AJAX::get_endpoint( '%%endpoint%%' ),
-			'i18n_form_error' => __( 'Failed to initialize form. If this issue persists, please reload the page and try again.', 'wc-mnm-variable' ),
-			'form_nonce'      => wp_create_nonce( 'wc_mnm_container_form' ),
-			'display_thumbnails' => wc_string_to_bool( get_option( 'wc_mnm_display_thumbnail', 'yes' ) ),
-			'display_short_description' => wc_string_to_bool( get_option( 'wc_mnm_display_short_description', 'no' ) ),
+			'wc_ajax_url'                => \WC_AJAX::get_endpoint( '%%endpoint%%' ),
+			'i18n_form_error'            => __( 'Failed to initialize form. If this issue persists, please reload the page and try again.', 'wc-mnm-variable' ),
+			'form_nonce'                 => wp_create_nonce( 'wc_mnm_container_form' ),
+			'display_thumbnails'         => wc_string_to_bool( get_option( 'wc_mnm_display_thumbnail', 'yes' ) ),
+			'display_short_description'  => wc_string_to_bool( get_option( 'wc_mnm_display_short_description', 'no' ) ),
 			'display_plus_minus_buttons' => wc_string_to_bool( get_option( 'wc_mnm_display_plus_minus_buttons', 'no' ) ),
 			'num_columns'                => (int) apply_filters( 'wc_mnm_grid_layout_columns', get_option( 'wc_mnm_number_columns', 3 ) ),
 		);

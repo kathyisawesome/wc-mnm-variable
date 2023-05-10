@@ -4,6 +4,8 @@ import { useEffect, useState } from '@wordpress/element';
 /**
  * Internal dependencies
  */
+import './style.scss';
+
 //import { ChildItemsState } from './data/child-item-state';
 
 import ChildItems from './ChildItems/ChildItems';
