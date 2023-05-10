@@ -3,9 +3,8 @@
  */
 import { useState } from "react";
 import { useContext } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { sprintf, _x } from '@wordpress/i18n';
 import { useDebouncedCallback } from 'use-debounce';
-
 
 /**
  * Internal dependencies
@@ -99,9 +98,35 @@ function ProductQty( {
 		)
 	}
 
-	// Show a checkbox.
-	if ( step === max ) {
-		return <input type="checkbox" />
+	// Required Hidden Quantity.
+	if ( max && min === max ) {
+
+		/* translators: %1$d: Quantity, %2$s: Product name. */
+		let required_text = sprintf( _x( '&times;%1d <span className="screen-reader-text">%2$s</span>', '[Frontend]', 'text-domain' ), max, childItem.name );
+		return (
+			
+			<p class="required-quantity">
+				<span>{ required_text }</span>
+				<input type="hidden" name={`mnm_quantity[${childItem.child_id}]`} value={max} />
+			</p>
+			
+		)
+
+	}
+
+
+	// Show a checkbox. @todo - handle check/uncheck.
+	if ( max && step === max ) {
+
+		/* translators: %1$d: Quantity, %2$s: Product name. */
+		let checkbox_label = sprintf( _x( 'Add %1d <span className="screen-reader-text">%2$s</span>', '[Frontend]', 'text-domain' ), max, childItem.name );
+
+		return (
+			<div class="quantity mnm-checkbox-qty">
+				<input type="checkbox" name={`mnm_quantity[${childItem.child_id}]`} value={max} />
+				<label for="{`mnm_quantity[${childItem.child_id}]`}">{checkbox_label}</label>
+			</div>
+		 )
 	}
 
 	// Otherwise show the quantity input.
