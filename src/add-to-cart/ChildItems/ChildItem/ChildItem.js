@@ -37,7 +37,7 @@ function ChildItem() {
 
     return (      
 
-            <li key={childItem.child_id} className="wc-block-grid__product wc-block-layout wc-mnm-block-child-item__product">
+            <li key={childItem.child_id} className="wc-block-grid__product wc-block-layout wc-mnm-child-item">
 
                 { WC_MNM_ADD_TO_CART_REACT_PARAMS.display_thumbnails && (
 

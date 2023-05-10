@@ -79,10 +79,6 @@ function ProductQty( {
 			// We round off the value to our steps.
 			newValue = Math.floor( newValue / step ) * step;
 
-			console.debug('new value', newValue);
-			console.debug('init value', initialValue);
-
-
 			// Only commit if the value has changed
 			if ( newValue !== initialValue ) {
 				onChange?.( newValue );
@@ -127,12 +123,13 @@ function ProductQty( {
 				<label for="{`mnm_quantity[${childItem.child_id}]`}">{checkbox_label}</label>
 			</div>
 		 )
+
 	}
 
 	// Otherwise show the quantity input.
     return (      
 
-        <div className="wc-mnm-block-child-item__product-quantity product-quantity">
+        <div className="child_item__quantity product-quantity">
 
 			<div className="quantity">
 
