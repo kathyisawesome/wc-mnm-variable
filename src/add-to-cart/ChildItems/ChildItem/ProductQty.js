@@ -136,10 +136,12 @@ function ProductQty( {
 
 			<div className="quantity">
 
-				<button onClick={handleMinusClick} type="button" tabIndex="-1" aria-label="{ __( 'Reduce quantity', 'woocommmerce-mix-and-match-products' ) }" className="button button--minus">－</button>
-
+				{ WC_MNM_ADD_TO_CART_REACT_PARAMS.display_plus_minus_buttons && (
+					<button onClick={handleMinusClick} type="button" tabIndex="-1" aria-label="{ __( 'Reduce quantity', 'woocommmerce-mix-and-match-products' ) }" className="button button--minus">－</button>
+				) }
+				
 				<input
-					className="wc-block-components-product-add-to-cart-quantity qty mnm-quantity input-text"
+					className="child_item__quantity_input qty mnm-quantity input-text"
 					type="number"
 					value={ value }
 					min={ min }
@@ -147,11 +149,13 @@ function ProductQty( {
 					step={ step }
 					hidden={ max === 1 }
 					disabled={ disabled }
-					onChange={handleInputChange}
+					onChange={(e) => normalizeQuantity(e.target.value)} 
 					name={`mnm_quantity[${childItem.child_id}]`}
 				/>
 
-				<button onClick={handlePlusClick} type="button" tabIndex="-1" aria-label="{ __( 'Increase quantity', 'woocommmerce-mix-and-match-products' ) }" className="button button--plus">＋</button>
+				{ WC_MNM_ADD_TO_CART_REACT_PARAMS.display_plus_minus_buttons && (
+					<button onClick={handlePlusClick} type="button" tabIndex="-1" aria-label="{ __( 'Increase quantity', 'woocommmerce-mix-and-match-products' ) }" className="button button--plus">＋</button>
+				) }
 
 			</div>
         </div>
