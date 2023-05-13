@@ -25,7 +25,7 @@ function ChildItems( {childItems} ) {
 
     return (      
 
-        <div className={`wc-block-grid has-${num_columns}-columns ${has_rows}`}>
+        <div className={`products mnm_child_products wc-block-grid has-${num_columns}-columns ${has_rows}`}>
 
             <ul className="wc-block-grid__products">
 

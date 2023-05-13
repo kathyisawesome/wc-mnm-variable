@@ -189,6 +189,7 @@ class WC_MNM_Variable {
 
 		// REST API
 		include_once 'includes/rest-api/class-wc-mnm-variable-rest-api.php';
+		include_once 'includes/rest-api/class-wc-mnm-variable-store-api.php';
 
 	}
 

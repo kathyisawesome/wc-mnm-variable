@@ -10,10 +10,12 @@ import './style.scss';
 
 import ChildItems from './ChildItems/ChildItems';
 import ProductUnavailable from './ProductUnavailable.js';
-import Status from './StatusUI/StatusUI';
+import ContainerStatus from './StatusUI/ContainerStatus';
 import { ContainerContext } from '../context/Context';
 
 export default function MixAndMatch( {product} ) {
+
+  const items = 'undefined' !== typeof product.extensions.mix_and_match && 'undefined' !== typeof product.extensions.mix_and_match.child_items ? product.extensions.mix_and_match.child_items : [];
 
   // Unavailable product (technically this would also be a place where the product ID is missing or not a mix and match, or some error).
   /*
@@ -23,27 +25,17 @@ export default function MixAndMatch( {product} ) {
   */
 
   // No child items. Should add other results, like not purchasable?
-  if( ! product.mnm_child_items || product.mnm_child_items.length === 0 ) {
+  if ( ! items || items.length === 0 ) {
     return <p>{ __( 'No child items', 'woocommmerce-mix-and-match-products' ) }</p>
   }
  
   return (
 
     <ContainerContext.Provider value={product}>
-      <div className="products mnm_child_products" >
-          <ChildItems childItems={product.mnm_child_items} />
-      </div>                
+          <ChildItems childItems={items} />
+          <ContainerStatus />           
      </ContainerContext.Provider>
 
   )
 
 }
-
-
-/*
-      <ContainerContext.Provider value={product} className="App">
-        <h1>Has {childItems.length} children</h1>
-        <ChildItems childItems={childItems} />
-        <Status container={product} />
-      </ContainerContext.Provider>
-      */
