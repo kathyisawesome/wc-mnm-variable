@@ -144,12 +144,12 @@ class WC_MNM_Variable {
 		// Tells core that the Variable product is also editable.
 		add_filter( 'wc_mnm_is_container_order_item_editable', [ $this, 'variable_is_editable' ], 10, 2 );
 
-		// Force tabular layout of attributes when editing in admin.
+		// Force table/dropdowns layout of attributes when editing in admin.
 		add_action( 'wc_mnm_edit_container_order_item_in_shop_order', array( __CLASS__, 'force_edit_container_styles' ), 0, 4 );
 		add_action( 'wc_mnm_edit_container_order_item_in_shop_subscription', array( __CLASS__, 'force_edit_container_styles' ), 0, 4 );
 		
 		// Force variations into tabular layout when editing in admin.
-		add_action( 'wc_mnm_variation_add_to_cart', [ $this, 'force_edit_variation_styles' ], 0 );
+		//add_action( 'wc_mnm_variation_add_to_cart', [ $this, 'force_edit_variation_styles' ], 0 );
 		
 		// Admin order style tweaks for variable mix and match.
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_inline_styles' ], 20 );
@@ -743,6 +743,53 @@ class WC_MNM_Variable {
 			   margin-right: 1em;
 			}
 			.wc-mnm-backbone-modal form.edit_container .blockUI.blockOverlay::before { border: none; }
+
+			/* Temp add some styles for grid - since template is cached we can't serve tabular layout in the admin */
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid {
+				display: flex;
+				flex-wrap: wrap;
+			}
+
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid .child-item {
+				padding: 0 .5em;
+				margin-bottom: 1em;
+				overflow: hidden;
+			}
+
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid .child-item img {
+				width: 100%;
+				height: auto;
+			  }
+			
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid.columns-1> .child-item {
+				max-width:100%;
+				flex-basis:100%
+			}
+			
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid.columns-2> .child-item {
+				max-width:50%;
+				flex-basis:50%
+			}
+		
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid.columns-3> .child-item {
+				max-width:33.33333%;
+				flex-basis:33.33333%
+			}
+	
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid.columns-4> .child-item {
+				max-width:25%;
+				flex-basis:25%
+			}
+		
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid.columns-5> .child-item {
+				max-width:20%;
+				flex-basis:20%
+			}
+	
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid.columns-6> .child-item {
+				max-width:16.66667%;
+				flex-basis:16.66667%
+			}
 		";
 		wp_add_inline_style( 'wc-mnm-admin-order-style', $custom_css );
 
