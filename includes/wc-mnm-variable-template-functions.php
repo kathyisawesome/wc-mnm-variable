@@ -121,15 +121,22 @@ if ( ! function_exists( 'wc_mnm_variation_add_to_cart' ) ) {
 
 		if ( false === $html ) {
 			ob_start();
-			// Load the template.
-			wc_get_template(
-				'single-product/add-to-cart/mnm-variation-add-to-cart.php',
-				array(
-					'variation' => $variation,
-				),
-				'',
-				WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
-			);
+			
+			echo '<div class="wc_mnm_variation">';
+
+				/**
+				 * 'wc_mnm_content_loop' action.
+				 *
+				 * @param  WC_Mix_and_Match_Variation  $variation
+				 * 
+				 * @hooked wc_mnm_variation_header    - 10
+				 * @hooked wc_mnm_content_loop        - 20
+				 * @hooked wc_mnm_template_reset_link - 30
+				 * @hooked wc_mnm_template_status     - 40
+				 */
+				do_action( 'wc_mnm_variation_content_loop', $variation );
+
+			echo '</div>';
 
 			$html = ob_get_clean();
 
