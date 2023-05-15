@@ -221,7 +221,7 @@
       // Set up some initial values pulled from the URL. It's a bit hacky, but needed if caching templates.
       let config = $( event.target ).data( 'product_config' );   
      
-      if ( 'undefined' !== typeof config && Object.keys(config).length > 0 ) {
+      if ( 'undefined' !== typeof config ) {
         $( event.target ).find( '.mnm-quantity' ).each( function() {
 
           let text = $(this).attr('name');
