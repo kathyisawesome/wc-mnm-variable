@@ -231,9 +231,10 @@
           if ( match && match[1] ) {
             let product_id = match[1];
 
-            if ( 'undefined' !== typeof ( config[product_id] ) ) {
-              $(this).val( config[product_id] );
-            }
+            let value = 'undefined' !== typeof ( config[product_id] ) ? config[product_id] : '';
+
+            $(this).val( value );
+             
           }
 
         });

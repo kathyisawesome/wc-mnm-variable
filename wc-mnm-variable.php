@@ -649,21 +649,6 @@ class WC_MNM_Variable {
 			wp_send_json_error( $error );
 		}
 
-		// Initialize form state based on the URL params.
-		if ( ! empty( $_POST['request'] ) ) {
-			parse_str( parse_url( $_POST['request'], PHP_URL_QUERY ), $params );
-			$_REQUEST = array_merge( $_REQUEST, $params );
-		}
-
-		unset( $_REQUEST['request'] );
-
-		// Initialize form state based on the actual configuration of the container.
-		$configuration = ! empty( $_POST['configuration'] ) ? wc_clean( $_POST['configuration'] ) : array();
-
-		if ( ! empty( $configuration ) ) {
-			$_REQUEST = array_merge( $_REQUEST, WC_Mix_and_Match()->cart->rebuild_posted_container_form_data( $configuration, $product ) );
-		}
-
 		/*
 		 * `wc_mnm_container_form_fragments` filter
 		 * 
