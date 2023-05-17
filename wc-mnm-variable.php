@@ -157,6 +157,9 @@ class WC_MNM_Variable {
 		// Preload the current variation.
 		add_filter( 'woocommerce_available_variation', [ $this, 'preload_order_item_variation' ], 20, 3 );
 
+		// Core MNM preloads the selected children from an order item by merging config into REQUEST. Need to disable that for variations.
+		add_filter( 'wc_mnm_get_posted_container_form_data', [ $this, 'remove_posted_data' ], 10, 3 );
+
 		// Handle change variation.
 		add_filter( 'wc_mnm_get_product_from_edit_order_item', [ $this, 'switch_variation' ], 10, 4 );
 	}
@@ -817,7 +820,28 @@ class WC_MNM_Variable {
 
 		return $data;
 
-	}	
+	}
+
+	/**
+	 * Filter the rebuilt configuration to an empty array as variations will prefill using JS.
+	 *
+	 * @param array $form_data
+	 * @param array $configuration
+	 * @param WC_Mix_and_Match_Product $container
+	 * @return array
+	 */
+	public static function remove_posted_data( $form_data, $configuration, $container ) {
+
+		if ( $container && $container->is_type( 'mix-and-match-variation' ) ) {
+			$form_data = [];
+		}
+
+		return $form_data;
+		
+	}
+
+
+
 
 	/**
 	 * Switch the product object if variation.
