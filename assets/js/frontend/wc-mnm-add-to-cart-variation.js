@@ -45,7 +45,7 @@
     $form.on(
         'wc-mnm-container-quantities-updated',
         function(event, container) {
-        self.storedConfig = container.api.get_container_config();
+          self.storedConfig = container.api.get_container_config();
         } 
     );
     // Persist config when switching between variations (as much as possible given  quantities).
@@ -53,16 +53,19 @@
         'wc-mnm-initializing',
         function(event, container) {
 
+        let config = $( event.target ).data( 'product_config' ) || {};  // Set up some initial values pulled from the URL. It's a bit hacky, but needed if caching templates.
         let storedConfig     = self.storedConfig; // Set here as child_item.update_quantity() is going to wipe out the container.storedConfig on first pass through for loop.
         let maxContainerSize = container.api.get_max_container_size();
+        let preFill = Object.keys( storedConfig ).length ? storedConfig : config;
 
-        if ( ! isNaN( maxContainerSize ) && container.child_items.length && Object.keys( storedConfig ).length ) {
+        if ( ! isNaN( maxContainerSize ) && container.child_items.length && Object.keys( preFill ).length ) {
 
           // Add up quantities.
           for ( let child_item of container.child_items ) {
 
             let slotsRemaining = maxContainerSize - container.api.get_container_size();
-            let newQty         = storedConfig[ child_item.get_item_id() ] || 0;
+                slotsRemaining = slotsRemaining > 0 ? slotsRemaining : 0;
+            let newQty         = preFill[ child_item.get_item_id() ] || 0;
 
             if ( slotsRemaining - newQty >= 0 ) {
               child_item.update_quantity( newQty );
@@ -217,29 +220,6 @@
 
       // HTML must be loaded first for MNM scripts to catch the container ID.
       $target.toggleClass( 'wc_mnm_variation_out_of_stock', ! variation.is_in_stock ).html( $template_html );
-
-      // Set up some initial values pulled from the URL. It's a bit hacky, but needed if caching templates.
-      let config = $( event.target ).data( 'product_config' );   
-     
-      if ( 'undefined' !== typeof config ) {
-        $( event.target ).find( '.mnm-quantity' ).each( function() {
-
-          let text = $(this).attr('name');
-
-          var match = text.match(/\[(\d+)\]/);
-
-          if ( match && match[1] ) {
-            let product_id = match[1];
-
-            let value = 'undefined' !== typeof ( config[product_id] ) ? config[product_id] : '';
-
-            $(this).val( value );
-             
-          }
-
-        });
-    
-      }
 
       // Fire MNM scripts.
       $( event.target ).trigger( 'wc-mnm-initialize.mix-and-match' );
