@@ -17,7 +17,7 @@
     self.html_forms         = []; // Keyed by variation ID.
     self.validation_context = $form.data( 'validation_context' ) || 'add-to-cart';
 
-    self.storedConfig       = [];
+    self.storedConfig       = {};
 
     // Add MNM container class.
     self.$form.addClass( 'mnm_form variations_form' );
@@ -279,7 +279,7 @@
     }
 
     // Reset stored config.
-    form.storedConfig = [];
+    form.storedConfig = {};
 
     $( event.target ).find( '.single_mnm_variation' ).hide();
     form.$selectors.prop( 'checked', false );
