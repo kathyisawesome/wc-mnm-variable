@@ -21,11 +21,13 @@ function ChildItems( {childItems} ) {
     const config = useContext(ConfigContext);
 
     const num_columns = WC_MNM_ADD_TO_CART_REACT_PARAMS.num_columns;
-    const has_rows = childItems.length > num_columns ? 'has-multilpe-rows' : ''
+    const display_layout = WC_MNM_ADD_TO_CART_REACT_PARAMS.display_layout;
+    const has_rows = childItems.length > num_columns ? 'has-multilpe-rows' : '';
+    const mobile_optimized = WC_MNM_ADD_TO_CART_REACT_PARAMS.mobile_optimized_layout ? 'mnm-mobile-optimized'  : '';
 
     return (      
 
-        <div className={`products mnm_child_products wc-block-grid has-${num_columns}-columns ${has_rows}`}>
+        <div className={`products mnm_child_products wc-block-${display_layout} has-${num_columns}-columns ${has_rows} ${mobile_optimized}`}>
 
             <ul className="wc-block-grid__products">
 

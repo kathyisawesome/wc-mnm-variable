@@ -504,8 +504,19 @@ class WC_MNM_Variable {
 			'display_thumbnails' => wc_string_to_bool( get_option( 'wc_mnm_display_thumbnail', 'yes' ) ),
 			'display_short_description' => wc_string_to_bool( get_option( 'wc_mnm_display_short_description', 'no' ) ),
 			'display_plus_minus_buttons' => wc_string_to_bool( get_option( 'wc_mnm_display_plus_minus_buttons', 'no' ) ),
+			'display_layout' => get_option('wc_mnm_layout','tabular'),
+			'mobile_optimized_layout' => wc_string_to_bool( get_option('wc_mnm_mobile_optimized_layout','no')),
 			'num_columns'                => (int) apply_filters( 'wc_mnm_grid_layout_columns', get_option( 'wc_mnm_number_columns', 3 ) ),
+            'cart_status_message' => __('You have selected <span class="mnm-selected-item">0</span> items. You may select between <span class="mnm-select-min-item">0</span> and <span class="mnm-select-max-item">0</span> items or add to cart to continue.', 'wc-mnm-variable' ),
 		);
+
+        if( is_product() && is_single() ){
+            $product_id = get_the_ID();
+            $is_override_template = wc_string_to_bool(get_post_meta($product_id,'_mnm_layout_override',true));
+            if( $is_override_template ){
+                $params['display_layout'] = get_post_meta($product_id,'_mnm_layout_style',true);
+            }
+        }
 
 		wp_localize_script( 'wc-mnm-add-to-cart-reatified', 'WC_MNM_ADD_TO_CART_REACT_PARAMS', $params );
 
