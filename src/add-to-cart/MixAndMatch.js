@@ -16,6 +16,7 @@ import { ContainerContext } from '../context/Context';
 export default function MixAndMatch( {product} ) {
 
   const items = 'undefined' !== typeof product.extensions.mix_and_match && 'undefined' !== typeof product.extensions.mix_and_match.child_items ? product.extensions.mix_and_match.child_items : [];
+  const Categories = 'undefined' !== typeof product.extensions.mix_and_match && 'undefined' !== typeof product.extensions.mix_and_match.child_categories ? product.extensions.mix_and_match.child_categories : [];
 
   // Unavailable product (technically this would also be a place where the product ID is missing or not a mix and match, or some error).
   /*
@@ -28,12 +29,12 @@ export default function MixAndMatch( {product} ) {
   if ( ! items || items.length === 0 ) {
     return <p>{ __( 'No child items', 'woocommmerce-mix-and-match-products' ) }</p>
   }
- 
+
   return (
 
     <ContainerContext.Provider value={product}>
-          <ChildItems childItems={items} />
-          <ContainerStatus />           
+          <ChildItems childItems={items} childCategories={Categories}/>
+          <ContainerStatus />
      </ContainerContext.Provider>
 
   )

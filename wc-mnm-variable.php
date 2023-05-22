@@ -437,6 +437,7 @@ class WC_MNM_Variable {
 		$style_url     = $this->get_plugin_url() . $style_path;
 		$style_version = WC_Mix_and_Match()->get_file_version( $this->get_plugin_path() . $style_path, self::VERSION );
 
+        wp_enqueue_style( 'wc-mnm-variable-frontend', $this->get_plugin_url() . '/assets/css/frontend/mnm-frontend.min.css', array(), self::VERSION );
 		wp_enqueue_style( 'wc-mnm-add-to-cart-variation', $style_url, [ 'wc-mnm-frontend' ], $style_version );
 
 		wp_style_add_data( 'wc-mnm-add-to-cart-variation', 'rtl', 'replace' );

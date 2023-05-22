@@ -24,6 +24,12 @@ function ProductQty( {
 
 	const childItem = useContext(ChildContext);
 
+	useEffect(() => {
+		window.onbeforeunload = function() {
+			localStorage.removeItem('productLoaded');
+		};
+	}, []);
+
     const hasMaximum = typeof max !== 'undefined';
 
     const isSelectable = childItem.purchasable && childItem.in_stock;
@@ -32,6 +38,11 @@ function ProductQty( {
 	let singleAddToCartButton = '.single_add_to_cart_button';
 	let childItemQuantityInput = '.child_item__quantity_input[type=number]';
 
+	/**
+	 * Enable cart button.
+	 *
+	 * @since 1.0.0
+	 */
 	const enabledCart = () => {
 		document.querySelectorAll(woocommerceVariationAddToCart).forEach((button) => {
 			button.classList.remove('woocommerce-variation-add-to-cart-disabled');
@@ -40,6 +51,11 @@ function ProductQty( {
 		});
 	};
 
+	/**
+	 * Disable cart button.
+	 *
+	 * @since 1.0.0
+	 */
 	const disableCart = () => {
 		document.querySelectorAll(woocommerceVariationAddToCart).forEach((button) => {
 			button.classList.add('woocommerce-variation-add-to-cart-disabled');
@@ -48,6 +64,14 @@ function ProductQty( {
 		});
 	};
 
+	/**
+	 * Display validation messages.
+	 *
+	 * @param obj current input object.
+	 * @param message display message.
+	 *
+	 * @since 1.0.0
+	 */
 	const displayMessage = (obj, message) => {
 		const currentObj = obj.target.parentElement.lastElementChild;
 		currentObj.innerHTML = message;
@@ -58,76 +82,149 @@ function ProductQty( {
 		},3000);
 	};
 
-	const update_cart_message = (cartTotal) =>{
-		const message_container_object = document.querySelector('.mnm_status .mnm_message_content li');
-		message_container_object.querySelector('.mnm-selected-item').innerHTML = cartTotal !== null ? cartTotal : '0';
-		message_container_object.querySelector('.mnm-select-min-item').innerHTML = max;
-		message_container_object.querySelector('.mnm-select-max-item').innerHTML = max;
+	/**
+	 * Reset cart quantity
+	 *
+	 * @since 1.0.0
+	 */
+	const resetCart = () => {
+		const child_items_quantity = document.querySelectorAll('.child_item__quantity ' + childItemQuantityInput);
+		if ( undefined !== child_items_quantity ) {
+			child_items_quantity.forEach((element) => {
+				element.value = 0;
+				onChange(0);
+			});
+		}
 	};
 
+	/**
+	 * Update the cart message.
+	 *
+	 * @param cartTotal cart quantity total.
+	 *
+	 * @since 1.0.0
+	 */
+	const updateCartMessage = (cartTotal) => {
+		const message_container_object = document.querySelector('.mnm_status .mnm_message_content li');
+		message_container_object.querySelector('.mnm-selected-item').innerHTML = cartTotal !== null ? cartTotal : '0';
+		let maxQuantity = 1;
+		let maxInputQuantity = document.querySelector('.mnm_child_products .mnm-checkbox-qty input[type="checkbox"].mnm-quantity');
+		if( undefined === maxInputQuantity || null === maxInputQuantity ){
+			maxInputQuantity = document.querySelector('.child_item__quantity ' + childItemQuantityInput);
+			maxQuantity = (undefined !== maxInputQuantity && null !== maxInputQuantity ) ? maxInputQuantity.getAttribute('max') : max;
+		}
+		message_container_object.querySelector('.mnm-select-min-item').innerHTML = maxQuantity;
+		message_container_object.querySelector('.mnm-select-max-item').innerHTML = maxQuantity;
+	};
+
+	/**
+	 * Manage localstorage for update the cart quantity and add to cart button.
+	 *
+	 * @since 1.0.0
+	 */
+	let variationId = document.querySelector('.woocommerce-variation-add-to-cart .variation_id').value;
+	variationId = ( undefined !== variationId && null !== variationId ) ? variationId : 0;
+	if ( !localStorage.getItem('productLoaded') || !localStorage.getItem('variationId') || variationId !== localStorage.getItem('variationId') ) {
+		localStorage.setItem('productLoaded', 'true');
+		localStorage.setItem('variationId',variationId);
+		setTimeout(function (){
+			disableCart();
+			updateCartMessage(0);
+			resetCart();
+		},500);
+	}
+
+	/**
+	 * Handle checkbox click event.
+	 *
+	 * @param event
+	 *
+	 * @since 1.0.0
+	 */
 	const handleCheckboxClick = (event) => {
 		document.querySelectorAll('.mnm-checkbox-qty input[type="checkbox"]').forEach((element) => {
 			(event.target !== element && event.target.checked) ? element.disabled = true : element.disabled = false;
 		});
-		if(event.target.checked) {
+		if (event.target.checked) {
 			enabledCart();
-			update_cart_message('1');
+			updateCartMessage('1');
 		} else {
 			disableCart();
-			update_cart_message('0');
+			updateCartMessage('0');
 		}
 	};
 
+	/**
+	 * Handle the minus button event.
+	 *
+	 * @param e
+	 *
+	 * @since 1.0.0
+	 */
 	const handleMinusClick = (e) => {
 		const newValue = value - step;
 		if (newValue >= min) {
 			onChange(newValue);
 			updateTotal(e);
-		}else{
+		} else {
 			updateTotal(e);
 		}
-
 	};
 
+	/**
+	 * Handle the plus button event.
+	 *
+	 * @param e
+	 *
+	 * @since 1.0.0
+	 */
 	const handlePlusClick = (e) => {
 		const newValue = value + step;
 		if (newValue <= max) {
 			onChange(newValue);
 			updateTotal(e);
-		}else{
-			displayMessage(obj,wc_mnm_params.i18n_child_item_max_qty_message.replace('%d', max));
+		} else {
+			displayMessage(e,wc_mnm_params.i18n_child_item_max_qty_message.replace('%d', max));
 		}
 	};
 
+	/**
+	 * Update the total quantity.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @type {DebouncedState<(function(*): void)|*>}
+	 */
 	const updateTotal = useDebouncedCallback( (obj) => {
 		const child_items_quantity = document.querySelectorAll('.child_item__quantity ' + childItemQuantityInput);
-		if ( undefined !== child_items_quantity ){
+		if ( undefined !== child_items_quantity ) {
 			let cartTotal = 0;
 			child_items_quantity.forEach((element, index) => {
 				let currentIndex = index + 1;
 				cartTotal = Number(cartTotal) + Number(element.value);
-				if( cartTotal >= max ){
+				if ( cartTotal >= max ) {
 					enabledCart();
-					if ( cartTotal > max ){
+					if ( cartTotal > max ) {
 						displayMessage(obj,wc_mnm_params.i18n_child_item_max_qty_message.replace('%d', max));
 					}
-				}else if (cartTotal <= min){
+				} else if (cartTotal <= min) {
 					disableCart();
-					if ( cartTotal < min ){
+					if ( cartTotal < min ) {
 						displayMessage(obj,wc_mnm_params.i18n_child_item_min_qty_message.replace('%d', min));
 					}
 				} else {
 					disableCart();
 				}
 
-				if( currentIndex === child_items_quantity.length ){
-					update_cart_message(cartTotal);
-					if ( cartTotal > max ){
+				if ( currentIndex === child_items_quantity.length ) {
+					if ( cartTotal > max ) {
 						const extraQuantity = cartTotal - max;
 						const currentQuantityInput = obj.target.parentElement.querySelector(childItemQuantityInput);
 						currentQuantityInput.value = currentQuantityInput.value - extraQuantity;
 						onChange(currentQuantityInput.value);
 						updateTotal(obj);
+					} else {
+						updateCartMessage(cartTotal);
 					}
 				}
 			});
@@ -146,7 +243,6 @@ function ProductQty( {
 	 * Copied from <QuantitySelector>
 	 */
 	const normalizeQuantity = useDebouncedCallback( ( initialValue, e ) => {
-			// We copy the starting value.
 			let newValue = initialValue;
 			// We check if we have a maximum value, and select the lowest between what was inserted and the maximum.
 			if ( hasMaximum ) {
@@ -183,7 +279,7 @@ function ProductQty( {
 	if ( max && min === max ) {
 
 		/* translators: %1$d: Quantity, %2$s: Product name. */
-		let required_text = sprintf( _x( '&times;%1d <span className="screen-reader-text">%2$s</span>', '[Frontend]', 'text-domain' ), max, childItem.name );
+		let required_text = sprintf( _x( '&times;%1d <span className="screen-reader-text">%2$s</span>', '[Frontend]', 'wc-mnm-variable' ), max, childItem.name );
 		return (
 			
 			<p class="required-quantity">
@@ -204,7 +300,7 @@ function ProductQty( {
 
 		return (
 			<div class="quantity mnm-checkbox-qty">
-				<input type="checkbox" name={`mnm_quantity[${childItem.child_id}]`} value={max} onClick={handleCheckboxClick} />
+				<input className="qty mnm-quantity" type="checkbox" name={`mnm_quantity[${childItem.child_id}]`} value={max} onClick={handleCheckboxClick} />
 				<label for={`mnm_quantity[${childItem.child_id}]`}><RawHTML>{checkbox_label}</RawHTML></label>
 			</div>
 		 )

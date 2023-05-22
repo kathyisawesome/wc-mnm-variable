@@ -101,7 +101,7 @@ export default function MixAndMatchApp( {target} ) {
   }
 
   return (
-      <MixAndMatch product={product} /> 
+      <MixAndMatch product={product} />
   )
     
 }
