@@ -3,8 +3,9 @@
  */
 import { useState } from "react";
 import {useContext, RawHTML, useEffect} from '@wordpress/element';
-import { sprintf, _x } from '@wordpress/i18n';
+import { sprintf, _x, __ } from '@wordpress/i18n';
 import { useDebouncedCallback } from 'use-debounce';
+import { PLACEHOLDER_IMG_SRC } from '@woocommerce/settings';
 
 /**
  * Internal dependencies
@@ -37,6 +38,9 @@ function ProductQty( {
 	let woocommerceVariationAddToCart = '.woocommerce-variation-add-to-cart';
 	let singleAddToCartButton = '.single_add_to_cart_button';
 	let childItemQuantityInput = '.child_item__quantity_input[type=number]';
+	let selectedChildItems = [];
+	let imageSrc = childItem.images.length ? childItem.images[ 0 ] : PLACEHOLDER_IMG_SRC;
+	imageSrc = imageSrc.src ? imageSrc.src : PLACEHOLDER_IMG_SRC;
 
 	/**
 	 * Enable cart button.
@@ -105,16 +109,32 @@ function ProductQty( {
 	 * @since 1.0.0
 	 */
 	const updateCartMessage = (cartTotal) => {
+
 		const message_container_object = document.querySelector('.mnm_status .mnm_message_content li');
 		message_container_object.querySelector('.mnm-selected-item').innerHTML = cartTotal !== null ? cartTotal : '0';
+
 		let maxQuantity = 1;
 		let maxInputQuantity = document.querySelector('.mnm_child_products .mnm-checkbox-qty input[type="checkbox"].mnm-quantity');
+		let miniCartMessage = __('Completed. Your bundle is full.','wc-mnm-variable');
+
 		if( undefined === maxInputQuantity || null === maxInputQuantity ){
 			maxInputQuantity = document.querySelector('.child_item__quantity ' + childItemQuantityInput);
 			maxQuantity = (undefined !== maxInputQuantity && null !== maxInputQuantity ) ? maxInputQuantity.getAttribute('max') : max;
 		}
+
+		if ( Number(maxQuantity) > 0 && Number(cartTotal) < Number(maxQuantity) - 1 ) {
+			miniCartMessage = __('Please add %d items to complete.','wc-mnm-variable');
+			miniCartMessage = miniCartMessage.replace('%d', Number(maxQuantity) - Number(cartTotal));
+		} else if ( Number(maxQuantity) > 0 && Number(cartTotal) === Number(maxQuantity) - 1) {
+			miniCartMessage = __('Please add %d item more to complete.','wc-mnm-variable');
+			miniCartMessage = miniCartMessage.replace('%d', Number(maxQuantity) - Number(cartTotal));
+		}
+
 		message_container_object.querySelector('.mnm-select-min-item').innerHTML = maxQuantity;
 		message_container_object.querySelector('.mnm-select-max-item').innerHTML = maxQuantity;
+		document.querySelector('.mnm-minicart-quantity.note').innerHTML = miniCartMessage;
+		document.querySelector('.mnm-cart-product-items').innerHTML = cartTotal;
+		document.querySelector('.mnm-minicart-total-price').innerHTML = document.querySelector('.woocommerce-variation .woocommerce-variation-price').innerHTML;
 	};
 
 	/**
@@ -131,6 +151,7 @@ function ProductQty( {
 			disableCart();
 			updateCartMessage(0);
 			resetCart();
+			selectedChildItems = [];
 		},500);
 	}
 
@@ -142,12 +163,14 @@ function ProductQty( {
 	 * @since 1.0.0
 	 */
 	const handleCheckboxClick = (event) => {
+		selectedChildItems = [];
 		document.querySelectorAll('.mnm-checkbox-qty input[type="checkbox"]').forEach((element) => {
 			(event.target !== element && event.target.checked) ? element.disabled = true : element.disabled = false;
 		});
 		if (event.target.checked) {
 			enabledCart();
 			updateCartMessage('1');
+			selectedChildItems.push({ image: event.target.getAttribute('data-src'), title: event.target.getAttribute('data-title'), name: event.target.getAttribute('name') });
 		} else {
 			disableCart();
 			updateCartMessage('0');
@@ -196,10 +219,16 @@ function ProductQty( {
 	 * @type {DebouncedState<(function(*): void)|*>}
 	 */
 	const updateTotal = useDebouncedCallback( (obj) => {
+		selectedChildItems = [];
 		const child_items_quantity = document.querySelectorAll('.child_item__quantity ' + childItemQuantityInput);
 		if ( undefined !== child_items_quantity ) {
 			let cartTotal = 0;
 			child_items_quantity.forEach((element, index) => {
+				if( element.value > 0 ){
+					for (let i = 0 ; i < element.value; i++){
+						selectedChildItems.push({ image: element.getAttribute('data-src'), title: element.getAttribute('data-title'), name: element.getAttribute('name') });
+					}
+				}
 				let currentIndex = index + 1;
 				cartTotal = Number(cartTotal) + Number(element.value);
 				if ( cartTotal >= max ) {
@@ -224,6 +253,7 @@ function ProductQty( {
 						onChange(currentQuantityInput.value);
 						updateTotal(obj);
 					} else {
+						displaySelectedProducts();
 						updateCartMessage(cartTotal);
 					}
 				}
@@ -231,6 +261,16 @@ function ProductQty( {
 		}
 	},300);
 
+	/**
+	 *
+	 */
+	const displaySelectedProducts = () => {
+		if( selectedChildItems.length > 0 ){
+			Object.entries(selectedChildItems).map(([selectedItem, index]) => {
+				return '';
+			});
+		}
+	};
 	/**
 	 * The goal of this function is to normalize what was inserted,
 	 * but after the customer has stopped typing.
@@ -300,7 +340,7 @@ function ProductQty( {
 
 		return (
 			<div class="quantity mnm-checkbox-qty">
-				<input className="qty mnm-quantity" type="checkbox" name={`mnm_quantity[${childItem.child_id}]`} value={max} onClick={handleCheckboxClick} />
+				<input className="qty mnm-quantity" data-title={childItem.name} data-src={imageSrc} type="checkbox" name={`mnm_quantity[${childItem.child_id}]`} value={max} onClick={handleCheckboxClick} />
 				<label for={`mnm_quantity[${childItem.child_id}]`}><RawHTML>{checkbox_label}</RawHTML></label>
 			</div>
 		 )
@@ -328,6 +368,8 @@ function ProductQty( {
 					hidden={ max === 1 }
 					disabled={ disabled }
 					onChange={(e) => normalizeQuantity(e.target.value,e)}
+					data-title={childItem.name}
+					data-src={imageSrc}
 					name={`mnm_quantity[${childItem.child_id}]`}
 				/>
 

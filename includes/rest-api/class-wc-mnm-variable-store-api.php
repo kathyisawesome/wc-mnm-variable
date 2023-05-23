@@ -155,8 +155,11 @@ class WC_MNM_Variable_Store_API {
 			$item_data['weight_cumulative']   = $product->is_weight_cumulative();
 			$item_data['discount']             = $product->get_discount();
 			$item_data['child_items']          = self::prepare_child_items_response( $product );
-			$item_data['child_categories'] = $product->get_child_categories($product);
-		}
+            if( !empty( $item_data['content_source'] ) && $item_data['content_source'] !== 'products' ) {
+                $item_data['child_categories'] = $product->get_child_categories($product);
+            }
+
+        }
 
 		return $item_data;
 	}
