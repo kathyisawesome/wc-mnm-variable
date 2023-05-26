@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { createContext, useContext } from '@wordpress/element';
+import { createContext,useState, useContext } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 
@@ -19,7 +19,7 @@ import { ConfigContext, ChildContext } from '../../context/Context';
 
 function ChildItems( {childItems, childCategories} ) {
 
-    
+
     const config = useContext(ConfigContext);
 
     const num_columns = WC_MNM_ADD_TO_CART_REACT_PARAMS.num_columns;
@@ -92,23 +92,6 @@ function ChildItems( {childItems, childCategories} ) {
     return (
         <div className={`products mnm-variable-product mnm_child_products wc-block-${display_layout} has-${num_columns}-columns ${has_rows} ${mobile_optimized}`}>
             { childCategories.length !== 0 ? getCategoryItems(childCategories,childItems) : getItems(childItems) }
-            <div className={"product-cart-overview mnm-variable-product-cart-view mnm-variable-product-cart-view-main"}>
-                <div className={"product-cart-overview mnm-variable-product-cart-view-container"}>
-                    <div className={"mnm-variable-cart-view-title-wrapper"}>
-                        <h4>{__('Your Selection','wc-mnm-variable')}</h4>
-                    </div>
-                    <div className={"mnm-variable-cart-view-content-wrapper"}>
-                    </div>
-                    <div className={"mnm-variable-cart-view-footer-wrapper"}>
-                        <div className={"variable-cart-footer-actions"}>
-                            <a className={"edit-cart"}>{__('Edit item(s)','wc-mnm-variable')}</a>
-                            <a className={"reset-cart"}>{__('Reset Cart','wc-mnm-variable')}</a>
-                        </div>
-                        <p className={'mnm-minicart-quantity note'}>{__('Please add 0 items to complete.','wc-mnm-variable')}</p>
-                        <p className={'mnm-minicart-price'}><span className={'mnm-minicart-price-label'}>{__('Total: ','wc-mnm-variable')}</span><span className={'mnm-minicart-total-price'}></span>(<span className={'mnm-cart-product-items'}>0</span>{__(' items','wc-mnm-variable')})</p>
-                    </div>
-                </div>
-            </div>
         </div>
     )
     

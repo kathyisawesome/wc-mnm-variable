@@ -37,7 +37,8 @@ form.cart .mnm-variable-product .mnm_child_products.tabular .quantity.mnm-checkb
     font-style: normal;
     font-weight: 700;
     font-size: 1.25em;
-    line-height: 1.2; }
+    line-height: 1.2;
+    margin: 5px 0; }
 
 .mnm-variable-cart-view-title-wrapper {
     background: #c4c4c480;
@@ -65,11 +66,56 @@ form.cart .mnm-variable-product .mnm_child_products.tabular .quantity.mnm-checkb
     font-size: 1.25em; }
 
 .mnm-minicart-price .mnm-minicart-total-price .woocommerce-Price-amount {
+    color: #000000;
     font-family: 'Helvetica Neue';
-    font-style: normal;
     font-size: 0.667em !important;
-    line-height: 1.5em;
-    color: #000000; }
+    font-style: normal;
+    line-height: 1.5em; }
 
 .mnm-minicart-total-price {
     margin-left: 1em; }
+
+.mnm-variable-cart-view-content-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap:5px;
+    margin: 0 auto;
+    text-align:center; }
+
+.minicart-product-grid {
+    border: 1px solid #e7e9eb;
+    font-size: 30px;
+    padding: 18px 2px;
+    position: relative; }
+
+.minicart-product-grid * {
+    text-align: center; }
+
+.mnm-variable-cart-view-content-container img {
+    width: 100px;}
+
+.mnm-variable-cart-view-content-container h4 {
+    color: #000000;
+    font-family: 'Helvetica Neue';
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    margin:0;
+    word-break: break-word; }
+
+.remove-child-item {
+    background: #CD2653;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    font-size: 22px;
+    height: 24px;
+    line-height:1;
+    position: absolute;
+    left: 5px;
+    text-align: center;
+    top: 8px;
+    width: 24px; }
+
+.mnm-reset-cart,.mnm-edit-cart,.remove-child-item {
+    cursor:pointer; }

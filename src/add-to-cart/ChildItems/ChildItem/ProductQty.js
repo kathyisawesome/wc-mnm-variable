@@ -20,7 +20,7 @@ function ProductQty( {
 	max,
 	step = 1,
 	value,
-	onChange,
+	onChange
 } ) {
 
 	const childItem = useContext(ChildContext);
@@ -35,12 +35,33 @@ function ProductQty( {
 
     const isSelectable = childItem.purchasable && childItem.in_stock;
 
-	let woocommerceVariationAddToCart = '.woocommerce-variation-add-to-cart';
-	let singleAddToCartButton = '.single_add_to_cart_button';
-	let childItemQuantityInput = '.child_item__quantity_input[type=number]';
+	const woocommerceVariationAddToCart = '.woocommerce-variation-add-to-cart';
+	const singleAddToCartButton = '.single_add_to_cart_button';
+	const childItemQuantityInput = '.child_item__quantity_input[type=number]';
+	const childItemQuantityCheckbox = '.mnm_child_products .mnm-checkbox-qty input[type="checkbox"].mnm-quantity';
 	let selectedChildItems = [];
 	let imageSrc = childItem.images.length ? childItem.images[ 0 ] : PLACEHOLDER_IMG_SRC;
 	imageSrc = imageSrc.src ? imageSrc.src : PLACEHOLDER_IMG_SRC;
+
+	/**
+	 * Manage Remove child item from minicart box
+	 *
+	 * @param event
+	 *
+	 * @since 1.0.0
+	 */
+	const handleRemoveChildItem = (event) => {
+		const productName = event.target.getAttribute('data-product');
+		const childProduct = document.querySelector(`[name="${productName}"]`);
+		if (childProduct.type === 'number') {
+			const childProduct = document.querySelector(`[name="${productName}"]`);
+			const minusButton = childProduct.parentNode.querySelector('.button--minus');
+			minusButton.dispatchEvent(clickEvent);
+		} else {
+			childProduct.dispatchEvent(clickEvent);
+			childProduct.checked = false;
+		}
+	};
 
 	/**
 	 * Enable cart button.
@@ -49,9 +70,11 @@ function ProductQty( {
 	 */
 	const enabledCart = () => {
 		document.querySelectorAll(woocommerceVariationAddToCart).forEach((button) => {
-			button.classList.remove('woocommerce-variation-add-to-cart-disabled');
-			button.querySelector(singleAddToCartButton).classList.remove('disabled','wc-variation-selection-needed');
-			button.classList.add('woocommerce-variation-add-to-cart-enabled');
+			if( !button.classList.contains('variations_button') ){
+				button.classList.remove('woocommerce-variation-add-to-cart-disabled');
+				button.querySelector(singleAddToCartButton).classList.remove('disabled','wc-variation-selection-needed');
+				button.classList.add('woocommerce-variation-add-to-cart-enabled');
+			}
 		});
 	};
 
@@ -62,9 +85,11 @@ function ProductQty( {
 	 */
 	const disableCart = () => {
 		document.querySelectorAll(woocommerceVariationAddToCart).forEach((button) => {
-			button.classList.add('woocommerce-variation-add-to-cart-disabled');
-			button.querySelector(singleAddToCartButton).classList.add('disabled','wc-variation-selection-needed');
-			button.classList.remove('woocommerce-variation-add-to-cart-enabled');
+			if( !button.classList.contains('variations_button') ) {
+				button.classList.add('woocommerce-variation-add-to-cart-disabled');
+				button.querySelector(singleAddToCartButton).classList.add('disabled', 'wc-variation-selection-needed');
+				button.classList.remove('woocommerce-variation-add-to-cart-enabled');
+			}
 		});
 	};
 
@@ -92,12 +117,21 @@ function ProductQty( {
 	 * @since 1.0.0
 	 */
 	const resetCart = () => {
-		const child_items_quantity = document.querySelectorAll('.child_item__quantity ' + childItemQuantityInput);
-		if ( undefined !== child_items_quantity ) {
-			child_items_quantity.forEach((element) => {
+		const child_product_number_inputs = document.querySelectorAll('.child_item__quantity ' + childItemQuantityInput);
+		if (child_product_number_inputs !== null && child_product_number_inputs.length > 0) {
+				child_product_number_inputs.forEach((element) => {
 				element.value = 0;
-				onChange(0);
+				element.dispatchEvent(changeEvent);
 			});
+		} else {
+			const child_product_checkboxes = document.querySelectorAll(childItemQuantityCheckbox);
+			if ( undefined !== child_product_checkboxes ) {
+				child_product_checkboxes.forEach((element) => {
+					element.disabled = false;
+					element.checked = false;
+				});
+			}
+
 		}
 	};
 
@@ -114,7 +148,7 @@ function ProductQty( {
 		message_container_object.querySelector('.mnm-selected-item').innerHTML = cartTotal !== null ? cartTotal : '0';
 
 		let maxQuantity = 1;
-		let maxInputQuantity = document.querySelector('.mnm_child_products .mnm-checkbox-qty input[type="checkbox"].mnm-quantity');
+		let maxInputQuantity = document.querySelector(childItemQuantityCheckbox);
 		let miniCartMessage = __('Completed. Your bundle is full.','wc-mnm-variable');
 
 		if( undefined === maxInputQuantity || null === maxInputQuantity ){
@@ -148,12 +182,31 @@ function ProductQty( {
 		localStorage.setItem('productLoaded', 'true');
 		localStorage.setItem('variationId',variationId);
 		setTimeout(function (){
+			const maxInputQuantity = document.querySelector('.child_item__quantity ' + childItemQuantityInput);
+			const maxQuantity = (undefined !== maxInputQuantity && null !== maxInputQuantity ) ? maxInputQuantity.getAttribute('max') : max;
 			disableCart();
 			updateCartMessage(0);
 			resetCart();
 			selectedChildItems = [];
+			displaySelectedProducts(maxQuantity);
+			document.querySelector('.mnm-reset-cart').addEventListener('click',handleResetCart);
 		},500);
 	}
+
+	/**
+	 * Manage the reset cart event.
+	 *
+	 * @since 1.0.0
+	 */
+	const handleResetCart = () => {
+		const maxInputQuantity = document.querySelector('.child_item__quantity ' + childItemQuantityInput);
+		const maxQuantity = (undefined !== maxInputQuantity && null !== maxInputQuantity ) ? maxInputQuantity.getAttribute('max') : max;
+		disableCart();
+		updateCartMessage(0);
+		resetCart();
+		selectedChildItems = [];
+		displaySelectedProducts(maxQuantity);
+	};
 
 	/**
 	 * Handle checkbox click event.
@@ -164,16 +217,18 @@ function ProductQty( {
 	 */
 	const handleCheckboxClick = (event) => {
 		selectedChildItems = [];
-		document.querySelectorAll('.mnm-checkbox-qty input[type="checkbox"]').forEach((element) => {
+		document.querySelectorAll(childItemQuantityCheckbox).forEach((element) => {
 			(event.target !== element && event.target.checked) ? element.disabled = true : element.disabled = false;
 		});
 		if (event.target.checked) {
 			enabledCart();
 			updateCartMessage('1');
 			selectedChildItems.push({ image: event.target.getAttribute('data-src'), title: event.target.getAttribute('data-title'), name: event.target.getAttribute('name') });
+			displaySelectedProducts(0);
 		} else {
 			disableCart();
 			updateCartMessage('0');
+			displaySelectedProducts(max);
 		}
 	};
 
@@ -193,6 +248,14 @@ function ProductQty( {
 			updateTotal(e);
 		}
 	};
+
+	const clickEvent = new MouseEvent('click', {
+		bubbles: true,
+		cancelable: true,
+		view: window
+	});
+
+	const changeEvent = new Event('change', { bubbles: true });
 
 	/**
 	 * Handle the plus button event.
@@ -253,7 +316,9 @@ function ProductQty( {
 						onChange(currentQuantityInput.value);
 						updateTotal(obj);
 					} else {
-						displaySelectedProducts();
+						setTimeout( function(){
+							displaySelectedProducts(max - cartTotal);
+						},100);
 						updateCartMessage(cartTotal);
 					}
 				}
@@ -262,15 +327,65 @@ function ProductQty( {
 	},300);
 
 	/**
+	 * Display selected products.
 	 *
+	 * @param placeholderQuantity
+	 *
+	 * @since 1.0.0
 	 */
-	const displaySelectedProducts = () => {
+	const displaySelectedProducts = (placeholderQuantity) => {
+		let mnmMiniCartContentContainer = document.querySelector('.mnm-variable-cart-view-content-container');
+		let displaySelectedItem = [];
 		if( selectedChildItems.length > 0 ){
-			Object.entries(selectedChildItems).map(([selectedItem, index]) => {
-				return '';
+			Object.entries(selectedChildItems).map(([index,selectedItem]) => {
+				displaySelectedItem.push(selectedItem);
 			});
 		}
+		if( Number( placeholderQuantity) > 0 ){
+			for(let i = 0; i < Number(placeholderQuantity) ; i++ ) {
+				displaySelectedItem.push({image: PLACEHOLDER_IMG_SRC, title: __('Empty','wc-mnm-variable'), name: ''});
+			}
+		}
+		setTimeout( function(){
+			mnmMiniCartContentContainer.innerHTML = '';
+			if (displaySelectedItem.length > 0 ){
+				displaySelectedItem.map( (item, index)  => {
+					mnmMiniCartContentContainer.innerHTML += getProductHTML(item);
+					if( index + 1 === displaySelectedItem.length  ){
+						document.querySelectorAll('.remove-child-item').forEach((childItem) => {
+							childItem.addEventListener('click', handleRemoveChildItem);
+							return () => {
+								childItem.removeEventListener('click', handleRemoveChildItem);
+							};
+						});
+					}
+				});
+			}
+		}, 100);
 	};
+
+	/**
+	 * Get selected child product structure.
+	 *
+	 * @param obj
+	 *
+	 * @since 1.0.0
+	 *
+	 * @returns {`<div class="minicart-product-grid">
+				${string}
+				<img src="${string}"/>
+				<h4>${string}</h4>
+			</div>`}
+	 */
+	const getProductHTML = ( obj ) => {
+		let closeButton = obj.name !== '' ? `<span class="remove-child-item" data-product="${obj.name}">×</span>` : ``;
+		return `<div class="minicart-product-grid">
+				${closeButton}
+				<img src="${obj.image}"/>
+				<h4>${obj.title}</h4>
+			</div>`;
+	};
+
 	/**
 	 * The goal of this function is to normalize what was inserted,
 	 * but after the customer has stopped typing.
@@ -283,6 +398,7 @@ function ProductQty( {
 	 * Copied from <QuantitySelector>
 	 */
 	const normalizeQuantity = useDebouncedCallback( ( initialValue, e ) => {
+
 			let newValue = initialValue;
 			// We check if we have a maximum value, and select the lowest between what was inserted and the maximum.
 			if ( hasMaximum ) {
@@ -331,10 +447,8 @@ function ProductQty( {
 
 	}
 
-
 	// Show a checkbox. @todo - handle check/uncheck.
 	if ( max && step === max ) {
-
 		/* translators: %1$d: Quantity, %2$s: Product name. */
 		let checkbox_label = sprintf( _x( 'Add %1d <span className="screen-reader-text">%2$s</span>', '[Frontend]', 'text-domain' ), max, childItem.name );
 
@@ -344,7 +458,6 @@ function ProductQty( {
 				<label for={`mnm_quantity[${childItem.child_id}]`}><RawHTML>{checkbox_label}</RawHTML></label>
 			</div>
 		 )
-
 	}
 
 	// Otherwise show the quantity input.
@@ -355,7 +468,7 @@ function ProductQty( {
 			<div className="quantity">
 
 				{ WC_MNM_ADD_TO_CART_REACT_PARAMS.display_plus_minus_buttons && (
-					<button onClick={handleMinusClick} type="button" tabIndex="-1" aria-label="{ __( 'Reduce quantity', 'woocommmerce-mix-and-match-products' ) }" className="button button--minus">－</button>
+					<button onClick={handleMinusClick} type="button" tabIndex="-1" aria-label="{ __( 'Reduce quantity', 'wc-mnm-variable' ) }" className="button button--minus">－</button>
 				) }
 				
 				<input
@@ -374,7 +487,7 @@ function ProductQty( {
 				/>
 
 				{ WC_MNM_ADD_TO_CART_REACT_PARAMS.display_plus_minus_buttons && (
-					<button onClick={handlePlusClick} type="button" tabIndex="-1" aria-label="{ __( 'Increase quantity', 'woocommmerce-mix-and-match-products' ) }" className="button button--plus">＋</button>
+					<button onClick={handlePlusClick} type="button" tabIndex="-1" aria-label="{ __( 'Increase quantity', 'wc-mnm-variable' ) }" className="button button--plus">＋</button>
 				) }
 				<div className="wc_mnm_child_item_error" aria-live="polite"></div>
 			</div>
