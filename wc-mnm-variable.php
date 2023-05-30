@@ -106,6 +106,11 @@ class WC_MNM_Variable {
 		add_filter( 'woocommerce_product_class', [ $this, 'set_variation_class' ], 10, 4 );
 
 		/**
+		 * Customizer.
+		 */
+		add_action( 'customize_register', [ $this, 'add_customizer_control' ], 20 );
+
+		/**
 		 * Front end
 		 */
 
@@ -397,6 +402,48 @@ class WC_MNM_Variable {
 		return $classname;
 	}
 
+	/*
+	|--------------------------------------------------------------------------
+	| Customizer controls.
+	|--------------------------------------------------------------------------
+	*/
+
+	/**
+	 * Add control to Mix and Match section of the Customizer.
+	 * NB: Eventually this will be an option for MNM core.
+	 *
+	 * @param  bool     $wp_customize
+	 */
+	public function add_customizer_control( $wp_customize ) {
+
+		/**
+		 * Display Visual Status UI
+		 */
+		$wp_customize->add_setting(
+			'wc_mnm_visual_status_ui',
+			array(
+				'default'              => 'no',
+				'type'                 => 'option',
+				'capability'           => 'manage_woocommerce',
+				'sanitize_callback'    => 'wc_bool_to_string',
+				'sanitize_js_callback' => 'wc_string_to_bool',
+			)
+		);
+
+		$wp_customize->add_control(
+			new KIA_Customizer_Toggle_Control(
+				$wp_customize,
+				'wc_mnm_visual_status_ui',
+				array(
+					'label'    => esc_html__( 'Display Visual Status UI', 'wc-mnm-variable' ),
+					'description' => esc_html__( 'May conflict with your theme styles.', 'wc-mnm-variable' ),
+					'section'  => 'wc_mnm',
+					'type'     => 'kia-toggle',
+					'settings' => 'wc_mnm_visual_status_ui',
+				)
+			)
+		);
+	}
 
 	/*
 	|--------------------------------------------------------------------------
@@ -505,16 +552,16 @@ class WC_MNM_Variable {
 			true
 		);
 
-
 		$params = array( 
 			'wc_ajax_url'     => \WC_AJAX::get_endpoint( '%%endpoint%%' ),
 			'i18n_form_error' => __( 'Failed to initialize form. If this issue persists, please reload the page and try again.', 'wc-mnm-variable' ),
 			'form_nonce'      => wp_create_nonce( 'wc_mnm_container_form' ),
 			'display_thumbnails' => wc_string_to_bool( get_option( 'wc_mnm_display_thumbnail', 'yes' ) ),
-			'display_short_description' => wc_string_to_bool( get_option( 'wc_mnm_display_short_description', 'no' ) ),
+			'display_short_description'  => wc_string_to_bool( get_option( 'wc_mnm_display_short_description', 'no' ) ),
 			'display_plus_minus_buttons' => wc_string_to_bool( get_option( 'wc_mnm_display_plus_minus_buttons', 'no' ) ),
 			'display_layout' => get_option('wc_mnm_layout','tabular'),
 			'mobile_optimized_layout' => wc_string_to_bool( get_option('wc_mnm_mobile_optimized_layout','no')),
+			'display_visual_status_ui'   => wc_string_to_bool( get_option( 'wc_mnm_visual_status_ui', 'no' ) ),
 			'num_columns'                => (int) apply_filters( 'wc_mnm_grid_layout_columns', get_option( 'wc_mnm_number_columns', 3 ) ),
             'cart_status_message' => __('You have selected <span class="mnm-selected-item">0</span> items. You may select between <span class="mnm-select-min-item">0</span> and <span class="mnm-select-max-item">0</span> items or add to cart to continue.', 'wc-mnm-variable' ),
 		);
