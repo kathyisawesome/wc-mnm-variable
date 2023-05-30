@@ -60,6 +60,22 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 		return 'mix-and-match-variation';
 	}
 
+	/**
+	 * Cache key.
+	 *
+	 * @return string
+	 */
+	public function get_cache_key() {
+
+		$key = $this->get_parent_id() . '_variation:' . $this->get_id();
+
+		if ( 'categories' === $this->get_content_source() ) {
+			$key .= '-cats:' . implode( '|', $this->get_child_category_ids() );
+		}
+
+		return $key;
+	}
+	
 	
 	/**
 	 * Share content getter.

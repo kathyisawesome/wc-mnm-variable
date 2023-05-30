@@ -50,7 +50,7 @@ if ( ! class_exists( 'WC_MNM_Variable_APFS_Switching_Compatibility' ) ) :
 		 */
 		public static function get_posted_container_form_data( $form_data, $configuration, $container ) {
 
-			if ( $container->is_type( 'mix-and-match-variation' ) ) {
+			if ( $container && $container->is_type( 'mix-and-match-variation' ) ) {
 
 				$attributes = array_filter( $container->get_variation_attributes(), 'wc_array_filter_default_attributes' );
 
