@@ -15,7 +15,7 @@ import ProductQty from './ProductQty';
 
 function ChildItem() {
 
-    const childItem = useContext(ChildContext);
+    const {childItem,isReset} = useContext(ChildContext);
 
     const [quantity, setQuantity] = useState(0);
 
@@ -30,11 +30,16 @@ function ChildItem() {
         setQuantity(value);
     };
 
+
     // Fetch the inital product on page load.
     useEffect(() => {
-        const initialQty = childItem.qty || 0;
+        let initialQty = childItem.qty || 0;
         setQuantity(initialQty);
     }, [] );
+
+    if(isReset && quantity !== 0){
+        setQuantity(0);
+    }
 
     return (
         isGridLayout ? (

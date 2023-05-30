@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { createContext,useState, useContext } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 
@@ -15,12 +14,12 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import ChildItem from './ChildItem/ChildItem';
-import { ConfigContext, ChildContext } from '../../context/Context';
+import { ChildContext } from '../../context/Context';
+import Loading from "../Loading";
 
-function ChildItems( {childItems, childCategories} ) {
 
 
-    const config = useContext(ConfigContext);
+function ChildItems( {childItems, childCategories,isEditable, isReset} ) {
 
     const num_columns = WC_MNM_ADD_TO_CART_REACT_PARAMS.num_columns;
     const display_layout = WC_MNM_ADD_TO_CART_REACT_PARAMS.display_layout;
@@ -32,7 +31,7 @@ function ChildItems( {childItems, childCategories} ) {
             display_layout === 'grid' ? (
                 <ul className="wc-block-grid__products">
                     { childProducts.map((childItem, index) => (
-                        <ChildContext.Provider key={childItem.child_id} value={childItem}>
+                        <ChildContext.Provider key={childItem.child_id} value={{childItem,isEditable,isReset}}>
                             <ChildItem />
                         </ChildContext.Provider>
                     ) ) }
@@ -49,7 +48,7 @@ function ChildItems( {childItems, childCategories} ) {
                     <tbody>
                     {
                         childProducts.map((childItem, index) => (
-                            <ChildContext.Provider key={childItem.child_id} value={childItem}>
+                            <ChildContext.Provider key={childItem.child_id} value={{childItem,isEditable,isReset}}>
                                 <ChildItem />
                             </ChildContext.Provider>
                         ) )
@@ -92,6 +91,7 @@ function ChildItems( {childItems, childCategories} ) {
     return (
         <div className={`products mnm-variable-product mnm_child_products wc-block-${display_layout} has-${num_columns}-columns ${has_rows} ${mobile_optimized}`}>
             { childCategories.length !== 0 ? getCategoryItems(childCategories,childItems) : getItems(childItems) }
+            {<Loading />}
         </div>
     )
     

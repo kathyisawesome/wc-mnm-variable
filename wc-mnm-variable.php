@@ -473,6 +473,8 @@ class WC_MNM_Variable {
 			'wc_ajax_url'     => \WC_AJAX::get_endpoint( '%%endpoint%%' ),
 			'i18n_form_error' => __( 'Failed to initialize form. If this issue persists, please reload the page and try again.', 'wc-mnm-variable' ),
 			'form_nonce'      => wp_create_nonce( 'wc_mnm_container_form' ),
+            'closeWindowIcon'       => $this->get_plugin_url().'/assets/icons/close-window.png',
+            'openWindowIcon'       => $this->get_plugin_url().'/assets/icons/open-window.png',
 		);
 
 		wp_localize_script( 'wc-mnm-add-to-cart-variation', 'WC_MNM_ADD_TO_CART_VARIATION_PARAMS', $params );

@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { useState } from "react";
 import {useContext, RawHTML, useEffect} from '@wordpress/element';
 import { sprintf, _x, __ } from '@wordpress/i18n';
 import { useDebouncedCallback } from 'use-debounce';
@@ -23,7 +22,7 @@ function ProductQty( {
 	onChange
 } ) {
 
-	const childItem = useContext(ChildContext);
+	const {childItem,isEditable} = useContext(ChildContext);
 
 	useEffect(() => {
 		window.onbeforeunload = function() {
@@ -38,6 +37,8 @@ function ProductQty( {
 	const woocommerceVariationAddToCart = '.woocommerce-variation-add-to-cart';
 	const singleAddToCartButton = '.single_add_to_cart_button';
 	const childItemQuantityInput = '.child_item__quantity_input[type=number]';
+	const mixAndMatchRoot = '.wc-block-components-product-add-to-cart-loading';
+	const hasButton = WC_MNM_ADD_TO_CART_REACT_PARAMS.display_plus_minus_buttons ? 'show-button' : 'hide-button';
 	const childItemQuantityCheckbox = '.mnm_child_products .mnm-checkbox-qty input[type="checkbox"].mnm-quantity';
 	let selectedChildItems = [];
 	let imageSrc = childItem.images.length ? childItem.images[ 0 ] : PLACEHOLDER_IMG_SRC;
@@ -51,10 +52,12 @@ function ProductQty( {
 	 * @since 1.0.0
 	 */
 	const handleRemoveChildItem = (event) => {
+		displayLoader();
 		const productName = event.target.getAttribute('data-product');
 		const childProduct = document.querySelector(`[name="${productName}"]`);
+
 		if (childProduct.type === 'number') {
-			const childProduct = document.querySelector(`[name="${productName}"]`);
+			childProduct.value = childProduct.value - 1;
 			const minusButton = childProduct.parentNode.querySelector('.button--minus');
 			minusButton.dispatchEvent(clickEvent);
 		} else {
@@ -117,21 +120,12 @@ function ProductQty( {
 	 * @since 1.0.0
 	 */
 	const resetCart = () => {
-		const child_product_number_inputs = document.querySelectorAll('.child_item__quantity ' + childItemQuantityInput);
-		if (child_product_number_inputs !== null && child_product_number_inputs.length > 0) {
-				child_product_number_inputs.forEach((element) => {
-				element.value = 0;
-				element.dispatchEvent(changeEvent);
+		const child_product_checkboxes = document.querySelectorAll(childItemQuantityCheckbox);
+		if (child_product_checkboxes !== null && child_product_checkboxes.length > 0) {
+			child_product_checkboxes.forEach((element) => {
+				element.disabled = false;
+				element.checked = false;
 			});
-		} else {
-			const child_product_checkboxes = document.querySelectorAll(childItemQuantityCheckbox);
-			if ( undefined !== child_product_checkboxes ) {
-				child_product_checkboxes.forEach((element) => {
-					element.disabled = false;
-					element.checked = false;
-				});
-			}
-
 		}
 	};
 
@@ -143,9 +137,6 @@ function ProductQty( {
 	 * @since 1.0.0
 	 */
 	const updateCartMessage = (cartTotal) => {
-
-		const message_container_object = document.querySelector('.mnm_status .mnm_message_content li');
-		message_container_object.querySelector('.mnm-selected-item').innerHTML = cartTotal !== null ? cartTotal : '0';
 
 		let maxQuantity = 1;
 		let maxInputQuantity = document.querySelector(childItemQuantityCheckbox);
@@ -164,8 +155,6 @@ function ProductQty( {
 			miniCartMessage = miniCartMessage.replace('%d', Number(maxQuantity) - Number(cartTotal));
 		}
 
-		message_container_object.querySelector('.mnm-select-min-item').innerHTML = maxQuantity;
-		message_container_object.querySelector('.mnm-select-max-item').innerHTML = maxQuantity;
 		document.querySelector('.mnm-minicart-quantity.note').innerHTML = miniCartMessage;
 		document.querySelector('.mnm-cart-product-items').innerHTML = cartTotal;
 		document.querySelector('.mnm-minicart-total-price').innerHTML = document.querySelector('.woocommerce-variation .woocommerce-variation-price').innerHTML;
@@ -216,6 +205,7 @@ function ProductQty( {
 	 * @since 1.0.0
 	 */
 	const handleCheckboxClick = (event) => {
+
 		selectedChildItems = [];
 		document.querySelectorAll(childItemQuantityCheckbox).forEach((element) => {
 			(event.target !== element && event.target.checked) ? element.disabled = true : element.disabled = false;
@@ -223,7 +213,7 @@ function ProductQty( {
 		if (event.target.checked) {
 			enabledCart();
 			updateCartMessage('1');
-			selectedChildItems.push({ image: event.target.getAttribute('data-src'), title: event.target.getAttribute('data-title'), name: event.target.getAttribute('name') });
+			selectedChildItems.push({ image: event.target.getAttribute('data-src'), title: event.target.getAttribute('data-title'), name: event.target.getAttribute('name'), dataId: event.target.getAttribute('data-id') });
 			displaySelectedProducts(0);
 		} else {
 			disableCart();
@@ -240,8 +230,9 @@ function ProductQty( {
 	 * @since 1.0.0
 	 */
 	const handleMinusClick = (e) => {
+		displayLoader();
 		const newValue = value - step;
-		if (newValue >= min) {
+		if (newValue >= min && newValue <= max) {
 			onChange(newValue);
 			updateTotal(e);
 		} else {
@@ -255,8 +246,6 @@ function ProductQty( {
 		view: window
 	});
 
-	const changeEvent = new Event('change', { bubbles: true });
-
 	/**
 	 * Handle the plus button event.
 	 *
@@ -265,14 +254,21 @@ function ProductQty( {
 	 * @since 1.0.0
 	 */
 	const handlePlusClick = (e) => {
+		displayLoader();
 		const newValue = value + step;
-		if (newValue <= max) {
+		if (newValue <= max && newValue >= min) {
 			onChange(newValue);
 			updateTotal(e);
 		} else {
-			displayMessage(e,wc_mnm_params.i18n_child_item_max_qty_message.replace('%d', max));
+			updateTotal(e);
 		}
 	};
+
+	const displayLoader = () => {
+		document.querySelectorAll(mixAndMatchRoot).forEach( (loader) => {
+			loader.style.display = 'block';
+		});
+	}
 
 	/**
 	 * Update the total quantity.
@@ -289,7 +285,7 @@ function ProductQty( {
 			child_items_quantity.forEach((element, index) => {
 				if( element.value > 0 ){
 					for (let i = 0 ; i < element.value; i++){
-						selectedChildItems.push({ image: element.getAttribute('data-src'), title: element.getAttribute('data-title'), name: element.getAttribute('name') });
+						selectedChildItems.push({ image: element.getAttribute('data-src'), title: element.getAttribute('data-title'), name: element.getAttribute('name'), dataId: element.getAttribute('data-id') });
 					}
 				}
 				let currentIndex = index + 1;
@@ -334,7 +330,8 @@ function ProductQty( {
 	 * @since 1.0.0
 	 */
 	const displaySelectedProducts = (placeholderQuantity) => {
-		let mnmMiniCartContentContainer = document.querySelector('.mnm-variable-cart-view-content-container');
+		displayLoader();
+		let mnmMiniCartContentContainer = document.querySelector('.mnm-minicart-view-content-container ');
 		let displaySelectedItem = [];
 		if( selectedChildItems.length > 0 ){
 			Object.entries(selectedChildItems).map(([index,selectedItem]) => {
@@ -346,12 +343,16 @@ function ProductQty( {
 				displaySelectedItem.push({image: PLACEHOLDER_IMG_SRC, title: __('Empty','wc-mnm-variable'), name: ''});
 			}
 		}
+
 		setTimeout( function(){
 			mnmMiniCartContentContainer.innerHTML = '';
 			if (displaySelectedItem.length > 0 ){
 				displaySelectedItem.map( (item, index)  => {
 					mnmMiniCartContentContainer.innerHTML += getProductHTML(item);
 					if( index + 1 === displaySelectedItem.length  ){
+						document.querySelectorAll(mixAndMatchRoot).forEach( (loader) => {
+							loader.style.display = 'none';
+						});
 						document.querySelectorAll('.remove-child-item').forEach((childItem) => {
 							childItem.addEventListener('click', handleRemoveChildItem);
 							return () => {
@@ -372,13 +373,16 @@ function ProductQty( {
 	 * @since 1.0.0
 	 *
 	 * @returns {`<div class="minicart-product-grid">
-				${string}
-				<img src="${string}"/>
-				<h4>${string}</h4>
-			</div>`}
+	 *
+	 * 				<img src="${string}"/>
+	 * 				<h4>${string}</h4>
+	 * 			</div>`}
 	 */
 	const getProductHTML = ( obj ) => {
-		let closeButton = obj.name !== '' ? `<span class="remove-child-item" data-product="${obj.name}">×</span>` : ``;
+		let closeButton = '';
+		if( obj.name !== '' ){
+			closeButton = `<span class="remove-child-item ${isEditable ? '' : 'hidden'}" data-id="${obj.dataId}" data-product="${obj.name}">×</span>`;
+		}
 		return `<div class="minicart-product-grid">
 				${closeButton}
 				<img src="${obj.image}"/>
@@ -398,31 +402,27 @@ function ProductQty( {
 	 * Copied from <QuantitySelector>
 	 */
 	const normalizeQuantity = useDebouncedCallback( ( initialValue, e ) => {
+		let newValue = initialValue;
+		// We check if we have a maximum value, and select the lowest between what was inserted and the maximum.
+		if ( hasMaximum ) {
+			newValue = Math.min(
+				newValue,
+				// the maximum possible value in step increments.
+				Math.floor( max / step ) * step
+			);
+		}
 
-			let newValue = initialValue;
-			// We check if we have a maximum value, and select the lowest between what was inserted and the maximum.
-			if ( hasMaximum ) {
-				newValue = Math.min(
-					newValue,
-					// the maximum possible value in step increments.
-					Math.floor( max / step ) * step
-				);
-			}
+		// Select the biggest between what's inserted, the the minimum value in steps.
+		newValue = Math.max( newValue, Math.ceil( min / step ) * step );
 
-			// Select the biggest between what's inserted, the the minimum value in steps.
-			newValue = Math.max( newValue, Math.ceil( min / step ) * step );
-
-			// We round off the value to our steps.
-			newValue = Math.floor( newValue / step ) * step;
-			updateTotal(e);
-			// Only commit if the value has changed
-			if ( newValue !== initialValue ) {
-				onChange?.( newValue );
-			}
-
-		},
-		300
-	);
+		// We round off the value to our steps.
+		newValue = Math.floor( newValue / step ) * step;
+		updateTotal(e);
+		// Only commit if the value has changed
+		if ( newValue !== initialValue ) {
+			onChange?.( newValue );
+		}
+	},300);
 
 	// If out of stock or not purchasable we do not show a quantity input.
 	if ( ! isSelectable ) {
@@ -463,13 +463,11 @@ function ProductQty( {
 	// Otherwise show the quantity input.
     return (      
 
-        <div className="child_item__quantity product-quantity">
+        <div className={`child_item__quantity product-quantity ${hasButton}`}>
 
 			<div className="quantity">
 
-				{ WC_MNM_ADD_TO_CART_REACT_PARAMS.display_plus_minus_buttons && (
-					<button onClick={handleMinusClick} type="button" tabIndex="-1" aria-label="{ __( 'Reduce quantity', 'wc-mnm-variable' ) }" className="button button--minus">－</button>
-				) }
+				<button onClick={handleMinusClick} type="button" tabIndex="-1" aria-label="{ __( 'Reduce quantity', 'wc-mnm-variable' ) }" className={`button button--minus ${hasButton === 'hide-button' ? 'hidden' : ''}`}>－</button>
 				
 				<input
 					className="child_item__quantity_input qty mnm-quantity input-text"
@@ -484,6 +482,7 @@ function ProductQty( {
 					data-title={childItem.name}
 					data-src={imageSrc}
 					name={`mnm_quantity[${childItem.child_id}]`}
+					data-id={childItem.child_id}
 				/>
 
 				{ WC_MNM_ADD_TO_CART_REACT_PARAMS.display_plus_minus_buttons && (
