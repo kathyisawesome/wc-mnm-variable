@@ -19,7 +19,7 @@ import Loading from "../Loading";
 
 
 
-function ChildItems( {childItems, childCategories,isEditable, isReset} ) {
+function ChildItems( {childItems, childCategories, isReset} ) {
 
     const num_columns = WC_MNM_ADD_TO_CART_REACT_PARAMS.num_columns;
     const display_layout = WC_MNM_ADD_TO_CART_REACT_PARAMS.display_layout;
@@ -31,7 +31,7 @@ function ChildItems( {childItems, childCategories,isEditable, isReset} ) {
             display_layout === 'grid' ? (
                 <ul className="wc-block-grid__products">
                     { childProducts.map((childItem, index) => (
-                        <ChildContext.Provider key={childItem.child_id} value={{childItem,isEditable,isReset}}>
+                        <ChildContext.Provider key={childItem.child_id} value={{childItem,isReset}}>
                             <ChildItem />
                         </ChildContext.Provider>
                     ) ) }
@@ -48,7 +48,7 @@ function ChildItems( {childItems, childCategories,isEditable, isReset} ) {
                     <tbody>
                     {
                         childProducts.map((childItem, index) => (
-                            <ChildContext.Provider key={childItem.child_id} value={{childItem,isEditable,isReset}}>
+                            <ChildContext.Provider key={childItem.child_id} value={{childItem,isReset}}>
                                 <ChildItem />
                             </ChildContext.Provider>
                         ) )

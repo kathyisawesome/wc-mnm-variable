@@ -22,7 +22,7 @@ function ProductQty( {
 	onChange
 } ) {
 
-	const {childItem,isEditable} = useContext(ChildContext);
+	const {childItem} = useContext(ChildContext);
 
 	useEffect(() => {
 		window.onbeforeunload = function() {
@@ -173,12 +173,14 @@ function ProductQty( {
 		setTimeout(function (){
 			const maxInputQuantity = document.querySelector('.child_item__quantity ' + childItemQuantityInput);
 			const maxQuantity = (undefined !== maxInputQuantity && null !== maxInputQuantity ) ? maxInputQuantity.getAttribute('max') : max;
+			const resetCartButton = document.querySelector('.mnm-reset-cart');
 			disableCart();
 			updateCartMessage(0);
 			resetCart();
 			selectedChildItems = [];
 			displaySelectedProducts(maxQuantity);
-			document.querySelector('.mnm-reset-cart').addEventListener('click',handleResetCart);
+			resetCartButton.dispatchEvent(clickEvent);
+			resetCartButton.addEventListener('click',handleResetCart);
 		},500);
 	}
 
@@ -373,16 +375,14 @@ function ProductQty( {
 	 * @since 1.0.0
 	 *
 	 * @returns {`<div class="minicart-product-grid">
-	 *
-	 * 				<img src="${string}"/>
-	 * 				<h4>${string}</h4>
-	 * 			</div>`}
+	 * 			${string|string}
+	 * 			<img src="${string}"/>
+	 * 			<h4>${string}</h4>
+	 * 		</div>`}
 	 */
 	const getProductHTML = ( obj ) => {
-		let closeButton = '';
-		if( obj.name !== '' ){
-			closeButton = `<span class="remove-child-item ${isEditable ? '' : 'hidden'}" data-id="${obj.dataId}" data-product="${obj.name}">×</span>`;
-		}
+		let closeButton = obj.name !== '' ? `<span class="remove-child-item" data-id="${obj.dataId}" data-product="${obj.name}">×</span>`: '';
+
 		return `<div class="minicart-product-grid">
 				${closeButton}
 				<img src="${obj.image}"/>
@@ -438,7 +438,7 @@ function ProductQty( {
 		let required_text = sprintf( _x( '&times;%1d <span className="screen-reader-text">%2$s</span>', '[Frontend]', 'wc-mnm-variable' ), max, childItem.name );
 		return (
 			
-			<p class="required-quantity">
+			<p className="required-quantity">
 				<span>{ required_text }</span>
 				<input type="hidden" name={`mnm_quantity[${childItem.child_id}]`} value={max} />
 			</p>
@@ -453,9 +453,11 @@ function ProductQty( {
 		let checkbox_label = sprintf( _x( 'Add %1d <span className="screen-reader-text">%2$s</span>', '[Frontend]', 'text-domain' ), max, childItem.name );
 
 		return (
-			<div class="quantity mnm-checkbox-qty">
-				<input className="qty mnm-quantity" data-title={childItem.name} data-src={imageSrc} type="checkbox" name={`mnm_quantity[${childItem.child_id}]`} value={max} onClick={handleCheckboxClick} />
-				<label for={`mnm_quantity[${childItem.child_id}]`}><RawHTML>{checkbox_label}</RawHTML></label>
+			<div className="product-quantity">
+				<div className="quantity mnm-checkbox-qty">
+					<input className="qty mnm-quantity" data-title={childItem.name} data-src={imageSrc} type="checkbox" name={`mnm_quantity[${childItem.child_id}]`} value={max} onClick={handleCheckboxClick} />
+					<label for={`mnm_quantity[${childItem.child_id}]`}><RawHTML>{checkbox_label}</RawHTML></label>
+				</div>
 			</div>
 		 )
 	}
@@ -467,10 +469,10 @@ function ProductQty( {
 
 			<div className="quantity">
 
-				<button onClick={handleMinusClick} type="button" tabIndex="-1" aria-label="{ __( 'Reduce quantity', 'wc-mnm-variable' ) }" className={`button button--minus ${hasButton === 'hide-button' ? 'hidden' : ''}`}>－</button>
+				<button onClick={handleMinusClick} type="button" tabIndex="-1" aria-label="{ __( 'Reduce quantity', 'wc-mnm-variable' ) }" className={`button button--minus wp-element-button ${hasButton === 'hide-button' ? 'hidden' : ''}`}>－</button>
 				
 				<input
-					className="child_item__quantity_input qty mnm-quantity input-text"
+					className="child_item__quantity_input qty mnm-quantity input-text qty text"
 					type="number"
 					value={ value }
 					min={ min }
@@ -486,7 +488,7 @@ function ProductQty( {
 				/>
 
 				{ WC_MNM_ADD_TO_CART_REACT_PARAMS.display_plus_minus_buttons && (
-					<button onClick={handlePlusClick} type="button" tabIndex="-1" aria-label="{ __( 'Increase quantity', 'wc-mnm-variable' ) }" className="button button--plus">＋</button>
+					<button onClick={handlePlusClick} type="button" tabIndex="-1" aria-label="{ __( 'Increase quantity', 'wc-mnm-variable' ) }" className="button button--plus wp-element-button">＋</button>
 				) }
 				<div className="wc_mnm_child_item_error" aria-live="polite"></div>
 			</div>

@@ -12,7 +12,6 @@ import Loading from "./Loading";
 
 export default function MixAndMatch( {product} ) {
     const [isVisible, setIsVisible] = useState(true);
-    const [isEditable, setIsEditable] = useState(false);
     const [isReset, setIsReset] = useState(false);
 
   const items = 'undefined' !== typeof product.extensions.mix_and_match && 'undefined' !== typeof product.extensions.mix_and_match.child_items ? product.extensions.mix_and_match.child_items : [];
@@ -20,8 +19,6 @@ export default function MixAndMatch( {product} ) {
   const maxQuantity = 'undefined' !== typeof product.add_to_cart && 'undefined' !== typeof product.add_to_cart.maximum ? product.add_to_cart.maximum : 1;
   const minQuantity = 'undefined' !== typeof product.add_to_cart && 'undefined' !== typeof product.add_to_cart.minimum ? product.add_to_cart.minimum : 1;
   const productTitle = 'undefined' !== typeof product.name ? product.name : "";
-  const closeIcon = WC_MNM_ADD_TO_CART_VARIATION_PARAMS.closeWindowIcon;
-  const openIcon = WC_MNM_ADD_TO_CART_VARIATION_PARAMS.openWindowIcon;
 
   // No child items. Should add other results, like not purchasable?
   if ( ! items || items.length === 0 ) {
@@ -41,18 +38,6 @@ export default function MixAndMatch( {product} ) {
       setIsVisible(!isVisible);
   }
 
-  const handleEditMiniCart = () => {
-    setIsEditable(!isEditable);
-    const selectedProducts = document.querySelectorAll('.mnm-minicart-view-content-container .minicart-product-grid .remove-child-item');
-    selectedProducts.forEach((element) => {
-        if( isEditable ) {
-            element.classList.add('hidden');
-        } else {
-            element.classList.remove('hidden');
-        }
-    });
-  };
-
   const handleResetCart = () => {
     setIsReset(true);
     setTimeout(function () {
@@ -63,11 +48,11 @@ export default function MixAndMatch( {product} ) {
     return (
 
     <ContainerContext.Provider value={product}>
-        <ChildItems childItems={items} childCategories={Categories} isEditable={isEditable} isReset={isReset}/>
+        <ChildItems childItems={items} childCategories={Categories} isReset={isReset}/>
             <div className={"mnm-minicart-overview mnm-variable-product-cart-view mnm-minicart-view-main"}>
                 <div className={"product-minicart-overview mnm-minicart-view-container"}>
                     <div onClick={handleMinicartPopup} className={"mnm-minicart-view-title-wrapper"}>
-                        <h4>{__('Your Selection','wc-mnm-variable')}</h4> <span className={`mnm-minicart-popup-icon ${isVisible ? '' : 'close'}`}><img src={`${isVisible ? closeIcon : openIcon}`} /></span>
+                        <h4>{__('Your Selection','wc-mnm-variable')}</h4> <span className={`mnm-minicart-popup-icon dashicons dashicons-arrow-${isVisible ? 'down' : 'up'}-alt2`}></span>
                     </div>
                     <div className={`mnm-minicart-view-content-wrapper ${isVisible ? 'show' : 'hidden'}`}>
                         <div className={"mnm-minicart-view-content-container"}>
@@ -75,7 +60,6 @@ export default function MixAndMatch( {product} ) {
                         </div>
                         <div className={"mnm-minicart-view-footer-wrapper"}>
                             <div className={"variable-cart-footer-actions"}>
-                                <a onClick={handleEditMiniCart} className={"mnm-edit-cart"}>{isEditable ? __('Cancel Edit','wc-mnm-variable') : __('Edit item(s)','wc-mnm-variable')}</a>
                                 <a onClick={handleResetCart} className={"mnm-reset-cart"}>{__('Clear all ','wc-mnm-variable')}</a>
                             </div>
                             <p className={'mnm-minicart-quantity note'}>{__('Please add 0 items to complete.','wc-mnm-variable')}</p>
