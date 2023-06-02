@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import {useContext, RawHTML, useEffect} from '@wordpress/element';
+import {useContext, RawHTML, useEffect,useState} from '@wordpress/element';
 import { sprintf, _x, __ } from '@wordpress/i18n';
 import { useDebouncedCallback } from 'use-debounce';
 import { PLACEHOLDER_IMG_SRC } from '@woocommerce/settings';
@@ -22,7 +22,8 @@ function ProductQty( {
 	onChange
 } ) {
 
-	const {childItem} = useContext(ChildContext);
+	const { childItem } = useContext(ChildContext);
+	const [containerMaxSize, setContainerMaxSize] = useState(1);
 
 	useEffect(() => {
 		window.onbeforeunload = function() {
@@ -36,7 +37,7 @@ function ProductQty( {
 
 	const woocommerceVariationAddToCart = '.woocommerce-variation-add-to-cart';
 	const singleAddToCartButton = '.single_add_to_cart_button';
-	const childItemQuantityInput = '.child_item__quantity_input[type=number]';
+	const childItemQuantityInput = '.child_item__quantity_input';
 	const mixAndMatchRoot = '.wc-block-components-product-add-to-cart-loading';
 	const hasButton = WC_MNM_ADD_TO_CART_REACT_PARAMS.display_plus_minus_buttons ? 'show-button' : 'hide-button';
 	const childItemQuantityCheckbox = '.mnm_child_products .mnm-checkbox-qty input[type="checkbox"].mnm-quantity';
@@ -105,7 +106,12 @@ function ProductQty( {
 	 * @since 1.0.0
 	 */
 	const displayMessage = (obj, message) => {
-		const currentObj = obj.target.parentElement.lastElementChild;
+		let currentObj = '';
+		if( undefined === obj.target || null === obj.target ) {
+			currentObj = obj.parentElement.lastElementChild;
+		} else {
+			currentObj = obj.target.parentElement.lastElementChild;
+		}
 		currentObj.innerHTML = message;
 		currentObj.classList.add('show');
 		setTimeout(function (){
@@ -136,23 +142,17 @@ function ProductQty( {
 	 *
 	 * @since 1.0.0
 	 */
-	const updateCartMessage = (cartTotal) => {
+	const updateCartMessage = (cartTotal,mnm_max_container) => {
 
-		let maxQuantity = 1;
-		let maxInputQuantity = document.querySelector(childItemQuantityCheckbox);
 		let miniCartMessage = __('Completed. Your bundle is full.','wc-mnm-variable');
 
-		if( undefined === maxInputQuantity || null === maxInputQuantity ){
-			maxInputQuantity = document.querySelector('.child_item__quantity ' + childItemQuantityInput);
-			maxQuantity = (undefined !== maxInputQuantity && null !== maxInputQuantity ) ? maxInputQuantity.getAttribute('max') : max;
-		}
 
-		if ( Number(maxQuantity) > 0 && Number(cartTotal) < Number(maxQuantity) - 1 ) {
+		if ( Number(mnm_max_container) > 0 && Number(cartTotal) < Number(mnm_max_container) - 1 ) {
 			miniCartMessage = __('Please add %d items to complete.','wc-mnm-variable');
-			miniCartMessage = miniCartMessage.replace('%d', Number(maxQuantity) - Number(cartTotal));
-		} else if ( Number(maxQuantity) > 0 && Number(cartTotal) === Number(maxQuantity) - 1) {
+			miniCartMessage = miniCartMessage.replace('%d', Number(mnm_max_container) - Number(cartTotal));
+		} else if ( Number(mnm_max_container) > 0 && Number(cartTotal) === Number(mnm_max_container) - 1) {
 			miniCartMessage = __('Please add %d item more to complete.','wc-mnm-variable');
-			miniCartMessage = miniCartMessage.replace('%d', Number(maxQuantity) - Number(cartTotal));
+			miniCartMessage = miniCartMessage.replace('%d', Number(mnm_max_container) - Number(cartTotal));
 		}
 
 		document.querySelector('.mnm-minicart-quantity.note').innerHTML = miniCartMessage;
@@ -171,14 +171,16 @@ function ProductQty( {
 		localStorage.setItem('productLoaded', 'true');
 		localStorage.setItem('variationId',variationId);
 		setTimeout(function (){
-			const maxInputQuantity = document.querySelector('.child_item__quantity ' + childItemQuantityInput);
-			const maxQuantity = (undefined !== maxInputQuantity && null !== maxInputQuantity ) ? maxInputQuantity.getAttribute('max') : max;
 			const resetCartButton = document.querySelector('.mnm-reset-cart');
+			const mnm_max_container = document.querySelector('#mnm_max_container').value;
+			setContainerMaxSize(mnm_max_container);
 			disableCart();
-			updateCartMessage(0);
+			updateCartMessage(0,containerMaxSize);
 			resetCart();
 			selectedChildItems = [];
-			displaySelectedProducts(maxQuantity);
+			displaySelectedProducts(containerMaxSize);
+			updateTotal(false);
+
 			resetCartButton.dispatchEvent(clickEvent);
 			resetCartButton.addEventListener('click',handleResetCart);
 		},500);
@@ -190,13 +192,12 @@ function ProductQty( {
 	 * @since 1.0.0
 	 */
 	const handleResetCart = () => {
-		const maxInputQuantity = document.querySelector('.child_item__quantity ' + childItemQuantityInput);
-		const maxQuantity = (undefined !== maxInputQuantity && null !== maxInputQuantity ) ? maxInputQuantity.getAttribute('max') : max;
 		disableCart();
-		updateCartMessage(0);
+		updateCartMessage(0,containerMaxSize);
 		resetCart();
 		selectedChildItems = [];
-		displaySelectedProducts(maxQuantity);
+		updateTotal(false);
+		//displaySelectedProducts(ContainerMaxSize);
 	};
 
 	/**
@@ -209,18 +210,13 @@ function ProductQty( {
 	const handleCheckboxClick = (event) => {
 
 		selectedChildItems = [];
-		document.querySelectorAll(childItemQuantityCheckbox).forEach((element) => {
-			(event.target !== element && event.target.checked) ? element.disabled = true : element.disabled = false;
-		});
+
 		if (event.target.checked) {
 			enabledCart();
-			updateCartMessage('1');
-			selectedChildItems.push({ image: event.target.getAttribute('data-src'), title: event.target.getAttribute('data-title'), name: event.target.getAttribute('name'), dataId: event.target.getAttribute('data-id') });
-			displaySelectedProducts(0);
+			updateTotal(event.target);
 		} else {
 			disableCart();
-			updateCartMessage('0');
-			displaySelectedProducts(max);
+			updateTotal(event.target);
 		}
 	};
 
@@ -270,7 +266,13 @@ function ProductQty( {
 		document.querySelectorAll(mixAndMatchRoot).forEach( (loader) => {
 			loader.style.display = 'block';
 		});
-	}
+	};
+
+	const removeLoader = () => {
+		document.querySelectorAll(mixAndMatchRoot).forEach( (loader) => {
+			loader.style.display = 'none';
+		});
+	};
 
 	/**
 	 * Update the total quantity.
@@ -282,24 +284,36 @@ function ProductQty( {
 	const updateTotal = useDebouncedCallback( (obj) => {
 		selectedChildItems = [];
 		const child_items_quantity = document.querySelectorAll('.child_item__quantity ' + childItemQuantityInput);
-		if ( undefined !== child_items_quantity ) {
+		const mnm_min_container = document.querySelector('#mnm_min_container').value;
+		const mnm_max_container = document.querySelector('#mnm_max_container').value;
+		if ( null !== child_items_quantity && child_items_quantity.length > 0 ) {
+			let objectTypeCheckbox = false;
+			if( obj ){
+				objectTypeCheckbox = undefined === obj.target ? obj.type === 'checkbox' : obj.target.type === 'checkbox';
+			}
 			let cartTotal = 0;
 			child_items_quantity.forEach((element, index) => {
-				if( element.value > 0 ){
+				let isCheckbox = ( element.type === 'checkbox');
+				let checkboxSelected = isCheckbox ? element.checked : true;
+
+				if( element.value > 0 && checkboxSelected ){
 					for (let i = 0 ; i < element.value; i++){
-						selectedChildItems.push({ image: element.getAttribute('data-src'), title: element.getAttribute('data-title'), name: element.getAttribute('name'), dataId: element.getAttribute('data-id') });
+						selectedChildItems.push({ image: element.getAttribute('data-src'), title: element.getAttribute('data-title'), name: element.getAttribute('name'), dataId: element.getAttribute('data-id'), required: element.getAttribute('data-required') });
 					}
 				}
 				let currentIndex = index + 1;
-				cartTotal = Number(cartTotal) + Number(element.value);
-				if ( cartTotal >= max ) {
+
+				if( checkboxSelected ){
+					cartTotal = Number(cartTotal) + Number(element.value);
+				}
+				if ( cartTotal >= mnm_max_container ) {
 					enabledCart();
-					if ( cartTotal > max ) {
-						displayMessage(obj,wc_mnm_params.i18n_child_item_max_qty_message.replace('%d', max));
+					if ( obj && ( cartTotal > mnm_max_container || element.value > max ) && checkboxSelected ) {
+						displayMessage(obj,wc_mnm_params.i18n_child_item_max_qty_message.replace('%d', element.value > max ? max : mnm_max_container));
 					}
-				} else if (cartTotal <= min) {
+				} else if (cartTotal <= mnm_min_container) {
 					disableCart();
-					if ( cartTotal < min ) {
+					if ( obj && element.value < min && checkboxSelected ) {
 						displayMessage(obj,wc_mnm_params.i18n_child_item_min_qty_message.replace('%d', min));
 					}
 				} else {
@@ -307,17 +321,28 @@ function ProductQty( {
 				}
 
 				if ( currentIndex === child_items_quantity.length ) {
-					if ( cartTotal > max ) {
-						const extraQuantity = cartTotal - max;
-						const currentQuantityInput = obj.target.parentElement.querySelector(childItemQuantityInput);
-						currentQuantityInput.value = currentQuantityInput.value - extraQuantity;
-						onChange(currentQuantityInput.value);
+					if ( obj && cartTotal > mnm_max_container ) {
+						const extraQuantity = cartTotal - mnm_max_container;
+						let currentQuantityInput = '';
+						if( ! objectTypeCheckbox && undefined === obj.target || null === obj.target ) {
+							currentQuantityInput = obj.parentElement.querySelector(childItemQuantityInput);
+						} else if( ! objectTypeCheckbox ) {
+							currentQuantityInput = obj.target.parentElement.querySelector(childItemQuantityInput);
+						}
+
+						if( objectTypeCheckbox ){
+							obj.checked = false;
+							onChange(0);
+						} else {
+							currentQuantityInput.value = currentQuantityInput.value - extraQuantity;
+							onChange(currentQuantityInput.value);
+						}
 						updateTotal(obj);
 					} else {
 						setTimeout( function(){
-							displaySelectedProducts(max - cartTotal);
+							displaySelectedProducts(mnm_max_container - cartTotal);
 						},100);
-						updateCartMessage(cartTotal);
+						updateCartMessage(cartTotal,mnm_max_container);
 					}
 				}
 			});
@@ -352,9 +377,7 @@ function ProductQty( {
 				displaySelectedItem.map( (item, index)  => {
 					mnmMiniCartContentContainer.innerHTML += getProductHTML(item);
 					if( index + 1 === displaySelectedItem.length  ){
-						document.querySelectorAll(mixAndMatchRoot).forEach( (loader) => {
-							loader.style.display = 'none';
-						});
+						removeLoader();
 						document.querySelectorAll('.remove-child-item').forEach((childItem) => {
 							childItem.addEventListener('click', handleRemoveChildItem);
 							return () => {
@@ -381,7 +404,7 @@ function ProductQty( {
 	 * 		</div>`}
 	 */
 	const getProductHTML = ( obj ) => {
-		let closeButton = obj.name !== '' ? `<span class="remove-child-item" data-id="${obj.dataId}" data-product="${obj.name}">×</span>`: '';
+		let closeButton = (obj.name !== '' && obj.required !== 'true') ? `<span class="remove-child-item" data-id="${obj.dataId}" data-product="${obj.name}">×</span>`: '';
 
 		return `<div class="minicart-product-grid">
 				${closeButton}
@@ -438,9 +461,10 @@ function ProductQty( {
 		let required_text = sprintf( _x( '&times;%1d <span className="screen-reader-text">%2$s</span>', '[Frontend]', 'wc-mnm-variable' ), max, childItem.name );
 		return (
 			
-			<p className="required-quantity">
-				<span>{ required_text }</span>
-				<input type="hidden" name={`mnm_quantity[${childItem.child_id}]`} value={max} />
+			<p className="required-quantity child_item__quantity">
+				<span><RawHTML>{ required_text }</RawHTML></span>
+				<input type="hidden" data-required={true} data-title={childItem.name} data-src={imageSrc} data-id={childItem.child_id} className={'child_item__quantity_input qty mnm-quantity input-text'} name={`mnm_quantity[${childItem.child_id}]`} value={max} />
+				<div className="wc_mnm_child_item_error" aria-live="polite"></div>
 			</p>
 			
 		)
@@ -454,9 +478,10 @@ function ProductQty( {
 
 		return (
 			<div className="product-quantity">
-				<div className="quantity mnm-checkbox-qty">
-					<input className="qty mnm-quantity" data-title={childItem.name} data-src={imageSrc} type="checkbox" name={`mnm_quantity[${childItem.child_id}]`} value={max} onClick={handleCheckboxClick} />
+				<div className="quantity mnm-checkbox-qty child_item__quantity">
+					<input className="qty mnm-quantity child_item__quantity_input" data-required={false} data-title={childItem.name} data-src={imageSrc} type="checkbox" name={`mnm_quantity[${childItem.child_id}]`} value={max} onClick={handleCheckboxClick} />
 					<label for={`mnm_quantity[${childItem.child_id}]`}><RawHTML>{checkbox_label}</RawHTML></label>
+					<div className="wc_mnm_child_item_error" aria-live="polite"></div>
 				</div>
 			</div>
 		 )
@@ -484,6 +509,7 @@ function ProductQty( {
 					data-title={childItem.name}
 					data-src={imageSrc}
 					name={`mnm_quantity[${childItem.child_id}]`}
+					data-required={false}
 					data-id={childItem.child_id}
 				/>
 

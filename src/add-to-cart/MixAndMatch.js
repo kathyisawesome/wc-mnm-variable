@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 
@@ -11,11 +12,15 @@ import { ContainerContext } from '../context/Context';
 import Loading from "./Loading";
 
 export default function MixAndMatch( {product} ) {
-    const [isVisible, setIsVisible] = useState(true);
+    const windowSize = useRef([window.innerWidth, window.innerHeight]);
+    let [isVisible, setIsVisible] = useState(windowSize.current[0] > 600);
     const [isReset, setIsReset] = useState(false);
+
 
   const items = 'undefined' !== typeof product.extensions.mix_and_match && 'undefined' !== typeof product.extensions.mix_and_match.child_items ? product.extensions.mix_and_match.child_items : [];
   const Categories = 'undefined' !== typeof product.extensions.mix_and_match && 'undefined' !== typeof product.extensions.mix_and_match.child_categories ? product.extensions.mix_and_match.child_categories : [];
+  const ContainerMinSize = 'undefined' !== typeof product.extensions.mix_and_match && 'undefined' !== typeof product.extensions.mix_and_match.min_container_size ? product.extensions.mix_and_match.min_container_size : 1;
+  const ContainerMaxSize = 'undefined' !== typeof product.extensions.mix_and_match && 'undefined' !== typeof product.extensions.mix_and_match.max_container_size ? product.extensions.mix_and_match.max_container_size : 1;
   const maxQuantity = 'undefined' !== typeof product.add_to_cart && 'undefined' !== typeof product.add_to_cart.maximum ? product.add_to_cart.maximum : 1;
   const minQuantity = 'undefined' !== typeof product.add_to_cart && 'undefined' !== typeof product.add_to_cart.minimum ? product.add_to_cart.minimum : 1;
   const productTitle = 'undefined' !== typeof product.name ? product.name : "";
@@ -80,6 +85,8 @@ export default function MixAndMatch( {product} ) {
                                         autoComplete="off"
                                     />
                                 </div>
+                                <input type="hidden" name="mnm-min-container" value={ContainerMinSize} id="mnm_min_container" className="mnm-min-container"/>
+                                <input type="hidden" name="mnm-max-container" value={ContainerMaxSize} id="mnm_max_container" className="mnm-max-container"/>
                                 <button className="single_add_to_cart_button button alt wp-element-button wc-variation-selection-needed">{__('Add to Cart','wc-mnm-variable')}</button>
                             </div>
                         </div>
