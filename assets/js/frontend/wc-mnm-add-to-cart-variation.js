@@ -133,7 +133,7 @@
           form.storedConfig = {};
           $( event.target ).data( 'product_config', {} );
 
-          alert( WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_form_cleared );
+          window.alert( WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_form_cleared );
 
         }
 
