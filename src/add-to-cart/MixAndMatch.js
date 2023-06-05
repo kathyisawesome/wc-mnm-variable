@@ -14,6 +14,7 @@ import Loading from "./Loading";
 export default function MixAndMatch( {product} ) {
     const windowSize = useRef([window.innerWidth, window.innerHeight]);
     let [isVisible, setIsVisible] = useState(windowSize.current[0] > 600);
+
     const [isReset, setIsReset] = useState(false);
 
 

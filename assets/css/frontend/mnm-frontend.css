@@ -206,6 +206,7 @@ form.cart .mnm-variable-product .mnm_child_products.tabular .quantity.mnm-checkb
     left: 8px;
     top: var(--top, 8px);
     background: var(--background, var(--primary));
+    border:none;
     animation: var(--name-icon-b, var(--name-icon, unchecked-icon)) var(--duration) ease forwards; }
 
 .mnm_form .mnm-variable-product.mnm_child_products .product-quantity .mnm-checkbox-qty .qty:before {

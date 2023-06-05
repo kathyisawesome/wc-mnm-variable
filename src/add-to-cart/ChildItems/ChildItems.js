@@ -91,7 +91,6 @@ function ChildItems( {childItems, childCategories, isReset} ) {
     return (
         <div className={`products mnm-variable-product mnm_child_products wc-block-${display_layout} has-${num_columns}-columns ${has_rows} ${mobile_optimized}`}>
             { childCategories.length !== 0 ? getCategoryItems(childCategories,childItems) : getItems(childItems) }
-            {<Loading />}
         </div>
     )
     

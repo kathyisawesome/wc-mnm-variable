@@ -45,6 +45,19 @@ function ProductQty( {
 	let imageSrc = childItem.images.length ? childItem.images[ 0 ] : PLACEHOLDER_IMG_SRC;
 	imageSrc = imageSrc.src ? imageSrc.src : PLACEHOLDER_IMG_SRC;
 
+
+	const displayLoader = () => {
+		document.querySelectorAll(mixAndMatchRoot).forEach( (loader) => {
+			loader.style.display = 'block';
+		});
+	};
+
+	const removeLoader = () => {
+		document.querySelectorAll(mixAndMatchRoot).forEach( (loader) => {
+			loader.style.display = 'none';
+		});
+	};
+
 	/**
 	 * Manage Remove child item from minicart box
 	 *
@@ -138,7 +151,8 @@ function ProductQty( {
 	/**
 	 * Update the cart message.
 	 *
-	 * @param cartTotal cart quantity total.
+	 * @param cartTotal
+	 * @param mnm_max_container
 	 *
 	 * @since 1.0.0
 	 */
@@ -168,6 +182,7 @@ function ProductQty( {
 	let variationId = document.querySelector('.woocommerce-variation-add-to-cart .variation_id').value;
 	variationId = ( undefined !== variationId && null !== variationId ) ? variationId : 0;
 	if ( !localStorage.getItem('productLoaded') || !localStorage.getItem('variationId') || variationId !== localStorage.getItem('variationId') ) {
+		displayLoader();
 		localStorage.setItem('productLoaded', 'true');
 		localStorage.setItem('variationId',variationId);
 		setTimeout(function (){
@@ -178,12 +193,10 @@ function ProductQty( {
 			updateCartMessage(0,containerMaxSize);
 			resetCart();
 			selectedChildItems = [];
-			displaySelectedProducts(containerMaxSize);
 			updateTotal(false);
-
 			resetCartButton.dispatchEvent(clickEvent);
 			resetCartButton.addEventListener('click',handleResetCart);
-		},500);
+		},100);
 	}
 
 	/**
@@ -197,7 +210,6 @@ function ProductQty( {
 		resetCart();
 		selectedChildItems = [];
 		updateTotal(false);
-		//displaySelectedProducts(ContainerMaxSize);
 	};
 
 	/**
@@ -262,18 +274,6 @@ function ProductQty( {
 		}
 	};
 
-	const displayLoader = () => {
-		document.querySelectorAll(mixAndMatchRoot).forEach( (loader) => {
-			loader.style.display = 'block';
-		});
-	};
-
-	const removeLoader = () => {
-		document.querySelectorAll(mixAndMatchRoot).forEach( (loader) => {
-			loader.style.display = 'none';
-		});
-	};
-
 	/**
 	 * Update the total quantity.
 	 *
@@ -282,6 +282,7 @@ function ProductQty( {
 	 * @type {DebouncedState<(function(*): void)|*>}
 	 */
 	const updateTotal = useDebouncedCallback( (obj) => {
+		displayLoader();
 		selectedChildItems = [];
 		const child_items_quantity = document.querySelectorAll('.child_item__quantity ' + childItemQuantityInput);
 		const mnm_min_container = document.querySelector('#mnm_min_container').value;
@@ -339,9 +340,7 @@ function ProductQty( {
 						}
 						updateTotal(obj);
 					} else {
-						setTimeout( function(){
-							displaySelectedProducts(mnm_max_container - cartTotal);
-						},100);
+						displaySelectedProducts(mnm_max_container - cartTotal);
 						updateCartMessage(cartTotal,mnm_max_container);
 					}
 				}
@@ -371,23 +370,21 @@ function ProductQty( {
 			}
 		}
 
-		setTimeout( function(){
-			mnmMiniCartContentContainer.innerHTML = '';
-			if (displaySelectedItem.length > 0 ){
-				displaySelectedItem.map( (item, index)  => {
-					mnmMiniCartContentContainer.innerHTML += getProductHTML(item);
-					if( index + 1 === displaySelectedItem.length  ){
-						removeLoader();
-						document.querySelectorAll('.remove-child-item').forEach((childItem) => {
-							childItem.addEventListener('click', handleRemoveChildItem);
-							return () => {
-								childItem.removeEventListener('click', handleRemoveChildItem);
-							};
-						});
-					}
-				});
-			}
-		}, 100);
+		mnmMiniCartContentContainer.innerHTML = '';
+		if (displaySelectedItem.length > 0 ){
+			displaySelectedItem.map( (item, index)  => {
+				mnmMiniCartContentContainer.innerHTML += getProductHTML(item);
+				if( index + 1 === displaySelectedItem.length  ){
+					removeLoader();
+					document.querySelectorAll('.remove-child-item').forEach((childItem) => {
+						childItem.addEventListener('click', handleRemoveChildItem);
+						return () => {
+							childItem.removeEventListener('click', handleRemoveChildItem);
+						};
+					});
+				}
+			});
+		}
 	};
 
 	/**
