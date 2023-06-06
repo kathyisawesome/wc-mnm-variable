@@ -45,13 +45,22 @@ function ProductQty( {
 	let imageSrc = childItem.images.length ? childItem.images[ 0 ] : PLACEHOLDER_IMG_SRC;
 	imageSrc = imageSrc.src ? imageSrc.src : PLACEHOLDER_IMG_SRC;
 
-
+	/**
+	 * Display the loader.
+	 *
+	 * @since 1.0.0
+	 */
 	const displayLoader = () => {
 		document.querySelectorAll(mixAndMatchRoot).forEach( (loader) => {
 			loader.style.display = 'block';
 		});
 	};
 
+	/**
+	 * Remove the loader.
+	 *
+	 * @since 1.0.0
+	 */
 	const removeLoader = () => {
 		document.querySelectorAll(mixAndMatchRoot).forEach( (loader) => {
 			loader.style.display = 'none';
@@ -59,9 +68,9 @@ function ProductQty( {
 	};
 
 	/**
-	 * Manage Remove child item from minicart box
+	 * Manage Remove child item from minicart box.
 	 *
-	 * @param event
+	 * @param event Event object.
 	 *
 	 * @since 1.0.0
 	 */
@@ -151,15 +160,14 @@ function ProductQty( {
 	/**
 	 * Update the cart message.
 	 *
-	 * @param cartTotal
-	 * @param mnm_max_container
+	 * @param cartTotal Get the cart total.
+	 * @param mnm_max_container Get the container max value.
 	 *
 	 * @since 1.0.0
 	 */
 	const updateCartMessage = (cartTotal,mnm_max_container) => {
 
 		let miniCartMessage = __('Completed. Your bundle is full.','wc-mnm-variable');
-
 
 		if ( Number(mnm_max_container) > 0 && Number(cartTotal) < Number(mnm_max_container) - 1 ) {
 			miniCartMessage = __('Please add %d items to complete.','wc-mnm-variable');
@@ -215,7 +223,7 @@ function ProductQty( {
 	/**
 	 * Handle checkbox click event.
 	 *
-	 * @param event
+	 * @param event Get the event object.
 	 *
 	 * @since 1.0.0
 	 */
@@ -235,13 +243,13 @@ function ProductQty( {
 	/**
 	 * Handle the minus button event.
 	 *
-	 * @param e
+	 * @param e Get the event object.
 	 *
 	 * @since 1.0.0
 	 */
 	const handleMinusClick = (e) => {
 		displayLoader();
-		const newValue = value - step;
+		const newValue = Number(value) - Number(step);
 		if (newValue >= min && newValue <= max) {
 			onChange(newValue);
 			updateTotal(e);
@@ -250,6 +258,13 @@ function ProductQty( {
 		}
 	};
 
+	/**
+	 * Trigger click event.
+	 *
+	 * @type {MouseEvent | MouseEvent}
+	 *
+	 * @since 1.0.0
+	 */
 	const clickEvent = new MouseEvent('click', {
 		bubbles: true,
 		cancelable: true,
@@ -265,7 +280,7 @@ function ProductQty( {
 	 */
 	const handlePlusClick = (e) => {
 		displayLoader();
-		const newValue = value + step;
+		const newValue = Number(value) + Number(step);
 		if (newValue <= max && newValue >= min) {
 			onChange(newValue);
 			updateTotal(e);
@@ -351,7 +366,7 @@ function ProductQty( {
 	/**
 	 * Display selected products.
 	 *
-	 * @param placeholderQuantity
+	 * @param placeholderQuantity Get the placeholder count.
 	 *
 	 * @since 1.0.0
 	 */
@@ -390,7 +405,7 @@ function ProductQty( {
 	/**
 	 * Get selected child product structure.
 	 *
-	 * @param obj
+	 * @param obj Get the product object.
 	 *
 	 * @since 1.0.0
 	 *
@@ -468,7 +483,11 @@ function ProductQty( {
 
 	}
 
-	// Show a checkbox. @todo - handle check/uncheck.
+	/**
+	 * Show a checkbox.
+	 *
+	 * @since 1.0.0
+	 */
 	if ( max && step === max ) {
 		/* translators: %1$d: Quantity, %2$s: Product name. */
 		let checkbox_label = sprintf( _x( 'Add %1d <span className="screen-reader-text">%2$s</span>', '[Frontend]', 'text-domain' ), max, childItem.name );

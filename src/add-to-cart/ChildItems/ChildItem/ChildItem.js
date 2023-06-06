@@ -16,8 +16,10 @@ import ProductQty from './ProductQty';
 function ChildItem() {
 
     const {childItem,isReset} = useContext(ChildContext);
+    const params = new URLSearchParams(window.location.search);
 
     const [quantity, setQuantity] = useState(0);
+    const [isQuantity, setIsQuantity] = useState(false);
 
     const { name, images, catalog_visibility, purchasable } = childItem;
 
@@ -26,19 +28,47 @@ function ChildItem() {
 	const permalink = catalog_visibility === 'hidden' || catalog_visibility === 'search' ? false : childItem.permalink;
     const isGridLayout = WC_MNM_ADD_TO_CART_REACT_PARAMS.display_layout === 'grid';
 
-    const handleQuantityChange = (value) => {
+    /**
+     * Handle the child product quantity change event.
+     *
+     * @param value Get the item quantity.
+     * @param isQtyReset product reset or not.
+     *
+     * @since 1.0.0
+     */
+    const handleQuantityChange = (value, isQtyReset = false) => {
         setQuantity(value);
+        if(isQtyReset){
+            setTimeout( function (){
+                setIsQuantity(false);
+            },500);
+        }
     };
 
-
-    // Fetch the inital product on page load.
+    /**
+     * Fetch the initial product on page load.
+     *
+     * @since 1.0.0
+     */
     useEffect(() => {
         let initialQty = childItem.qty || 0;
         setQuantity(initialQty);
+        if( params.get(`mnm_quantity[${childItem.child_id}]`) && isQuantity !== 0){
+            setIsQuantity(true);
+        }
     }, [] );
 
-    if(isReset && quantity !== 0){
-        setQuantity(0);
+    /**
+     * Handle Clear all button event in child product.
+     *
+     * @since 1.0.0
+     */
+    if(isReset && quantity !== 0 && ( ! isQuantity || ( params.get(`mnm_quantity[${childItem.child_id}]`) && quantity !== params.get(`mnm_quantity[${childItem.child_id}]`) ) ) ){
+        if( isQuantity ) {
+            handleQuantityChange(params.get(`mnm_quantity[${childItem.child_id}]`), true);
+        }else{
+            setQuantity(0);
+        }
     }
 
     return (

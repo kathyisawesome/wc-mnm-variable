@@ -913,15 +913,12 @@ class WC_MNM_Variable {
 	public static function remove_posted_data( $form_data, $configuration, $container ) {
 
 		if ( $container && $container->is_type( 'mix-and-match-variation' ) ) {
-			$form_data = [];
+			//$form_data = [];
 		}
 
 		return $form_data;
 		
 	}
-
-
-
 
 	/**
 	 * Switch the product object if variation.
