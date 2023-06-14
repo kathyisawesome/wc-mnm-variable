@@ -24,12 +24,16 @@ function ProductQty( {
 
 	const { childItem } = useContext(ChildContext);
 	const [containerMaxSize, setContainerMaxSize] = useState(1);
+	const [isCheckboxChecked, setCheckboxChecked] = useState(0);
 
 	useEffect(() => {
+
+		setCheckboxChecked(value);
+
 		window.onbeforeunload = function() {
 			localStorage.removeItem('productLoaded');
 		};
-	}, []);
+	}, [value]);
 
     const hasMaximum = typeof max !== 'undefined';
 
@@ -234,9 +238,11 @@ function ProductQty( {
 		if (event.target.checked) {
 			enabledCart();
 			updateTotal(event.target);
+			setCheckboxChecked(1);
 		} else {
 			disableCart();
 			updateTotal(event.target);
+			setCheckboxChecked(0);
 		}
 	};
 
@@ -297,11 +303,13 @@ function ProductQty( {
 	 * @type {DebouncedState<(function(*): void)|*>}
 	 */
 	const updateTotal = useDebouncedCallback( (obj) => {
+
 		displayLoader();
 		selectedChildItems = [];
 		const child_items_quantity = document.querySelectorAll('.child_item__quantity ' + childItemQuantityInput);
 		const mnm_min_container = document.querySelector('#mnm_min_container').value;
 		const mnm_max_container = document.querySelector('#mnm_max_container').value;
+
 		if ( null !== child_items_quantity && child_items_quantity.length > 0 ) {
 			let objectTypeCheckbox = false;
 			if( obj ){
@@ -470,7 +478,7 @@ function ProductQty( {
 	if ( max && min === max ) {
 
 		/* translators: %1$d: Quantity, %2$s: Product name. */
-		let required_text = sprintf( _x( '&times;%1d <span className="screen-reader-text">%2$s</span>', '[Frontend]', 'wc-mnm-variable' ), max, childItem.name );
+		let required_text = sprintf( _x( '&times;%1d <span class="screen-reader-text">%2$s</span>', '[Frontend]', 'wc-mnm-variable' ), max, childItem.name );
 		return (
 			
 			<p className="required-quantity child_item__quantity">
@@ -490,13 +498,13 @@ function ProductQty( {
 	 */
 	if ( max && step === max ) {
 		/* translators: %1$d: Quantity, %2$s: Product name. */
-		let checkbox_label = sprintf( _x( 'Add %1d <span className="screen-reader-text">%2$s</span>', '[Frontend]', 'text-domain' ), max, childItem.name );
+		let checkbox_label = sprintf( _x( 'Add %1d <span class="screen-reader-text">%2$s</span>', '[Frontend]', 'text-domain' ), max, childItem.name );
 
 		return (
 			<div className="product-quantity">
 				<div className="quantity mnm-checkbox-qty child_item__quantity">
-					<input className="qty mnm-quantity child_item__quantity_input" data-required={false} data-title={childItem.name} data-src={imageSrc} type="checkbox" name={`mnm_quantity[${childItem.child_id}]`} value={max} onClick={handleCheckboxClick} />
-					<label for={`mnm_quantity[${childItem.child_id}]`}><RawHTML>{checkbox_label}</RawHTML></label>
+					<input checked={isCheckboxChecked>0} className="qty mnm-quantity child_item__quantity_input" data-required={false} data-title={childItem.name} data-src={imageSrc} type="checkbox" name={`mnm_quantity[${childItem.child_id}]`} value={max} onClick={handleCheckboxClick} />
+					<label for={`mnm_quantity[${childItem.child_id}]`} className={"mnm-checkbox-qty-label"}><RawHTML>{checkbox_label}</RawHTML></label>
 					<div className="wc_mnm_child_item_error" aria-live="polite"></div>
 				</div>
 			</div>

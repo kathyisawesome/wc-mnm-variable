@@ -233,6 +233,9 @@ form.cart .mnm-variable-product .mnm_child_products.tabular .quantity.mnm-checkb
     display: block !important;
     width: 100%; }
 
+.mnm-checkbox-qty-label {
+    width: 100%;}
+
 @keyframes checked-icon {
     from {
         transform: translateZ(12px); }
