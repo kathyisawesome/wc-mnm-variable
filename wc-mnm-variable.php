@@ -468,12 +468,12 @@ class WC_MNM_Variable {
 
 		wp_register_script( 'wc-mnm-add-to-cart-variation', $script_url, [ 'wc-add-to-cart-variation', 'wc-add-to-cart-mnm', 'jquery-blockui' ], $script_version, true );	
 
-		$params = array( 
+		$params = apply_filters( 'wc_mnm_variable_script_params', array( 
 			'wc_ajax_url'       => \WC_AJAX::get_endpoint( '%%endpoint%%' ),
 			'i18n_form_error'   => __( 'Failed to initialize form. If this issue persists, please reload the page and try again.', 'wc-mnm-variable' ),
 			'i18n_form_cleared' => __( 'Your currently chosen container size is too small for your current configuration. Your selections have been reset to 0.', 'wc-mnm-variable' ),
 			'form_nonce'        => wp_create_nonce( 'wc_mnm_container_form' ),
-		);
+		) );
 
 		wp_localize_script( 'wc-mnm-add-to-cart-variation', 'WC_MNM_ADD_TO_CART_VARIATION_PARAMS', $params );
 
