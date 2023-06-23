@@ -35,7 +35,9 @@
         }
 
         input[type="radio"] {
-            display: none;
+            display: inline-block;
+            position: fixed;
+            opacity: 0;
         }
         label {
             border: 1px solid;
