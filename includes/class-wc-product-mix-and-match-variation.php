@@ -60,6 +60,22 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 		return 'mix-and-match-variation';
 	}
 
+	/**
+	 * Cache key.
+	 *
+	 * @return string
+	 */
+	public function get_cache_key() {
+
+		$key = $this->get_parent_id() . '_variation:' . $this->get_id();
+
+		if ( 'categories' === $this->get_content_source() ) {
+			$key .= '-cats:' . implode( '|', $this->get_child_category_ids() );
+		}
+
+		return $key;
+	}
+	
 	
 	/**
 	 * Share content getter.
@@ -108,6 +124,33 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 
 		return $value;
 	}
+
+
+    /**
+     * Category contents with title getter.
+     *
+     * @param  string $context
+     * @return array
+     */
+    public function get_child_categories( $context = 'view' ) {
+
+        // Inherit value from parent if sharing content.
+        if ( $this->is_sharing_content( $context ) ) {
+            $value = 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'child_category_ids', $this->parent_data['child_category_ids'], $this ) : $this->parent_data['child_category_ids'];
+            $categories = [];
+            if( !empty( $value ) && is_array( $value ) ){
+                foreach ($value as $category_id){
+                    $category = get_term_by('term_taxonomy_id',$category_id);
+                    $categories[$category_id] = !empty($category->name) ? $category->name : '';
+                }
+                $value = !empty( $categories ) ? $categories : $value;
+            }
+        } else {
+            $value = $this->get_prop( 'child_category_ids', $context );
+        }
+
+        return $value;
+    }
 
 
 	/**

@@ -153,9 +153,13 @@ class WC_MNM_Variable_Store_API {
 			$item_data['packing_mode']        = $product->get_packing_mode();
 			$item_data['shipped_per_product'] = ! $product->is_packed_together();
 			$item_data['weight_cumulative']   = $product->is_weight_cumulative();
-			$item_data['discount']            = $product->get_discount();
-			$item_data['child_items']         = self::prepare_child_items_response( $product );
-		}
+			$item_data['discount']             = $product->get_discount();
+			$item_data['child_items']          = self::prepare_child_items_response( $product );
+            if( !empty( $item_data['content_source'] ) && $item_data['content_source'] !== 'products' ) {
+                $item_data['child_categories'] = $product->get_child_categories($product);
+            }
+
+        }
 
 		return $item_data;
 	}
@@ -444,7 +448,8 @@ class WC_MNM_Variable_Store_API {
 				'images'             => self::get_images( $child_item, $product ),
 				'name'               => $child_item->get_product()->get_name(),
 				'permalink'          => $child_item->get_product()->get_permalink(),
-				'short_description'  => $child_item->get_product()->get_short_description(),	
+				'short_description'  => $child_item->get_product()->get_short_description(),
+                'category_ids'       => $child_item->get_product()->get_category_ids()
 			), $child_item, $product );
 		}
 
@@ -540,7 +545,11 @@ class WC_MNM_Variable_Store_API {
 		$data = $rest_preload_api_requests[$rest_route]['body']['extensions']->variable_mix_and_match['variations'] ?? [];
 
 		// Currently this will only support 1 vmnm product per page.
-		Automattic\WooCommerce\Blocks\Package::container()->get( Automattic\WooCommerce\Blocks\Assets\AssetDataRegistry::class )->add( 'wcMNMVariableSettings', $data );
+        $data_form_location = !empty( $data[0]['extensions']->mix_and_match['form_location'] ) ? $data[0]['extensions']->mix_and_match['form_location'] : '';
+
+        if( !empty( $data_form_location ) && $data_form_location !== 'after_summary' ){
+            Automattic\WooCommerce\Blocks\Package::container()->get( Automattic\WooCommerce\Blocks\Assets\AssetDataRegistry::class )->add( 'wcMNMVariableSettings', $data );
+        }
 	}
 
 }

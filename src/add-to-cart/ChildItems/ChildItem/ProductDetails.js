@@ -16,7 +16,7 @@ import ProductPrice from './ProductPrice';
 function ProductDetails() {
 
     const container = useContext(ContainerContext);
-    const childItem = useContext(ChildContext);
+    const {childItem} = useContext(ChildContext);
 
 
     const { name, catalog_visibility, permalink, short_description, price_html } = childItem;

@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce Mix and Match - Variable Mix and Match
  * Plugin URI: 
  * Description: Variable mix and match product type
- * Version: 1.0.0-reactified.alpha-2
+ * Version: 1.0.0-rc.13
  * Author: Kathy Darling
  * Author URI: http://kathyisawesome.com/
  * Text Domain: wc-mnm-variable
@@ -30,7 +30,7 @@ use Automattic\Jetpack\Constants;
 
 class WC_MNM_Variable {
 
-	const VERSION = '1.0.0-reactified.alpha-2';
+	const VERSION = '1.0.0-rc.13';
 	const REQ_MNM_VERSION = '2.4.0-beta.5';
 	const REQ_WC_VERSION  = '6.9.0'; // @todo -check this.
 
@@ -149,18 +149,21 @@ class WC_MNM_Variable {
 		// Tells core that the Variable product is also editable.
 		add_filter( 'wc_mnm_is_container_order_item_editable', [ $this, 'variable_is_editable' ], 10, 2 );
 
-		// Force tabular layout of attributes when editing in admin.
+		// Force table/dropdowns layout of attributes when editing in admin.
 		add_action( 'wc_mnm_edit_container_order_item_in_shop_order', array( __CLASS__, 'force_edit_container_styles' ), 0, 4 );
 		add_action( 'wc_mnm_edit_container_order_item_in_shop_subscription', array( __CLASS__, 'force_edit_container_styles' ), 0, 4 );
 		
 		// Force variations into tabular layout when editing in admin.
-		add_action( 'wc_mnm_variation_add_to_cart', [ $this, 'force_edit_variation_styles' ], 0 );
+		//add_action( 'wc_mnm_variation_add_to_cart', [ $this, 'force_edit_variation_styles' ], 0 );
 		
 		// Admin order style tweaks for variable mix and match.
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_inline_styles' ], 20 );
 
 		// Preload the current variation.
 		add_filter( 'woocommerce_available_variation', [ $this, 'preload_order_item_variation' ], 20, 3 );
+
+		// Core MNM preloads the selected children from an order item by merging config into REQUEST. Need to disable that for variations.
+		add_filter( 'wc_mnm_get_posted_container_form_data', [ $this, 'remove_posted_data' ], 10, 3 );
 
 		// Handle change variation.
 		add_filter( 'wc_mnm_get_product_from_edit_order_item', [ $this, 'switch_variation' ], 10, 4 );
@@ -184,6 +187,9 @@ class WC_MNM_Variable {
 		// Data stores.
 		include_once 'includes/data-stores/class-wc-product-variable-mix-and-match-data-store-cpt.php';
 		include_once 'includes/data-stores/class-wc-product-mix-and-match-variation-data-store-cpt.php';
+
+		// Transients - this is a temporary solution.
+		include_once 'includes/class-wc-mnm-variable-transients.php';
 
 		// Compatibility
 		include_once 'includes/compatibility/class-wc-mnm-variable-compatibility.php';
@@ -484,6 +490,8 @@ class WC_MNM_Variable {
 		$style_url     = $this->get_plugin_url() . $style_path;
 		$style_version = WC_Mix_and_Match()->get_file_version( $this->get_plugin_path() . $style_path, self::VERSION );
 
+        wp_enqueue_style( 'dashicons' );
+        wp_enqueue_style( 'wc-mnm-variable-frontend', $this->get_plugin_url() . '/assets/css/frontend/mnm-frontend.min.css', array(), self::VERSION );
 		wp_enqueue_style( 'wc-mnm-add-to-cart-variation', $style_url, [ 'wc-mnm-frontend' ], $style_version );
 
 		wp_style_add_data( 'wc-mnm-add-to-cart-variation', 'rtl', 'replace' );
@@ -519,6 +527,8 @@ class WC_MNM_Variable {
 			'wc_ajax_url'     => \WC_AJAX::get_endpoint( '%%endpoint%%' ),
 			'i18n_form_error' => __( 'Failed to initialize form. If this issue persists, please reload the page and try again.', 'wc-mnm-variable' ),
 			'form_nonce'      => wp_create_nonce( 'wc_mnm_container_form' ),
+            'closeWindowIcon'       => $this->get_plugin_url().'/assets/icons/close-window.png',
+            'openWindowIcon'       => $this->get_plugin_url().'/assets/icons/open-window.png',
 		);
 
 		wp_localize_script( 'wc-mnm-add-to-cart-variation', 'WC_MNM_ADD_TO_CART_VARIATION_PARAMS', $params );
@@ -550,9 +560,20 @@ class WC_MNM_Variable {
 			'display_thumbnails' => wc_string_to_bool( get_option( 'wc_mnm_display_thumbnail', 'yes' ) ),
 			'display_short_description'  => wc_string_to_bool( get_option( 'wc_mnm_display_short_description', 'no' ) ),
 			'display_plus_minus_buttons' => wc_string_to_bool( get_option( 'wc_mnm_display_plus_minus_buttons', 'no' ) ),
+			'display_layout' => get_option('wc_mnm_layout','tabular'),
+			'mobile_optimized_layout' => wc_string_to_bool( get_option('wc_mnm_mobile_optimized_layout','no')),
 			'display_visual_status_ui'   => wc_string_to_bool( get_option( 'wc_mnm_visual_status_ui', 'no' ) ),
 			'num_columns'                => (int) apply_filters( 'wc_mnm_grid_layout_columns', get_option( 'wc_mnm_number_columns', 3 ) ),
+            'cart_status_message' => __('You have selected <span class="mnm-selected-item">0</span> items. You may select between <span class="mnm-select-min-item">0</span> and <span class="mnm-select-max-item">0</span> items or add to cart to continue.', 'wc-mnm-variable' ),
 		);
+
+        if( is_product() && is_single() ){
+            $product_id = get_the_ID();
+            $is_override_template = wc_string_to_bool(get_post_meta($product_id,'_mnm_layout_override',true));
+            if( $is_override_template ){
+                $params['display_layout'] = get_post_meta($product_id,'_mnm_layout_style',true);
+            }
+        }
 
 		wp_localize_script( 'wc-mnm-add-to-cart-reatified', 'WC_MNM_ADD_TO_CART_REACT_PARAMS', $params );
 
@@ -711,21 +732,6 @@ class WC_MNM_Variable {
 			wp_send_json_error( $error );
 		}
 
-		// Initialize form state based on the URL params.
-		if ( ! empty( $_POST['request'] ) ) {
-			parse_str( parse_url( $_POST['request'], PHP_URL_QUERY ), $params );
-			$_REQUEST = array_merge( $_REQUEST, $params );
-		}
-
-		unset( $_REQUEST['request'] );
-
-		// Initialize form state based on the actual configuration of the container.
-		$configuration = ! empty( $_POST['configuration'] ) ? wc_clean( $_POST['configuration'] ) : array();
-
-		if ( ! empty( $configuration ) ) {
-			$_REQUEST = array_merge( $_REQUEST, WC_Mix_and_Match()->cart->rebuild_posted_container_form_data( $configuration, $product ) );
-		}
-
 		/*
 		 * `wc_mnm_container_form_fragments` filter
 		 * 
@@ -820,6 +826,53 @@ class WC_MNM_Variable {
 			   margin-right: 1em;
 			}
 			.wc-mnm-backbone-modal form.edit_container .blockUI.blockOverlay::before { border: none; }
+
+			/* Temp add some styles for grid - since template is cached we can't serve tabular layout in the admin */
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid {
+				display: flex;
+				flex-wrap: wrap;
+			}
+
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid .child-item {
+				padding: 0 .5em;
+				margin-bottom: 1em;
+				overflow: hidden;
+			}
+
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid .child-item img {
+				width: 100%;
+				height: auto;
+			  }
+			
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid.columns-1> .child-item {
+				max-width:100%;
+				flex-basis:100%
+			}
+			
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid.columns-2> .child-item {
+				max-width:50%;
+				flex-basis:50%
+			}
+		
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid.columns-3> .child-item {
+				max-width:33.33333%;
+				flex-basis:33.33333%
+			}
+	
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid.columns-4> .child-item {
+				max-width:25%;
+				flex-basis:25%
+			}
+		
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid.columns-5> .child-item {
+				max-width:20%;
+				flex-basis:20%
+			}
+	
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc_mnm_variation .grid.columns-6> .child-item {
+				max-width:16.66667%;
+				flex-basis:16.66667%
+			}
 		";
 		wp_add_inline_style( 'wc-mnm-admin-order-style', $custom_css );
 
@@ -847,7 +900,25 @@ class WC_MNM_Variable {
 
 		return $data;
 
-	}	
+	}
+
+	/**
+	 * Filter the rebuilt configuration to an empty array as variations will prefill using JS.
+	 *
+	 * @param array $form_data
+	 * @param array $configuration
+	 * @param WC_Mix_and_Match_Product $container
+	 * @return array
+	 */
+	public static function remove_posted_data( $form_data, $configuration, $container ) {
+
+		if ( $container && $container->is_type( 'mix-and-match-variation' ) ) {
+			//$form_data = [];
+		}
+
+		return $form_data;
+		
+	}
 
 	/**
 	 * Switch the product object if variation.
