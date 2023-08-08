@@ -13,7 +13,7 @@ jQuery(
     );
 	
     // Variable type options are valid for mnm.
-    $( '#woocommerce-product-data .show_if_variable:not(.hide_if_variable-mix-and-match)' ).addClass( 'show_if_variable-mix-and-match' );
+    $( '#woocommerce-product-data .product_data .show_if_variable:not(.hide_if_variable-mix-and-match)' ).addClass( 'show_if_variable-mix-and-match' );
 
     // Show packing options.
     $( '#shipping_product_data .mnm_packing_options' ).addClass( 'show_if_variable-mix-and-match' );
