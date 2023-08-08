@@ -80,6 +80,9 @@ class WC_MNM_Variable {
 			$this->admin_includes();
 		}
 
+		// Declare HPOS compatibility.
+		add_action( 'before_woocommerce_init', [ __CLASS__, 'declare_hpos_compatibility' ] );
+
 		// Load translation files.
 		add_action( 'init', [ $this, 'load_plugin_textdomain' ] );
 		
@@ -212,6 +215,23 @@ class WC_MNM_Variable {
 		}
 	}
 
+
+	/*-----------------------------------------------------------------------------------*/
+	/* Core Compat */
+	/*-----------------------------------------------------------------------------------*/
+
+
+	/**
+	 * Declare HPOS (Custom Order tables) compatibility.
+	 */
+	public static function declare_hpos_compatibility() {
+
+		if ( ! class_exists( 'Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
+			return;
+		}
+
+		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', plugin_basename( __FILE__ ), true );
+	}
 
 	/*
 	|--------------------------------------------------------------------------
