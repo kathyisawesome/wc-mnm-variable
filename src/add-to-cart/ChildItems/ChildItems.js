@@ -15,9 +15,6 @@ import { __ } from '@wordpress/i18n';
  */
 import ChildItem from './ChildItem/ChildItem';
 import { ChildContext } from '../../context/Context';
-import Loading from "../Loading";
-
-
 
 function ChildItems( {childItems, childCategories, isReset} ) {
 
