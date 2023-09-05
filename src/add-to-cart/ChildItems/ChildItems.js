@@ -74,10 +74,10 @@ function ChildItems( {childItems, childCategories, isReset} ) {
                             displayItems.push(childItem);
                         }
                         if (index + 1 === childItems.length) {
-                            displayedItems = displayedItems.length !== 0
+                            displayedItems = displayedItems.length
                                 ? [...displayItems, ...displayedItems.filter(item => !displayItems.some(displayItem => displayItem.child_id === item.child_id))]
                                 : displayItems;
-                            return displayItems.length !== 0 ? getItems(displayItems) : '';
+                            return displayItems.length ? getItems(displayItems) : '';
                         }
                     })}
                 </>
@@ -87,7 +87,7 @@ function ChildItems( {childItems, childCategories, isReset} ) {
 
     return (
         <div className={`products mnm-variable-product mnm_child_products wc-block-${display_layout} has-${num_columns}-columns ${has_rows} ${mobile_optimized}`}>
-            { childCategories.length !== 0 ? getCategoryItems(childCategories,childItems) : getItems(childItems) }
+            { childCategories.length ? getCategoryItems(childCategories,childItems) : getItems(childItems) }
         </div>
     )
     
