@@ -43,7 +43,6 @@ function ProductQty( {
 	const singleAddToCartButton = '.single_add_to_cart_button';
 	const childItemQuantityInput = '.child_item__quantity_input';
 	const mixAndMatchRoot = '.wc-block-components-product-add-to-cart-loading';
-	const hasButton = WC_MNM_ADD_TO_CART_REACT_PARAMS.display_plus_minus_buttons ? 'show-button' : 'hide-button';
 	const childItemQuantityCheckbox = '.mnm_child_products .mnm-checkbox-qty input[type="checkbox"].mnm-quantity';
 	let selectedChildItems = [];
 	let imageSrc = childItem.images.length ? childItem.images[ 0 ] : PLACEHOLDER_IMG_SRC;
@@ -514,12 +513,14 @@ function ProductQty( {
 	// Otherwise show the quantity input.
     return (      
 
-        <div className={`child_item__quantity product-quantity ${hasButton}`}>
+        <div className="child_item__quantity product-quantity">
 
 			<div className="quantity">
 
-				<button onClick={handleMinusClick} type="button" tabIndex="-1" aria-label="{ __( 'Reduce quantity', 'wc-mnm-variable' ) }" className={`button button--minus wp-element-button ${hasButton === 'hide-button' ? 'hidden' : ''}`}>－</button>
-				
+				{ WC_MNM_ADD_TO_CART_REACT_PARAMS.display_plus_minus_buttons && (
+					<button onClick={handleMinusClick} type="button" tabIndex="-1" aria-label="{ __( 'Reduce quantity', 'wc-mnm-variable' ) }" className="button button--minus wp-element-button">－</button>
+				) }
+
 				<input
 					className="child_item__quantity_input qty mnm-quantity input-text qty text"
 					type="number"
