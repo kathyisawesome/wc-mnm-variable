@@ -8,7 +8,7 @@ import { useEffect,useState } from '@wordpress/element';
 import './style.scss';
 
 import ChildItems from './child-items';
-import { ContainerContext } from '../../context/context';
+import { ContainerContext } from '../../context';
 import Loading from "./loading";
 
 const MixAndMatch = ( { product } ) => {

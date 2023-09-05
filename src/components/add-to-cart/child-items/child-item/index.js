@@ -7,7 +7,7 @@ import { useEffect, useState, useContext } from '@wordpress/element';
  * Internal dependencies
  */
 //import './style.scss';
-import { ChildContext } from '../../../../context/context';
+import { ChildContext } from '../../../../context';
 
 import ProductImage from './product-image';
 import ProductDetails from './product-details';

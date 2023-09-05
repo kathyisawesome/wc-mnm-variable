@@ -14,7 +14,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import ChildItem from './child-item';
-import { ChildContext } from '../../../context/context';
+import { ChildContext } from '../../../context';
 
 const ChildItems = ( {childItems, childCategories, isReset} ) => {
 

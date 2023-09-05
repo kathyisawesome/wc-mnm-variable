@@ -10,7 +10,7 @@ import { PLACEHOLDER_IMG_SRC } from '@woocommerce/settings';
  * Internal dependencies
  */
 //import './style.scss';
-import { ContainerContext, ChildContext } from '../../../../context/context';
+import { ContainerContext, ChildContext } from '../../../../context';
 import ProductStockStatus from './product-stock-status';
 
 const ProductQty = ( {
