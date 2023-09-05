@@ -135,3 +135,230 @@
         flex-basis: calc(33.3% - 1.5em);
     }
 }
+
+
+
+/**
+ * Mini-cart @todo- break into own component.
+ */
+ .mnm-minicart-view-content-container {
+
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 310px;
+    overflow: scroll;
+    margin: 0 auto;
+    text-align: center;
+  
+    .minicart-product-grid h4{margin-top:5px;}
+  
+    img {width: 100px;}
+  
+    h4 {
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 1.1;
+      margin: 0;
+      word-break: break-word;
+    }
+  
+  }
+  
+  .mnm-minicart-view-content-wrapper,
+  .mnm-minicart-view-footer-wrapper,
+  .mnm-minicart-view-title-wrapper {
+    padding: .625em;
+    position: relative;
+    text-align: center;
+  }
+  .mnm-minicart-view-footer-wrapper {
+  
+    .woocommerce-variation-add-to-cart {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: .5em;
+    }
+  
+    p {
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 1.5;
+      margin: .5em 0 0;
+    }
+  
+    .mnm-minicart-quantity{
+      font-size: 16px;
+      line-height: 1.5;
+    }
+  
+    .mnm-minicart-price .price{
+      font-size: 18px !important;
+    }
+  }
+  
+  .mnm-minicart-view-main {
+    background: #f7f7f7;
+    bottom: 0;
+    display: block;
+    max-height: 75%;
+    position: fixed;
+    right: 0;
+    width: 420px;
+    z-index: 1000;
+  }
+  
+  .mnm-minicart-view-title-wrapper {
+    background: #c4c4c480;
+    color: #363636;
+    cursor:pointer;
+  
+    h4 {
+      font-style: normal;
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 1.2;
+      margin: 5px 0;
+    }
+  }
+  
+  .variable-cart-footer-actions a {
+    color: #cd2653;
+    font-size: 14px;
+    line-height: 24px;
+    margin: 0 16px;
+    text-decoration: underline;
+  }
+  
+  .mnm-minicart-price-label {
+    font-weight: 700;
+  }
+  
+  .mnm-minicart-price .mnm-minicart-total-price .woocommerce-Price-amount {
+      font-size: 16px !important;
+      font-style: normal;
+      line-height: 1.5;
+  }
+  
+  .mnm-minicart-total-price {margin-right: 1em;}
+  
+  .minicart-product-grid {
+    border: 1px solid #e7e9eb;
+    font-size: 1.875em;
+    flex: none;
+    margin-bottom:5px;
+    padding: .669em .125em;
+    position: relative;
+    width: calc( 33.33% - 13px );
+  
+    &:nth-child(2),
+    &:nth-child(5){margin: 0 5px 5px;}
+  
+    * {text-align: center;}
+  }
+  
+  .remove-child-item {
+    background: #cd2653;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 0.733em;
+    line-height: 1;
+    position: absolute;
+    right: .313em;
+    text-align: center;
+    top: .5em;
+    width: 1.1em;
+    height: 1.1em;
+  }
+  
+  .mnm-edit-cart,
+  .mnm-reset-cart,
+  .remove-child-item {
+    cursor: pointer;
+  }
+  
+  .mix-and-match-root.single_mnm_variation {
+    position: relative;
+  }
+    
+  .mnm-minicart-popup-icon {
+    position: absolute;
+    top: calc(50% - 10px);
+    right: 10px;
+    max-height: 40px;
+    overflow: hidden;
+  }
+    
+  @media screen and (max-width: 600px) {
+    .mnm-minicart-view-main {
+      width: 100%; }
+  
+    .mnm-minicart-view-content-container {
+      background: #6d6d6d;
+      display: flex;
+      flex-wrap: nowrap;
+      height: 110px;
+      overflow: scroll;
+  
+      img {
+        width: 70px;
+      }
+  
+      .minicart-product-grid h4 {
+        display:none;
+      }
+  
+    }
+  
+    .minicart-product-grid {
+      border:none;
+      flex: none;
+      width: 110px;
+  
+      &:nth-child(2),
+      &:nth-child(5){
+        margin: 0;
+      }
+    }
+  
+    .remove-child-item {
+      right:10px;
+      top:6px;
+    }
+  
+    .mnm_form {
+      &.layout_tabular table .woocommerce-loop-product__title,
+      &.layout_grid .wc-block-grid__products .wc-block-grid__product-title {
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 24px;
+      }
+  
+      &:not(.layout_tabular) .mnm_child_product_images {
+        display: block;
+        width: 45%;
+      }
+  
+      &:not(.layout_tabular) .wc-mnm-block-child-item__product-details {
+        width: calc( 55% - 20px);
+        display: block;
+        margin-left: 20px;
+        text-align: left;
+      }
+    }
+  
+    .wc-mnm-block-child-item__product-description{
+      font-size: 18px;
+      line-height: 1.4;
+    }
+  
+    .wc-mnm-child-item {
+      display: flex;
+      width: 100%;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+}
+
+  

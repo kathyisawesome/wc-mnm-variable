@@ -486,25 +486,15 @@ class WC_MNM_Variable {
 	 */
 	public function frontend_scripts( $auto_enqueue = false ) {
 		$suffix         = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '': '.min';
+		
 		$style_path    = 'assets/dist/frontend/style-variable-mnm.css';
 		$style_url     = $this->get_plugin_url() . $style_path;
 		$style_version = WC_Mix_and_Match()->get_file_version( $this->get_plugin_path() . $style_path, self::VERSION );
 
-        $frontend_style_path    = 'assets/css/frontend/mnm-frontend.css';
-        $frontend_style_url     = $this->get_plugin_url() . $frontend_style_path;
-        $frontend_style_version = WC_Mix_and_Match()->get_file_version( $this->get_plugin_path() . $frontend_style_url, self::VERSION );
+		wp_enqueue_style( 'dashicons' );
+        wp_enqueue_style( 'wc-mnm-variable-frontend', $style_url, [ 'wc-mnm-frontend' ], $style_version );
 
-        wp_enqueue_style( 'dashicons' );
-        wp_enqueue_style( 'wc-mnm-add-to-cart-variation', $style_url, [ 'wc-mnm-frontend' ], $style_version );
-        wp_enqueue_style( 'wc-mnm-variable-frontend', $frontend_style_url, ['wc-mnm-frontend'], $frontend_style_version );
-
-		wp_style_add_data( 'wc-mnm-add-to-cart-variation', 'rtl', 'replace' );
 		wp_style_add_data( 'wc-mnm-variable-frontend', 'rtl', 'replace' );
-
-		if ( $suffix ) {
-			wp_style_add_data( 'wc-mnm-add-to-cart-variation', 'suffix', '.min' );
-			wp_style_add_data( 'wc-mnm-variable-frontend', 'suffix', '.min' );
-		}
 
 		// We need a core script and it isn't registered in the admin. A bit hacky, but no other way to do this.
 		if ( is_admin() ) {
