@@ -7,13 +7,13 @@ import { useEffect, useState, useContext } from '@wordpress/element';
  * Internal dependencies
  */
 //import './style.scss';
-import { ChildContext } from '../../../../context/Context';
+import { ChildContext } from '../../../../context/context';
 
-import ProductImage from './ProductImage';
-import ProductDetails from './ProductDetails';
-import ProductQty from './ProductQty';
+import ProductImage from './product-image';
+import ProductDetails from './product-details';
+import ProductQty from './product-qty';
 
-function ChildItem() {
+const ChildItem = () => {
 
     const {childItem,isReset} = useContext(ChildContext);
     const params = new URLSearchParams(window.location.search);

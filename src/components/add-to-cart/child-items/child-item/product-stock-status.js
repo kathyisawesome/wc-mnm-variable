@@ -1,6 +1,6 @@
 import { Interweave } from 'interweave';
 
-function ProductStockStatus( {status, availability} ) {
+const ProductStockStatus = ( {status, availability} ) => {
 
     return (
         <p className={`wc-mnm-block-child-item__product-stock stock ${status}`}>

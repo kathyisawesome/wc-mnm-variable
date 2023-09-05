@@ -10,10 +10,10 @@ import { addQueryArgs } from '@wordpress/url';
 /**
  * Internal dependencies
  */
-import MixAndMatch from './components/add-to-cart/MixAndMatch';
-import Loading from './components/add-to-cart/Loading';
+import MixAndMatch from './components/add-to-cart';
+import Loading from './components/add-to-cart/loading';
 
-export default function MixAndMatchApp( {target} ) {
+export default function App( {target} ) {
 
   const preloadedVariableData = getSetting(
     'wcMNMVariableSettings',

@@ -12,17 +12,8 @@ import { ContainerContext } from '../context/context';
 import Loading from "./loading";
 
 import { CONFIG_STORE_KEY } from '../data';
-import { useSelect } from '@wordpress/data';
 
-
-export default function MixAndMatch( {product} ) {
-
-    const config = useSelect( ( select ) => {
-        return select( CONFIG_STORE_KEY ).getConfiguration();
-    } );
-
-    const configCount = config.length;
-
+const MixAndMatch = ( {product} ) => {
 
   const windowSize = useRef([window.innerWidth, window.innerHeight]);
   let [isVisible, setIsVisible] = useState(windowSize.current[0] > 600);
@@ -98,7 +89,6 @@ export default function MixAndMatch( {product} ) {
     return (
 
     <ContainerContext.Provider value={product}>
-        <div class="bacon">Bacon : {configCount}</div>
         <ChildItems childItems={items} childCategories={Categories} isReset={isReset}/>
             <div className={"mnm-minicart-overview mnm-variable-product-cart-view mnm-minicart-view-main"}>
                 <div className={"product-minicart-overview mnm-minicart-view-container"}>
@@ -146,3 +136,4 @@ export default function MixAndMatch( {product} ) {
   )
 
 }
+export default MixAndMatch

@@ -7,11 +7,11 @@ import { useEffect,useState } from '@wordpress/element';
  */
 import './style.scss';
 
-import ChildItems from './ChildItems/ChildItems';
-import { ContainerContext } from '../../context/Context';
-import Loading from "./Loading";
+import ChildItems from './child-items';
+import { ContainerContext } from '../../context/context';
+import Loading from "./loading";
 
-export default function MixAndMatch( {product} ) {
+const MixAndMatch = ( { product } ) => {
   const windowSize = useRef([window.innerWidth, window.innerHeight]);
   let [isVisible, setIsVisible] = useState(windowSize.current[0] > 600);
   const [isReset, setIsReset] = useState(false);
@@ -133,3 +133,5 @@ export default function MixAndMatch( {product} ) {
   )
 
 }
+
+export default MixAndMatch;

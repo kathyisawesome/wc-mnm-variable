@@ -6,14 +6,13 @@ import { useContext } from "react";
 /**
  * Internal dependencies
  */
-import { ContainerContext, ChildContext } from '../../../../context/Context';
-import ProductTitle from './ProductTitle';
-import ProductDescription from './ProductDescription';
-import ProductStockStatus from './ProductStockStatus';
-import ProductPrice from './ProductPrice';
+import { ContainerContext, ChildContext } from '../../../../context/context';
+import ProductTitle from './product-title';
+import ProductDescription from './product-description';
+import ProductStockStatus from './product-stock-status';
+import ProductPrice from './product-price';
 
-
-function ProductDetails() {
+const ProductDetails = () => {
 
     const container = useContext(ContainerContext);
     const {childItem} = useContext(ChildContext);

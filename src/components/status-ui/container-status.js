@@ -1,5 +1,6 @@
 import {RawHTML} from '@wordpress/element';
-function ContainerStatus() {
+
+const ContainerStatus = () => {
     return (
         <div className="mnm_status">
             <div aria-live="polite" role="status" className={"mnm_message woocommerce-message"} style={{display: 'block'}}>

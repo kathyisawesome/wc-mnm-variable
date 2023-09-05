@@ -10,18 +10,17 @@ import { PLACEHOLDER_IMG_SRC } from '@woocommerce/settings';
  * Internal dependencies
  */
 //import './style.scss';
-import { ContainerContext, ChildContext } from '../../../../context/Context';
+import { ContainerContext, ChildContext } from '../../../../context/context';
+import ProductStockStatus from './product-stock-status';
 
-import ProductStockStatus from './ProductStockStatus';
-
-function ProductQty( {
+const ProductQty = ( {
 	disabled,
 	min,
 	max,
 	step = 1,
 	value,
 	onChange
-} ) {
+} ) => {
 
 	const { childItem } = useContext(ChildContext);
 	const { container } = useContext(ContainerContext);

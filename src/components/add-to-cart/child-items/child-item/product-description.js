@@ -1,6 +1,6 @@
 import { Interweave } from 'interweave';
 
-function ProductDescription( {shortDescription} ) {
+const ProductDescription = ( {shortDescription} ) => {
 
     return (
 

@@ -13,10 +13,10 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import ChildItem from './ChildItem/ChildItem';
-import { ChildContext } from '../../../context/Context';
+import ChildItem from './child-item';
+import { ChildContext } from '../../../context/context';
 
-function ChildItems( {childItems, childCategories, isReset} ) {
+const ChildItems = ( {childItems, childCategories, isReset} ) => {
 
     const num_columns = WC_MNM_ADD_TO_CART_REACT_PARAMS.num_columns;
     const display_layout = WC_MNM_ADD_TO_CART_REACT_PARAMS.display_layout;
