@@ -64,7 +64,7 @@ function ChildItems( {childItems, childCategories, isReset} ) {
             displayItems = [];
 
             return (
-                <>
+                <div key={categoryId} className={`product-category product-category-${categoryName}`} >
                     <h2 className="woocommerce-loop-category__title">{categoryName}</h2>
                     {childItems.map((childItem, index) => {
                         if (
@@ -80,7 +80,7 @@ function ChildItems( {childItems, childCategories, isReset} ) {
                             return displayItems.length ? getItems(displayItems) : '';
                         }
                     })}
-                </>
+                </div>
             );
         });
     };

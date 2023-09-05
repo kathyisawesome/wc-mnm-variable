@@ -73,7 +73,7 @@ function ChildItem() {
 
     return (
         isGridLayout ? (
-            <li key={childItem.child_id} className="wc-block-grid__product wc-block-layout wc-mnm-child-item">
+            <li className="wc-block-grid__product wc-block-layout wc-mnm-child-item">
                 { WC_MNM_ADD_TO_CART_REACT_PARAMS.display_thumbnails && (
                     <ProductImage image={ firstImage } fallbackAlt={ name } permalink={permalink} />
                 ) }
