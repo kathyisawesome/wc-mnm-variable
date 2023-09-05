@@ -10,8 +10,8 @@ import { addQueryArgs } from '@wordpress/url';
 /**
  * Internal dependencies
  */
-import MixAndMatch from './add-to-cart/MixAndMatch';
-import Loading from './add-to-cart/Loading';
+import MixAndMatch from './components/add-to-cart/MixAndMatch';
+import Loading from './components/add-to-cart/Loading';
 
 export default function MixAndMatchApp( {target} ) {
 

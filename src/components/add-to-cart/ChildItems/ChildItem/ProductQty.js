@@ -10,7 +10,8 @@ import { PLACEHOLDER_IMG_SRC } from '@woocommerce/settings';
  * Internal dependencies
  */
 //import './style.scss';
-import { ChildContext } from '../../../context/Context';
+import { ContainerContext, ChildContext } from '../../../../context/Context';
+
 import ProductStockStatus from './ProductStockStatus';
 
 function ProductQty( {
@@ -23,6 +24,7 @@ function ProductQty( {
 } ) {
 
 	const { childItem } = useContext(ChildContext);
+	const { container } = useContext(ContainerContext);
 	const [containerMaxSize, setContainerMaxSize] = useState(1);
 	const [isCheckboxChecked, setCheckboxChecked] = useState(0);
 
@@ -190,6 +192,7 @@ function ProductQty( {
 	 *
 	 * @since 1.0.0
 	 */
+	/*
 	let variationId = document.querySelector('.woocommerce-variation-add-to-cart .variation_id').value;
 	variationId = ( undefined !== variationId && null !== variationId ) ? variationId : 0;
 	if ( !localStorage.getItem('productLoaded') || !localStorage.getItem('variationId') || variationId !== localStorage.getItem('variationId') ) {
@@ -209,6 +212,7 @@ function ProductQty( {
 			resetCartButton.addEventListener('click',handleResetCart);
 		},100);
 	}
+	*/
 
 	/**
 	 * Manage the reset cart event.
@@ -459,7 +463,8 @@ function ProductQty( {
 
 		// We round off the value to our steps.
 		newValue = Math.floor( newValue / step ) * step;
-		updateTotal(e);
+		
+		// updateTotal(e); // @todo - here is probably where we need to update the data store.
 		// Only commit if the value has changed
 		if ( newValue !== initialValue ) {
 			onChange?.( newValue );

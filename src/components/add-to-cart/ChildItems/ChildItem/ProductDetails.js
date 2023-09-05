@@ -6,7 +6,7 @@ import { useContext } from "react";
 /**
  * Internal dependencies
  */
-import { ContainerContext, ChildContext } from '../../../context/Context';
+import { ContainerContext, ChildContext } from '../../../../context/Context';
 import ProductTitle from './ProductTitle';
 import ProductDescription from './ProductDescription';
 import ProductStockStatus from './ProductStockStatus';

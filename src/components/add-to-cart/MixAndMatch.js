@@ -8,7 +8,7 @@ import { useEffect,useState } from '@wordpress/element';
 import './style.scss';
 
 import ChildItems from './ChildItems/ChildItems';
-import { ContainerContext } from '../context/Context';
+import { ContainerContext } from '../../context/Context';
 import Loading from "./Loading";
 
 export default function MixAndMatch( {product} ) {
@@ -124,7 +124,7 @@ export default function MixAndMatch( {product} ) {
                                 <button className="single_add_to_cart_button button alt wp-element-button wc-variation-selection-needed">{containerKey ? __('Update Cart','wc-mnm-variable') : __('Add to Cart','wc-mnm-variable')}</button>
                             </div>
                         </div>
-                        {<Loading />}
+                       
                     </div>
                 </div>
             </div>
