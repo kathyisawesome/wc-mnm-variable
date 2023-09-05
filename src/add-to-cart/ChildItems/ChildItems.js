@@ -36,11 +36,11 @@ function ChildItems( {childItems, childCategories, isReset} ) {
             ) : (
                 <table cellspacing="0" className="products mnm_child_products tabular mnm_table shop_table">
                     <thead>
-                    <tr>
-                        <th> </th>
-                        <th>{__('Product','wc-mnm-variable')}</th>
-                        <th>{__('Quantity','wc-mnm-variable')}</th>
-                    </tr>
+                        <tr>
+                            <th> </th>
+                            <th>{__('Product','wc-mnm-variable')}</th>
+                            <th>{__('Quantity','wc-mnm-variable')}</th>
+                        </tr>
                     </thead>
                     <tbody>
                     {
