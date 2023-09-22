@@ -10,3 +10,4 @@ assets/js/admin/*.min.js
 bookmarks.json
 composer.lock
 package-lock.json
+assets/dist/*
