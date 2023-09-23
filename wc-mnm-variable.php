@@ -738,8 +738,8 @@ class WC_MNM_Variable {
 	public function force_edit_variation_styles() {
 
 		if ( wp_doing_ajax() && isset( $_POST['source'] ) && 'metabox' === wc_clean( $_POST['source'] ) ) {
-			add_filter( 'woocommerce_product_variation_get_layout', function() { return 'tabular'; }, 9999 );
-			add_filter( 'woocommerce_product_is_visible', '__return_false', 9999 );
+			add_filter( 'woocommerce_product_variation_get_layout', function() { return 'tabular'; }, 99 );
+			add_filter( 'woocommerce_product_is_visible', '__return_false', 99 );
 		}
 		
 	}
