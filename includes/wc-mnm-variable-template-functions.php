@@ -73,24 +73,6 @@ if ( ! function_exists( 'wc_mnm_variable_template_add_to_cart' ) ) {
 	}
 }
 
-if( ! function_exists( 'wc_mnm_template_override' ) ) {
-
-    function wc_mnm_template_override( $template, $template_name, $template_path ) {
-        global $product;
-
-        $product_type = is_object($product) ? $product->get_type() : '';
-        $plugin_path  = WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/';
-
-        if( $template_name === 'single-product/add-to-cart/variation-add-to-cart-button.php' && $product_type === 'variable-mix-and-match' ) {
-            if( file_exists( $plugin_path . $template_name ) ){
-                $template = $plugin_path . $template_name;
-            }
-        }
-
-        return $template;
-    }
-}
-
 if ( ! function_exists( 'wc_mnm_variable_template_add_to_cart_after_summary' ) ) {
 
 	/**

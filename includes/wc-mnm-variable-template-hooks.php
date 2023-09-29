@@ -9,7 +9,6 @@
 defined( 'ABSPATH' ) || exit;
 
 // Add to cart template.
-add_filter( 'woocommerce_locate_template', 'wc_mnm_template_override', 1, 3 );
 add_action( 'woocommerce_variable-mix-and-match_add_to_cart', 'wc_setup_loop', 0 );
 add_action( 'woocommerce_variable-mix-and-match_add_to_cart', 'wc_mnm_variable_template_add_to_cart' );
 
