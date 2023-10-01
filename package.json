@@ -28,8 +28,10 @@
   "devDependencies": {
     "@lodder/grunt-postcss": "^3.1.1",
     "@woocommerce/dependency-extraction-webpack-plugin": "^2.2.0",
+    "@woocommerce/eslint-plugin": "^2.2.0",
     "@wordpress/scripts": "^26.13.0",
     "autoprefixer": "^10.4.16",
+    "eslint-import-resolver-webpack": "^0.13.7",
     "grunt": "~1.6.1",
     "grunt-contrib-clean": "^2.0.1",
     "grunt-contrib-compress": "^2.0.0",
@@ -47,6 +49,7 @@
     "load-grunt-tasks": "~5.1.0",
     "node-sass": "^9.0.0",
     "postcss": "^8.4.31",
+    "prettier": "npm:wp-prettier@^3.0.3"
   },
   "scripts": {
     "build:js": "wp-scripts build",
