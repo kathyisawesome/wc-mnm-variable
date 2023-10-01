@@ -15,7 +15,7 @@
  * 
  * WC requires at least: 6.9.0
  * WC tested up to: 7.0.0
- * Requires at least: 5.9.0
+ * Requires at least: 6.0.0
  * Requires PHP: 7.4
  *
  * Copyright: © 2022 Kathy Darling
@@ -152,9 +152,6 @@ class WC_MNM_Variable {
 		// Force table/dropdowns layout of attributes when editing in admin.
 		add_action( 'wc_mnm_edit_container_order_item_in_shop_order', array( __CLASS__, 'force_edit_container_styles' ), 0, 4 );
 		add_action( 'wc_mnm_edit_container_order_item_in_shop_subscription', array( __CLASS__, 'force_edit_container_styles' ), 0, 4 );
-		
-		// Force variations into tabular layout when editing in admin.
-		//add_action( 'wc_mnm_variation_add_to_cart', [ $this, 'force_edit_variation_styles' ], 0 );
 		
 		// Admin order style tweaks for variable mix and match.
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_inline_styles' ], 20 );
@@ -542,7 +539,7 @@ class WC_MNM_Variable {
 			);
 
 		wp_register_script(
-			'wc-mnm-add-to-cart-reatified',
+			'wc-mnm-add-to-cart-reactified',
 			$script_url,
 			$script_asset[ 'dependencies' ],
 			$script_asset[ 'version' ],
@@ -556,7 +553,7 @@ class WC_MNM_Variable {
 			'display_thumbnails' => wc_string_to_bool( get_option( 'wc_mnm_display_thumbnail', 'yes' ) ),
 			'display_short_description'  => wc_string_to_bool( get_option( 'wc_mnm_display_short_description', 'no' ) ),
 			'display_plus_minus_buttons' => wc_string_to_bool( get_option( 'wc_mnm_display_plus_minus_buttons', 'no' ) ),
-			'display_layout' => get_option('wc_mnm_layout','tabular'),
+			'display_layout' => is_admin() ? 'tabular' : get_option( 'wc_mnm_layout','tabular' ),
 			'mobile_optimized_layout' => wc_string_to_bool( get_option('wc_mnm_mobile_optimized_layout','no')),
 			'display_visual_status_ui'   => wc_string_to_bool( get_option( 'wc_mnm_visual_status_ui', 'no' ) ),
 			'num_columns'                => (int) apply_filters( 'wc_mnm_grid_layout_columns', get_option( 'wc_mnm_number_columns', 3 ) ),
@@ -571,8 +568,9 @@ class WC_MNM_Variable {
             }
         }
 
-		wp_localize_script( 'wc-mnm-add-to-cart-reatified', 'WC_MNM_ADD_TO_CART_REACT_PARAMS', $params );
+		$params = apply_filters( 'wc_mnm_variable_add_to_cart_script_parameters', $params );
 
+		wp_localize_script( 'wc-mnm-add-to-cart-reactified', 'WC_MNM_ADD_TO_CART_REACT_PARAMS', $params );
 
 		if ( $auto_enqueue ) {
 			$this->load_scripts();
@@ -586,9 +584,8 @@ class WC_MNM_Variable {
 	 */
 	public function load_scripts() {
 		wp_enqueue_script( 'wc-add-to-cart-variation' );
-        wp_enqueue_script( 'wc-add-to-cart-mnm' );
         wp_enqueue_script( 'wc-mnm-add-to-cart-variation' );
-		wp_enqueue_script( 'wc-mnm-add-to-cart-reatified' );
+		wp_enqueue_script( 'wc-mnm-add-to-cart-reactified' );
 	}
 
 	/**
@@ -786,19 +783,6 @@ class WC_MNM_Variable {
 			add_filter( 'wc_mnm_variation_swatches_threshold', '__return_zero' );
 		}	
 	}
-
-	/**
-	 * Force tabular layout for variations which do not inherit the filtered layout of the parent product.
-	 */
-	public function force_edit_variation_styles() {
-
-		if ( wp_doing_ajax() && isset( $_POST['source'] ) && 'metabox' === wc_clean( $_POST['source'] ) ) {
-			add_filter( 'woocommerce_product_variation_get_layout', function() { return 'tabular'; }, 9999 );
-			add_filter( 'woocommerce_product_is_visible', '__return_false', 9999 );
-		}
-		
-	}
-
 
 	/**
 	 * Register scripts

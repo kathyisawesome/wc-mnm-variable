@@ -101,7 +101,6 @@ class WC_MNM_Variable_Store_API {
 
 			// Make an internal request to load complete variation data.
 			if ( 200 === $response->get_status() ) {
-				error_log('response ' . json_encode( $response->get_data()));
 				$item_data['variations'] = (array) $response->get_data();
 			}
 		

@@ -1,15 +1,23 @@
-import { createRoot, render } from '@wordpress/element';
-import App from './app';
+import { createRoot, render, createPortal } from '@wordpress/element';
+import MixAndMatch from './mix-and-match';
 
-let targets = document.querySelectorAll('.mix-and-match-root');
+// Attach the event listener to the desired custom event
+document.addEventListener( 'wc-mnm-initialize.variable-mix-and-match', function(e) {
 
-targets.forEach(function(target) {
+	const targets = e.target.querySelectorAll( '.mix-and-match-root' );
 
-    if ( createRoot ) {
-        createRoot( target ).render( <App target={target} /> );
-    } else {
-        render( <App />, target );
-    }
+	targets.forEach( function ( target ) {
 
-  });
-  
+		if ( createRoot ) {
+			createRoot( target ).render( <MixAndMatch target={ target } /> );
+		} else {
+			render( <MixAndMatch />, target );
+		}
+	} );
+
+});
+
+const initMNM = new CustomEvent( 'wc-mnm-initialize.variable-mix-and-match' );
+
+// Dispatch event on load.
+document.dispatchEvent(initMNM);

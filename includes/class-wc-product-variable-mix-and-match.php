@@ -96,6 +96,27 @@ class WC_Product_Variable_Mix_and_Match extends WC_Product_Variable {
 		}
 	}
 
+	/**
+	 * Get the add to cart button text for the single page.
+	 *
+	 * @return string
+	 */
+	public function single_add_to_cart_text() {
+
+		$text = _x( 'Add to cart', '[Frontend]', 'wc-mnm-variable' );
+
+		if ( isset( $_GET['update-container'] ) ) {
+
+			$updating_cart_key = wc_clean( wp_unslash( $_GET['update-container'] ) );
+
+			if ( isset( WC()->cart->cart_contents[ $updating_cart_key ] ) ) {
+				$text = _x( 'Update cart', '[Frontend]', 'wc-mnm-variable' );
+			}
+		}
+
+		/** WC core filter. */
+		return apply_filters( 'woocommerce_product_single_add_to_cart_text', $text, $this );
+	}
 
 	/*
 	|--------------------------------------------------------------------------

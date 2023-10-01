@@ -1,12 +1,13 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { _x } from '@wordpress/i18n';
 
 const ProductUnavailable = ( {
-	reason = __(
+	reason = _x(
 		'Sorry, this product cannot be purchased.',
-		'wc-mnm-reactified'
+		'[Frontend]',
+		'woo-gutenberg-products-block'
 	),
 } ) => {
 	return (

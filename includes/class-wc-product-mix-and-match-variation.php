@@ -50,6 +50,15 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 		parent::__construct( $product );
 	}
 
+	/**
+	 * Returns whether or not the product has additional options that need
+	 * selecting before adding to cart.
+	 *
+	 * @return boolean
+	 */
+	public function has_options() {
+		return apply_filters( 'woocommerce_product_has_options', true, $this );
+	}
 
 	/**
 	 * Get internal type.
