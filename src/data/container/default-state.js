@@ -1,6 +1,6 @@
 // Initial State
 const DEFAULT_STATE = {
-	product: null,
+	container: null,
 	selections: [],
 	config: {},
 	totalQty: 0,

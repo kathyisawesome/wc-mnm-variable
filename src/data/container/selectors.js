@@ -32,16 +32,16 @@ export const getTotalQty = ( state ) => {
 	return state.totalQty;
 };
 
-export const getProduct = ( state ) => {
-	return state.product;
+export const getContainer = ( state ) => {
+	return state.container;
 };
 
 export const getChildItems = ( state ) => {
-	return state.product &&
-		typeof state.product.extensions.mix_and_match !== 'undefined' &&
-		typeof state.product.extensions.mix_and_match.child_items !==
+	return state.container &&
+		typeof state.container.extensions.mix_and_match !== 'undefined' &&
+		typeof state.container.extensions.mix_and_match.child_items !==
 			'undefined'
-		? state.product.extensions.mix_and_match.child_items
+		? state.container.extensions.mix_and_match.child_items
 		: [];
 };
 
@@ -50,20 +50,20 @@ export const hasChildItems = ( state ) => {
 };
 
 export const getMinContainerSize = ( state ) => {
-	return state.product &&
-		typeof state.product.extensions.mix_and_match !== 'undefined' &&
-		typeof state.product.extensions.mix_and_match.min_container_size !==
+	return state.container &&
+		typeof state.container.extensions.mix_and_match !== 'undefined' &&
+		typeof state.container.extensions.mix_and_match.min_container_size !==
 			'undefined'
-		? state.product.extensions.mix_and_match.min_container_size
+		? state.container.extensions.mix_and_match.min_container_size
 		: 0;
 };
 
 export const getMaxContainerSize = ( state ) => {
-	return state.product &&
-		typeof state.product.extensions.mix_and_match !== 'undefined' &&
-		typeof state.product.extensions.mix_and_match.max_container_size !==
+	return state.container &&
+		typeof state.container.extensions.mix_and_match !== 'undefined' &&
+		typeof state.container.extensions.mix_and_match.max_container_size !==
 			'undefined'
-		? state.product.extensions.mix_and_match.max_container_size
+		? state.container.extensions.mix_and_match.max_container_size
 		: '';
 };
 

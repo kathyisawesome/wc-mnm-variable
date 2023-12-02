@@ -14,19 +14,19 @@ import StatusUI from '@components/status-ui';
 
 const AddToCart = () => {
 	// Get the child Items from the data store.
-	const { items, product } = useSelect( ( select ) => {
+	const { items, container } = useSelect( ( select ) => {
 		return {
 			items: select( CONTAINER_STORE_KEY ).getChildItems(),
-			product: select( CONTAINER_STORE_KEY ).getProduct(),
+			container: select( CONTAINER_STORE_KEY ).getContainer(),
 		};
 	} );
-
-	const [ containerKey, setContainerKey ] = useState( '' );
 	
+	const [ containerKey, setContainerKey ] = useState( '' );
+
 	const Categories =
-		typeof product.extensions.mix_and_match !== 'undefined' &&
-		typeof product.extensions.mix_and_match.child_categories !== 'undefined'
-			? product.extensions.mix_and_match.child_categories
+		typeof container.extensions.mix_and_match !== 'undefined' &&
+		typeof container.extensions.mix_and_match.child_categories !== 'undefined'
+			? container.extensions.mix_and_match.child_categories
 			: [];
 
 	/**

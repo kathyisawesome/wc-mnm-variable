@@ -16,7 +16,7 @@ import ProductPrice from './product-price';
 const ProductDetails = () => {
 	const { container } = useSelect( ( select ) => {
 		return {
-			container: select( CONTAINER_STORE_KEY ).getProduct(),
+			container: select( CONTAINER_STORE_KEY ).getContainer(),
 		};
 	} );
 

@@ -9,7 +9,7 @@ import { _x } from '@wordpress/i18n';
 import DEFAULT_STATE from './default-state';
 import TYPES from './action-types';
 
-const { HYDRATE_PRODUCT, RESET_CONFIG, SET_CONTEXT, UPDATE_CONFIG, UPDATE_QTY, VALIDATE } =
+const { HYDRATE_CONTAINER, RESET_CONFIG, SET_CONTEXT, UPDATE_CONFIG, UPDATE_QTY, VALIDATE } =
 	TYPES;
 
 /**
@@ -52,14 +52,14 @@ const selectedQtyMessage = function ( qty ) {
 
 const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 	switch ( type ) {
-		case HYDRATE_PRODUCT: {
+		case HYDRATE_CONTAINER: {
 
 			const params = new URLSearchParams( window.location.search );
 			const context = params.get( 'update-container' ) || 'edit' === params.get( 'action' ) ? 'edit' : 'add-to-cart'; // @todo - How can we set this context in the component itself.
 
 			return {
 				...state,
-				product: payload.product,
+				container: payload.container,
 		//		context: context,
 			};
 		}
@@ -126,15 +126,15 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 			const totalQty = calcTotalQty( state.config );
 
 			if (
-				state.product &&
-				state.product.type === 'mix-and-match-variation'
+				state.container &&
+				state.container.type === 'mix-and-match-variation'
 			) {
 				const validationContext = state.context;
 
 				const minContainerSize =
-					state.product.extensions.mix_and_match.min_container_size;
+					state.container.extensions.mix_and_match.min_container_size;
 				const maxContainerSize =
-					state.product.extensions.mix_and_match.max_container_size;
+					state.container.extensions.mix_and_match.max_container_size;
 				const qtyMessage = selectedQtyMessage( totalQty ); // "Selected X total".
 				
 				let errorMessage = '';

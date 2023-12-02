@@ -9,7 +9,7 @@ import { getSetting } from '@woocommerce/settings';
  *
  * @param {number} productId Id of the product to retrieve.
  */
-export function getProduct( productId, variationId ) {
+export function getContainer( productId, variationId ) {
 	return async ( { dispatch } ) => {
 		try {
 
@@ -23,17 +23,17 @@ export function getProduct( productId, variationId ) {
 
 				if ( preloadedVariableData.hasOwnProperty( productId ) ) {
 
-					let product = preloadedVariableData[productId].find(
+					let container = preloadedVariableData[productId].find(
 						( obj ) => obj.id === variationId
 					);
 	
-					if ( typeof product === 'undefined' ) {
-						product = await apiFetch( {
+					if ( typeof container === 'undefined' ) {
+						container = await apiFetch( {
 							path: `/wc/store/v1/products/${ variationId }`,
 						} );
 					}
 
-					dispatch.hydrateProduct( product );
+					dispatch.hydrateContainer( container );
 
 				}
 				

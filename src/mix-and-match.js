@@ -53,13 +53,13 @@ const MixAndMatch = ( { target } ) => {
 	);
 
 	// Listen for variation ID changes.
-	const { product, isLoading } = useSelect(
+	const { container, isLoading } = useSelect(
 		( select ) => {
 			return {
-				product: select( CONTAINER_STORE_KEY ).getProduct( productId, variationId ),
+				container: select( CONTAINER_STORE_KEY ).getContainer( productId, variationId ),
 				isLoading: ! select(
 					CONTAINER_STORE_KEY
-				).hasFinishedResolution( 'getProduct', [ productId, variationId ] ),
+				).hasFinishedResolution( 'getContainer', [ productId, variationId ] ),
 			};
 		},
 		[ variationId ]
@@ -75,13 +75,13 @@ const MixAndMatch = ( { target } ) => {
 		return <Loading />;
 	}
 
-	// Finally load the app when the product is ready.
-	if ( product ) {
-		if ( product.id && ! product.is_purchasable ) {
+	// Finally load the app when the container is ready.
+	if ( container ) {
+		if ( container.id && ! container.is_purchasable ) {
 			return <ProductUnavailable />;
 		}
 
-		if ( product.id && ! product.is_in_stock ) {
+		if ( container.id && ! container.is_in_stock ) {
 			return (
 				<ProductUnavailable
 					reason={ _x(
