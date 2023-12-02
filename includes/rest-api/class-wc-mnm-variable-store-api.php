@@ -61,6 +61,7 @@ class WC_MNM_Variable_Store_API {
 
 		// Preload REST Responses.
 		add_action( 'woocommerce_variable-mix-and-match_add_to_cart', [ __CLASS__, 'preload_response' ] );
+		add_action( is_admin() ? 'admin_print_footer_scripts' : 'wp_print_footer_scripts', array( __CLASS__, 'enqueue_asset_data' ), 0 );
 
 	}
 
@@ -527,7 +528,7 @@ class WC_MNM_Variable_Store_API {
 
 
 	/**
-	 * Preload all variations into WC settings.
+	 * Stash product ID for lazy preloading.
 	 *
 	 * @return object
 	 */
@@ -535,21 +536,51 @@ class WC_MNM_Variable_Store_API {
 	
 		global $product;
 
-		$rest_route = '/wc/store/v1/products/' . $product->get_id() ;
-		
-		Automattic\WooCommerce\Blocks\Package::container()->get( Automattic\WooCommerce\Blocks\Assets\AssetDataRegistry::class )->hydrate_api_request( $rest_route );
-		
-		$rest_preload_api_requests = rest_preload_api_request( [], $rest_route );
+		$preloads = WC_MNM_Helpers::cache_get( 'wcMNMVariablePreloads' );
 
-		$data = $rest_preload_api_requests[$rest_route]['body']['extensions']->variable_mix_and_match['variations'] ?? [];
+		if ( is_array( $preloads ) ) {
+			$preloads[] = $product->get_id();
+			WC_MNM_Helpers::cache_set( 'wcMNMVariablePreloads', $preloads );
+		} elseif ( null === $preloads ) {
+			$preloads = [ $product->get_id() ];
+		}
 
-		// Currently this will only support 1 vmnm product per page.
-        $data_form_location = !empty( $data[0]['extensions']->mix_and_match['form_location'] ) ? $data[0]['extensions']->mix_and_match['form_location'] : '';
+		WC_MNM_Helpers::cache_set( 'wcMNMVariablePreloads', $preloads );
 
-        if( !empty( $data_form_location ) && $data_form_location !== 'after_summary' ){
-            Automattic\WooCommerce\Blocks\Package::container()->get( Automattic\WooCommerce\Blocks\Assets\AssetDataRegistry::class )->add( 'wcMNMVariableSettings', $data );
-        }
 	}
 
+	/**
+	 * Preload all variations into WC settings.
+	 *
+	 * @return object
+	 */
+	public static function enqueue_asset_data() {
+
+		$preloads = WC_MNM_Helpers::cache_get( 'wcMNMVariablePreloads' );
+
+		if ( ! empty( $preloads ) && is_array( $preloads ) ) {
+
+			$data = [];
+
+			$assets = Automattic\WooCommerce\Blocks\Package::container()->get( Automattic\WooCommerce\Blocks\Assets\AssetDataRegistry::class );
+
+			foreach ( $preloads as $product_id ) {
+
+				$rest_route = '/wc/store/v1/products/' . $product_id ;
+
+				$assets->hydrate_api_request( $rest_route );
+
+				$rest_preload_api_requests = rest_preload_api_request( [], $rest_route );
+
+				$data[$product_id] = $rest_preload_api_requests[$rest_route]['body']['extensions']->variable_mix_and_match['variations'] ?? [];
+
+			}
+
+			$assets->add( 'wcMNMVariableSettings', $data );
+
+		}
+	
+	}
+	
 }
 WC_MNM_Variable_Store_API::init();

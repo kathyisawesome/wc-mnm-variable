@@ -102,7 +102,7 @@ if ( ! function_exists( 'wc_mnm_template_single_variation' ) ) {
 
 			$context = apply_filters( 'wc_mnm_variable_validation_context', is_admin() || isset( $_GET['update-container'] ) ? 'edit' : 'add-to-cart', $product );
 
-			echo '<div class="mix-and-match-root woocommerce-variation single_mnm_variation" data-product_id="0" data-validation_context="' . esc_attr( $context ) .'"></div>';
+			echo '<div class="mix-and-match-root woocommerce-variation single_mnm_variation" data-product_id="' . esc_attr( $product->get_id() ) . '" data-variation_id="0" data-validation_context="' . esc_attr( $context ) .'"></div>';
 		}
 	}
 }

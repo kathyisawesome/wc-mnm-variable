@@ -9,28 +9,34 @@ import { getSetting } from '@woocommerce/settings';
  *
  * @param {number} productId Id of the product to retrieve.
  */
-export function getProduct( productId ) {
+export function getProduct( productId, variationId ) {
 	return async ( { dispatch } ) => {
 		try {
+
 			// Only attempt to resolve if there's a product ID here.
-			if ( productId ) {
+			if ( productId && variationId ) {
 
 				const preloadedVariableData = getSetting(
 					'wcMNMVariableSettings',
 					[]
 				);
 
-				let product = preloadedVariableData.find(
-					( obj ) => obj.id === productId
-				);
+				if ( preloadedVariableData.hasOwnProperty( productId ) ) {
 
-				if ( typeof product === 'undefined' ) {
-					product = await apiFetch( {
-						path: `/wc/store/v1/products/${ productId }`,
-					} );
+					let product = preloadedVariableData[productId].find(
+						( obj ) => obj.id === variationId
+					);
+	
+					if ( typeof product === 'undefined' ) {
+						product = await apiFetch( {
+							path: `/wc/store/v1/products/${ variationId }`,
+						} );
+					}
+
+					dispatch.hydrateProduct( product );
+
 				}
-
-				dispatch.hydrateProduct( product );
+				
 			}
 		} catch ( error ) {
 			// @todo: Handle an error here eventually.

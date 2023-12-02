@@ -16,12 +16,21 @@ import { CONTAINER_STORE_KEY } from '@data';
 
 const MixAndMatch = ( { target } ) => {
 	const [ productId, setProductId ] = useState( 0 );
+	const [ variationId, setVariationId ] = useState( 0 );
 
 	// Update the context in the store.
 	const { setContext } = useDispatch( CONTAINER_STORE_KEY );
 
-	// Check the validation context on page load.
+	// Check the product ID and validation context on page load.
 	useEffect( () => {
+
+		const productId =  parseInt( 
+			target.getAttribute( 'data-product_id' ),
+			10
+		);
+
+		setProductId( productId );
+
 		const context = target.getAttribute( 'data-validation_context' );
 		setContext( context );
 	}, [] );
@@ -32,32 +41,32 @@ const MixAndMatch = ( { target } ) => {
 		( mutations ) => {
 			for ( const mutation of mutations ) {
 				if ( mutation.type === 'attributes' ) {
-					const newProductId = parseInt(
-						mutation.target.getAttribute( 'data-product_id' ),
+					const newVariationId = parseInt(
+						mutation.target.getAttribute( 'data-variation_id' ),
 						10
 					);
-					setProductId( newProductId );
+					setVariationId( newVariationId );
 				}
 			}
 		},
 		{ attributes: true }
 	);
 
-	// Listen for product ID changes.
+	// Listen for variation ID changes.
 	const { product, isLoading } = useSelect(
 		( select ) => {
 			return {
-				product: select( CONTAINER_STORE_KEY ).getProduct( productId ),
+				product: select( CONTAINER_STORE_KEY ).getProduct( productId, variationId ),
 				isLoading: ! select(
 					CONTAINER_STORE_KEY
-				).hasFinishedResolution( 'getProduct', [ productId ] ),
+				).hasFinishedResolution( 'getProduct', [ productId, variationId ] ),
 			};
 		},
-		[ productId ]
+		[ variationId ]
 	);
 
 	// Quietly return nothing if there's no product ID. Prevents a failed fetch for variable MNM until a variation is selected.
-	if ( ! productId ) {
+	if ( ! variationId ) {
 		return;
 	}
 

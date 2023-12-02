@@ -172,7 +172,7 @@
 
 			event.currentTarget
 				.querySelector( '.mix-and-match-root' )
-				.setAttribute( 'data-product_id', variation.variation_id );
+				.setAttribute( 'data-variation_id', variation.variation_id );
 
 			// Dynamically store variation ID in place that is automatically include in submit data when editing container.
 			$( event.target ).data( 'variation_id', variation.variation_id );
@@ -211,7 +211,7 @@
 
 		event.currentTarget
 			.querySelector( '.mix-and-match-root' )
-			.setAttribute( 'data-product_id', '' );
+			.setAttribute( 'data-variation_id', '' );
 
 		form.$selectors.prop( 'checked', false );
 
