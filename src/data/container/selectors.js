@@ -32,6 +32,10 @@ export const getTotalQty = ( state ) => {
 	return state.totalQty;
 };
 
+export const getSubTotal = ( state ) => {
+	return state.container.prices.price / 100;
+};
+
 export const getContainer = ( state ) => {
 	return state.container;
 };

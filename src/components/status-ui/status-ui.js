@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { useSelect } from '@wordpress/data';
+import { Interweave } from 'interweave';
 
 /**
  * Internal dependencies
@@ -9,9 +10,12 @@ import { useSelect } from '@wordpress/data';
 import { CONTAINER_STORE_KEY } from '@data/container';
 
 const StatusUI = () => {
-	const { messages, totalQty, isValid } = useSelect( ( select ) => {
+	const { maxContainerSize, subTotal, messages, totalQty, isValid } = useSelect( ( select ) => {
 		return {
-			hasChildItems: select( CONTAINER_STORE_KEY ).hasChildItems(),
+			maxContainerSize: select( CONTAINER_STORE_KEY ).getMaxContainerSize(),
+			totalQty: select( CONTAINER_STORE_KEY ).getTotalQty(),
+			subTotal: select( CONTAINER_STORE_KEY ).getSubTotal(),
+
 			messages: select( CONTAINER_STORE_KEY ).isValid()
 				? select( CONTAINER_STORE_KEY ).getMessages( 'status' )
 				: select( CONTAINER_STORE_KEY ).getMessages( 'errors' ),
@@ -21,8 +25,26 @@ const StatusUI = () => {
 
 	const errorClass = ! isValid ? 'woocommerce-error' : '';
 
+	let formattedTotal = 1 === maxContainerSize ? wc_mnm_params.i18n_quantity_format_counter_single : wc_mnm_params.i18n_quantity_format_counter;
+
+	let max = maxContainerSize || _x(
+		'∞',
+		'[Frontend]',
+		'wc-mnm-variable'
+	);
+		
+	formattedTotal = formattedTotal.replace( '%max', max ).replace( '%s', totalQty );
+
+	let formattedStatus = wc_mnm_params.i18n_status_format.replace( '%v', wc_mnm_price_format(subTotal) ).replace( '%s', formattedTotal );
+
 	return (
 		<div className="mnm_status">
+			<p className="mnm_price">
+				<span className="wc-mnm-block-child-item__product-price">
+					<Interweave content={ formattedStatus } />
+				</span>
+			</p>
+
 			<div
 				aria-live="polite"
 				role="status"
