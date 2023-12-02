@@ -7,7 +7,7 @@ const ProductUnavailable = ( {
 	reason = _x(
 		'Sorry, this product cannot be purchased.',
 		'[Frontend]',
-		'woo-gutenberg-products-block'
+		'wc-mnm-variable'
 	),
 } ) => {
 	return (

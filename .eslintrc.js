@@ -13,7 +13,7 @@ module.exports = {
 		'@wordpress/i18n-text-domain': [
 			'error',
 			{
-				allowedTextDomain: [ 'woo-gutenberg-products-block' ],
+				allowedTextDomain: [ 'wc-mnm-variable' ],
 			},
 		],
 		'@typescript-eslint/no-restricted-imports': [

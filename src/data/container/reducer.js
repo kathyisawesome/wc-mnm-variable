@@ -271,7 +271,7 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 					_x(
 						'This is not a valid Mix and Match variation and cannot be purchased.',
 						'[Frontend]',
-						'woo-gutenberg-products-block'
+						'wc-mnm-variable'
 					)
 				);
 			}

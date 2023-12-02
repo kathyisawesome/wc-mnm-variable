@@ -23,7 +23,7 @@ const ProductImage = ( {
 					_x(
 						'Product Image',
 						'[Frontend]',
-						'woo-gutenberg-products-block'
+						'wc-mnm-variable'
 					),
 				className:
 					'attachment-woocommerce_thumbnail size-woocommerce_thumbnail',

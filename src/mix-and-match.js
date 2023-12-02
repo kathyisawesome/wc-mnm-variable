@@ -78,7 +78,7 @@ const MixAndMatch = ( { target } ) => {
 					reason={ _x(
 						'This product is currently out of stock and cannot be purchased.',
 						'[Frontend]',
-						'woo-gutenberg-products-block'
+						'wc-mnm-variable'
 					) }
 				/>
 			);

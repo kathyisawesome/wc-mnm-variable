@@ -67,14 +67,14 @@ const ChildItems = ( { childItems, childCategories, isReset } ) => {
 							{ _x(
 								'Product',
 								'[Frontend]',
-								'woo-gutenberg-products-block'
+								'wc-mnm-variable'
 							) }
 						</th>
 						<th>
 							{ _x(
 								'Quantity',
 								'[Frontend]',
-								'woo-gutenberg-products-block'
+								'wc-mnm-variable'
 							) }
 						</th>
 					</tr>

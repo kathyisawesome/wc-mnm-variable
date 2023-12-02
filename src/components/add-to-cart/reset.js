@@ -32,7 +32,7 @@ const Reset = () => {
 				{ _x(
 					'Clear selections',
 					'[Frontend]',
-					'woo-gutenberg-products-block'
+					'wc-mnm-variable'
 				) }
 			</button>
 		);

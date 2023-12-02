@@ -288,7 +288,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 			_x(
 				'&times;%1d <span class="screen-reader-text">%2$s</span>',
 				'[Frontend]',
-				'woo-gutenberg-products-block'
+				'wc-mnm-variable'
 			),
 			max,
 			childItem.name
@@ -322,7 +322,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 			_x(
 				'Add %1d <span class="screen-reader-text">%2$s</span>',
 				'[Frontend]',
-				'woo-gutenberg-products-block'
+				'wc-mnm-variable'
 			),
 			max,
 			childItem.name
