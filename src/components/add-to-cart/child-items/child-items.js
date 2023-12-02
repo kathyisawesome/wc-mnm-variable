@@ -152,7 +152,7 @@ const ChildItems = ( { childItems, childCategories, isReset } ) => {
 		<div
 			className={ `mnm-variable-product mnm_child_products wc-block-${ displayLayout } has-${ numColumns }-columns ${ hasRows } ${ mobile_optimized }` }
 		>
-			{ childCategories.length
+			{ Object.keys( childCategories ).length
 				? getCategoryItems( childCategories, childItems )
 				: getItems( childItems ) }
 		</div>
