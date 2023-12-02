@@ -9,7 +9,7 @@ import { _x } from '@wordpress/i18n';
 import ChildItem from './child-item';
 import { ChildProvider } from '@context';
 
-const ChildItems = ( { childItems, childCategories, isReset } ) => {
+const ChildItems = ( { childItems, childCategories } ) => {
 	const numColumns = WC_MNM_ADD_TO_CART_REACT_PARAMS.num_columns;
 	const displayLayout = WC_MNM_ADD_TO_CART_REACT_PARAMS.display_layout;
 	const hasRows = childItems.length > numColumns ? 'has-multilpe-rows' : '';
