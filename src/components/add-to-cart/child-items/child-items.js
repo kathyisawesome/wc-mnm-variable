@@ -35,9 +35,10 @@ const ChildItems = ( { childItems, childCategories } ) => {
 		return '';
 	};
 
-	const getItems = ( childProducts ) => {
+	const getItems = ( childProducts, categoryId ) => {
+
 		return displayLayout === 'grid' ? (
-			<div className="grid">
+			<div className="grid" key={categoryId || 0} >
 				<ul
 					className={ `products mnm_child_products grid has-flex columns-${ numColumns }` }
 				>
@@ -57,6 +58,7 @@ const ChildItems = ( { childItems, childCategories } ) => {
 			</div>
 		) : (
 			<table
+				key={categoryId || 0}
 				cellSpacing="0"
 				className="products mnm_child_products tabular mnm_table shop_table"
 			>
@@ -138,7 +140,7 @@ const ChildItems = ( { childItems, childCategories } ) => {
 									  ]
 									: displayItems;
 								return displayItems.length
-									? getItems( displayItems )
+									? getItems( displayItems, categoryId )
 									: '';
 							}
 						} ) }
