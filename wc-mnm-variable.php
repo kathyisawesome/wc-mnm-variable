@@ -185,10 +185,10 @@ class WC_MNM_Variable {
 		include_once 'includes/data-stores/class-wc-product-variable-mix-and-match-data-store-cpt.php';
 		include_once 'includes/data-stores/class-wc-product-mix-and-match-variation-data-store-cpt.php';
 
-		// Compatibility
+		// Compatibility.
 		include_once 'includes/compatibility/class-wc-mnm-variable-compatibility.php';
 
-		// REST API
+		// REST API.
 		include_once 'includes/rest-api/class-wc-mnm-variable-rest-api.php';
 		include_once 'includes/rest-api/class-wc-mnm-variable-store-api.php';
 
@@ -943,6 +943,15 @@ class WC_MNM_Variable {
 		return trailingslashit( plugin_dir_path( __FILE__ ) );
 	}
 
+
+	/**
+	 * Get the plugin basename.
+	 *
+	 * @return string
+	 */
+	public function get_plugin_basename() {
+		return plugin_basename( __FILE__ );	
+	}
 }
 /*
 |--------------------------------------------------------------------------
