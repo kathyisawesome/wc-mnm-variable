@@ -56,8 +56,8 @@ const ProductDetails = () => {
 				/>
 			) }
 
-			{ container.mnm_priced_per_product && (
-				<ProductPrice priceString={ childItem.price_html } />
+			{ container.priced_per_product && (
+				<ProductPrice priceString={ price_html } />
 			) }
 		</div>
 	);
