@@ -802,6 +802,7 @@ trait WC_MNM_Container {
 					}
 				} else {
 					$price = sprintf(
+						// translators: %s is a formatted price, ex:  Starting at $99
                         _x( 'Starting at %s', '[Frontend]Price range, ex:  Starting at $99', 'wc-mnm-variable' ),
 						wc_format_sale_price( $this->get_container_regular_price( 'min' ), $this->get_container_price( 'min' ) )
 					);

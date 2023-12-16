@@ -148,6 +148,7 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 
 			<fieldset id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $class );?>">
 
+				<?php // translators: %s is an attribute label coming from the taxonomy args, ex: Choose Color. ?>
 				<legend><?php printf( esc_html_x( 'Choose %s', '[Frontend] attribute label', 'wc-mnm-variable' ), wc_attribute_label( $args['attribute'] ) ); ?></legend>
 
 				<ul class="variations wc-mnm-variations <?php echo esc_attr( count( $available_variations ) % 3 === 0 ? 'columns-3' : 'columns-2' ); ?>">
