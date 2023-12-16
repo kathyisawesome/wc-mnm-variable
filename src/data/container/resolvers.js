@@ -21,21 +21,23 @@ export function getContainer( productId, variationId ) {
 					[]
 				);
 
+				let container = false;
+
 				if ( preloadedVariableData.hasOwnProperty( productId ) ) {
 
-					let container = preloadedVariableData[productId].find(
+					container = preloadedVariableData[productId].find(
 						( obj ) => obj.id === variationId
 					);
-	
-					if ( typeof container === 'undefined' ) {
-						container = await apiFetch( {
-							path: `/wc/store/v1/products/${ variationId }`,
-						} );
-					}
-
-					dispatch.hydrateContainer( container );
 
 				}
+
+				if ( typeof container !== 'object' ) {
+					container = await apiFetch( {
+						path: `/wc/store/v1/products/${ variationId }`,
+					} );
+				}
+
+				dispatch.hydrateContainer( container );
 				
 			}
 		} catch ( error ) {
