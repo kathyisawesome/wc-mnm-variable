@@ -25,7 +25,7 @@ Right now you will see a Release Candidate as the latest 1.x version and Beta as
 
 1. This is provided _as is_ and does not receive priority support.
 2. Please test thoroughly before using in production.
-3. Requires Mix and Match 2.2.0+
+3. Requires Mix and Match 2.6.0+
 
 ### Automatic plugin updates
 

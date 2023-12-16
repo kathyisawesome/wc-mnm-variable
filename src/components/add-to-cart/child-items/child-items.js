@@ -99,23 +99,23 @@ const ChildItems = ( { childItems, childCategories } ) => {
 		let displayItems = [];
 		let displayedItems = [];
 
-		return Object.entries( categories ).map(
-			( [ categoryId, categoryName ] ) => {
+		return categories.map(
+			( category ) => {
 				displayItems = [];
 
 				return (
 					<div
-						key={ categoryId }
-						className={ `product-category product-category-${ categoryName }` }
+						key={ category.term_id }
+						className={ `product-category product-category-${ category.name }` }
 					>
 						<h2 className="woocommerce-loop-category_xtitle">
-							{ categoryName }
+							{ category.name }
 						</h2>
 						{ childItems.map( ( childItem, index ) => {
 							if (
 								childItem.category_ids.some(
 									( item ) =>
-										Number( item ) === Number( categoryId )
+										Number( item ) === Number( category.term_id )
 								) &&
 								( displayedItems.length === 0 ||
 									! displayedItems.some(
@@ -140,15 +140,14 @@ const ChildItems = ( { childItems, childCategories } ) => {
 									  ]
 									: displayItems;
 								return displayItems.length
-									? getItems( displayItems, categoryId )
+									? getItems( displayItems, category.term_id )
 									: '';
 							}
 						} ) }
 					</div>
 				);
-			}
-		);
-	};
+			} )
+		};
 
 	return (
 		<div

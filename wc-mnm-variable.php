@@ -13,8 +13,8 @@
  * Primary Branch: trunk
  * Release Asset: true
  * 
- * WC requires at least: 6.9.0
- * WC tested up to: 7.0.0
+ * WC requires at least: 8.0.0
+ * WC tested up to: 8.3.0
  * Requires at least: 6.0.0
  * Requires PHP: 7.4
  *
@@ -31,8 +31,8 @@ use Automattic\Jetpack\Constants;
 class WC_MNM_Variable {
 
 	const VERSION = '2.0.0-beta.1';
-	const REQ_MNM_VERSION = '2.4.0-beta.5';
-	const REQ_WC_VERSION  = '6.9.0'; // @todo -check this.
+	const REQ_WC_VERSION  = '8.0.0';
+	const REQ_MNM_VERSION = '2.6.0';
 
 	/**
 	 * The single instance of the class.
@@ -64,6 +64,11 @@ class WC_MNM_Variable {
 	 * Attach hooks and filters
 	 */
 	public function attach_hooks_and_filters() {
+
+		// Quietly quit if Woo is not active or below required version.
+		if ( ! function_exists( 'wc' ) || version_compare( wc()->version, self::REQ_WC_VERSION ) < 0 ) {
+			return false;
+		}
 
 		// Quietly quit if Mix and Match is not active.
 		if ( ! function_exists( 'wc_mix_and_match' ) || version_compare( wc_mix_and_match()->version, self::REQ_MNM_VERSION ) < 0 ) {
