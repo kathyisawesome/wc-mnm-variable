@@ -10,7 +10,7 @@
     },
     "scripts": {
       "makepot-audit": [
-        "wp --allow-root i18n make-pot . languages/wc-mnm-reactified.pot --slug=wc-mnm-reactified --exclude=\".github,.wordpress-org,node_modules,vendor,build,deploy\" --headers=\"Report-Msgid-Bugs-To: https://woocommerce.com/my-account/tickets/\n\""
+        "wp --allow-root i18n make-pot . languages/wc-mnm-variable.pot --slug=wc-mnm-variable --exclude=\".github,.wordpress-org,node_modules,vendor,build,deploy\" '--headers=[\"Report-Msgid-Bugs-To: https://woocommerce.com/my-account/tickets/\"]'"
       ],
       "makepot": [
         "@makepot-audit --skip-audit"
