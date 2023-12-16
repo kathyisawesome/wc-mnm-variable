@@ -232,7 +232,7 @@ class WC_MNM_Variable {
 	 * Make the plugin translation ready
 	 */
 	public function load_plugin_textdomain() {
-		load_plugin_textdomain( 'wc-mnm-variable-mix-and-match' , false , dirname( plugin_basename( __FILE__ ) ) .  '/languages/' );
+		load_plugin_textdomain( 'wc-mnm-variable' , false , dirname( plugin_basename( __FILE__ ) ) .  '/languages/' );
 	}
 
 	/*
