@@ -168,8 +168,6 @@
 		if ( variation.variation_is_visible ) {
 			const $target = form.$mnmVariation;
 
-			// form.$mnmVariation.data( 'product_id', variation.variation_id );
-
 			event.currentTarget
 				.querySelector( '.mix-and-match-root' )
 				.setAttribute( 'data-variation_id', variation.variation_id );
