@@ -246,22 +246,6 @@ module.exports = function ( grunt ) {
 			},
 		},
 
-		// Generate .pot file
-		makepot: {
-			target: {
-				options: {
-					domainPath: '/languages', // Where to save the POT file.
-					exclude: [ 'deploy', 'build', 'node_modules' ], // List of files or directories to ignore.
-					mainFile: '<%= pkg.name %>.php', // Main project file.
-					potFilename: '<%= pkg.name %>.pot', // Name of the POT file.
-					type: 'wp-plugin', // Type of project (wp-plugin or wp-theme).
-					potHeaders: {
-						'Report-Msgid-Bugs-To': '<%= pkg.bugs.issues %>',
-					},
-				},
-			},
-		},
-
 		// bump version numbers (replace with version in package.json)
 		replace: {
 			release: {
@@ -331,13 +315,12 @@ module.exports = function ( grunt ) {
 	grunt.registerTask( 'zip', [ 'clean', 'copy', 'compress' ] );
 
 	grunt.registerTask( 'dev', [ 'replace:prerelease', 'assets' ] );
-	grunt.registerTask( 'build', [ 'dev', 'addtextdomain', 'makepot' ] );
+	grunt.registerTask( 'build', [ 'dev', 'addtextdomain' ] );
 	grunt.registerTask( 'prerelease', [ 'build', 'zip', 'clean' ] );
 	grunt.registerTask( 'release', [
 		'replace:release',
 		'assets',
 		'addtextdomain',
-		'makepot',
 		'build',
 		'zip',
 		'clean',
