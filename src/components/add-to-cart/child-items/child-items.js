@@ -108,9 +108,9 @@ const ChildItems = ( { childItems, childCategories } ) => {
 						key={ category.term_id }
 						className={ `product-category product-category-${ category.name }` }
 					>
-						<h2 className="woocommerce-loop-category_xtitle">
+						<h3 className="woocommerce-loop-category_xtitle">
 							{ category.name }
-						</h2>
+						</h3>
 						{ childItems.map( ( childItem, index ) => {
 							if (
 								childItem.category_ids.some(
