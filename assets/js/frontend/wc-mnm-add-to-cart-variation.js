@@ -21,8 +21,6 @@
 		self.validation_context =
 			$form.data( 'validation_context' ) || 'add-to-cart';
 
-		self.storedConfig = [];
-
 		// Add MNM container class.
 		self.$form.addClass( 'mnm_form variations_form' );
 
@@ -63,40 +61,6 @@
 			{ mnmVariationForm: self },
 			self.onChange
 		);
-
-		// Stash the configuration for later.
-		$form.on(
-			'wc-mnm-container-quantities-updated',
-			function ( event, container ) {
-				self.storedConfig = container.api.get_container_config();
-			}
-		);
-		// Persist config when switching between variations (as much as possible given  quantities).
-		$form.on( 'wc-mnm-initializing', function ( event, container ) {
-			const storedConfig = self.storedConfig; // Set here as child_item.update_quantity() is going to wipe out the container.storedConfig on first pass through for loop.
-			const maxContainerSize = container.api.get_max_container_size();
-
-			if (
-				! isNaN( maxContainerSize ) &&
-				container.child_items.length &&
-				Object.keys( storedConfig ).length
-			) {
-				// Add up quantities.
-				for ( const child_item of container.child_items ) {
-					const slotsRemaining =
-						maxContainerSize - container.api.get_container_size();
-					const newQty =
-						storedConfig[ child_item.get_item_id() ] || 0;
-
-					if ( slotsRemaining - newQty >= 0 ) {
-						child_item.update_quantity( newQty );
-					} else {
-						child_item.update_quantity( slotsRemaining );
-						break;
-					}
-				}
-			}
-		} );
 
 		// Add data to ajax submit when editing a container.
 		$( document ).on(
@@ -203,9 +167,6 @@
 			form.$form.trigger( 'check_radio_variations' );
 			return false;
 		}
-
-		// Reset stored config.
-		form.storedConfig = [];
 
 		event.currentTarget
 			.querySelector( '.mix-and-match-root' )
