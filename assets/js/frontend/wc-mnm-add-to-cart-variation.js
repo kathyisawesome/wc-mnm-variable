@@ -29,9 +29,11 @@
 
 		// Events.
 
-		// Slight hack to disable add to cart button.
-		document.addEventListener( 'wc-mnm-updated', ( e ) => {
+		// Listen for Data Store updates.
+		// Disabled add to cart button and stash the config on the form attributes for use when saving in admin.
+		document.addEventListener( 'wc/mnm/container/container-updated', ( e ) => {
 			self.$addToCart.toggleClass( 'disabled', ! e.detail.isValid );
+			self.$form.data( 'config', e.detail.config );
 		} );
 
 		$form.on(
@@ -221,13 +223,17 @@
 	};
 
 	/**
-	 * Add variation_id to $_POST
+	 * Add data to $_POST for editing in admin.
 	 *
 	 * @param event
 	 */
 	WC_MNM_Variation_Form.prototype.addVariationData = function ( event ) {
 		const form = event.data.mnmVariationForm;
-		return { variation_id: form.$form.data( 'variation_id' ) || 0 };
+
+		return {
+			variation_id: form.$form.data( 'variation_id' ) || 0,
+			config: form.$form.data( 'config' ) || {}		
+		};
 	};
 
 	/**
