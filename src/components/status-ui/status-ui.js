@@ -23,8 +23,6 @@ const StatusUI = () => {
 		};
 	} );
 
-	const errorClass = ! isValid ? 'woocommerce-error' : '';
-
 	let formattedTotal = 1 === maxContainerSize ? wc_mnm_params.i18n_quantity_format_counter_single : wc_mnm_params.i18n_quantity_format_counter;
 
 	let max = maxContainerSize || _x(
@@ -38,7 +36,7 @@ const StatusUI = () => {
 	let formattedStatus = wc_mnm_params.i18n_status_format.replace( '%v', wc_mnm_price_format(subTotal) ).replace( '%s', formattedTotal );
 
 	return (
-		<div className="mnm_status">
+		<div className={`mnm_status ${isValid ? 'passes_validation' : 'fails_validation'}`}>
 			<p className="mnm_price">
 				<span className="wc-mnm-block-child-item__product-price">
 					<Interweave content={ formattedStatus } />
@@ -48,7 +46,7 @@ const StatusUI = () => {
 			<div
 				aria-live="polite"
 				role="status"
-				className={ `mnm_message woocommerce-message ${ errorClass }` }
+				className={ `mnm_message woocommerce-message ${ ! isValid ? 'woocommerce-error' : '' }` }
 				style={ { display: 'block' } }
 			>
 				<ul className="msg mnm_message_content">
