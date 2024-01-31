@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import { _x } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import { Interweave } from 'interweave';
 
