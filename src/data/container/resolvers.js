@@ -7,34 +7,29 @@ import { getSetting } from '@woocommerce/settings';
 /**
  * Fetch a product object from the Store API.
  *
- * @param {number} productId Id of the product to retrieve.
+ * @param {number} containerId Id of the product|variation to retrieve.
  */
-export function getContainer( productId, variationId ) {
+export function getContainer( containerId ) {
 	return async ( { dispatch } ) => {
 		try {
 
 			// Only attempt to resolve if there's a product ID here.
-			if ( productId && variationId ) {
+			if ( containerId ) {
 
 				const preloadedVariableData = getSetting(
 					'wcMNMVariableSettings',
 					[]
 				);
 
-				let container = false;
-
-				if ( preloadedVariableData.hasOwnProperty( productId ) ) {
-
-					container = preloadedVariableData[productId].find(
-						( obj ) => obj.id === variationId
-					);
-
-				}
-
+				let container = preloadedVariableData.find(
+					( obj ) => obj.id === containerId
+				);
+			
 				if ( typeof container !== 'object' ) {
 					container = await apiFetch( {
-						path: `/wc/store/v1/products/${ variationId }`,
+						path: `/wc/store/v1/products/${ containerId }`,
 					} );
+
 				}
 
 				dispatch.hydrateContainer( container );

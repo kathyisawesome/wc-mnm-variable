@@ -156,7 +156,9 @@ class WC_MNM_Variable_Store_API {
 
 				$rest_preload_api_requests = rest_preload_api_request( [], $rest_route );
 
-				$data[$product_id] = $rest_preload_api_requests[$rest_route]['body']['extensions']->variable_mix_and_match['variations'] ?? [];
+				$variation_data = $rest_preload_api_requests[$rest_route]['body']['extensions']->variable_mix_and_match['variations'] ?? [];
+
+				$data = array_merge( $data, $variation_data );
 
 			}
 
