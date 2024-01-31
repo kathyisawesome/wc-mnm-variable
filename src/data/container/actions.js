@@ -7,10 +7,17 @@ import { useDispatch } from '@wordpress/data';
  * Internal dependencies
  */
 import TYPES from './action-types';
-const { HYDRATE_CONTAINER, RESET_CONFIG, SET_CONTEXT, UPDATE_CONFIG, UPDATE_QTY, VALIDATE } =
+const { SET_CONTAINER_ID, HYDRATE_CONTAINER, RESET_CONFIG, SET_CONTEXT, UPDATE_CONFIG, UPDATE_QTY, VALIDATE } =
 	TYPES;
 
 import { CONTAINER_STORE_KEY } from '@data';
+// Set the product ID.
+export const setContainerId =
+	( containerId ) =>
+	( { select, dispatch } ) => {
+		dispatch( { type: SET_CONTAINER_ID, payload: { containerId } } );
+
+	};
 
 // Set the product.
 export const hydrateContainer =

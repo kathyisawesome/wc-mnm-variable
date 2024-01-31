@@ -9,7 +9,7 @@ import { getSetting } from '@woocommerce/settings';
  *
  * @param {number} containerId Id of the product|variation to retrieve.
  */
-export function getContainer( containerId ) {
+export function getContainerById( containerId ) {
 	return async ( { dispatch } ) => {
 		try {
 
@@ -33,11 +33,14 @@ export function getContainer( containerId ) {
 				}
 
 				dispatch.hydrateContainer( container );
+
+				return container;
 				
 			}
 		} catch ( error ) {
 			// @todo: Handle an error here eventually.
 			console.error( error );
+			return {};
 		}
 	};
 }

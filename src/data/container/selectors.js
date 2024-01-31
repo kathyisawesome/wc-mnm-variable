@@ -33,41 +33,70 @@ export const getTotalQty = ( state ) => {
 };
 
 export const getSubTotal = ( state ) => {
-	return state.container.prices.price / 100;
+	const container = getContainer( state );
+	return container.prices.price / 100;
+};
+
+export const isLoading = ( state ) => {
+	return state.loading;
+};
+
+export const getContainerId = ( state ) => {
+	return state.containerId;
+};
+
+export const getContainerById = (state, id) => {
+	return state.containers[id];
 };
 
 export const getContainer = ( state ) => {
-	return state.container;
+	return state.containers.hasOwnProperty(state.containerId)
+    ? state.containers[state.containerId]
+    : {};
 };
 
 export const getChildItems = ( state ) => {
-	return state.container &&
-		typeof state.container.extensions.mix_and_match !== 'undefined' &&
-		typeof state.container.extensions.mix_and_match.child_items !==
+	const container = getContainer( state );
+
+	return container &&
+		typeof container.extensions.mix_and_match !== 'undefined' &&
+		typeof container.extensions.mix_and_match.child_items !==
 			'undefined'
-		? state.container.extensions.mix_and_match.child_items
+		? container.extensions.mix_and_match.child_items
 		: [];
 };
+
+export const hasValidContainer = ( state ) => {
+	const container = getContainer( state );
+	return container.hasOwnProperty('id');
+};
+
 
 export const hasChildItems = ( state ) => {
 	return getChildItems( state ).length;
 };
 
 export const getMinContainerSize = ( state ) => {
+
+	const container = getContainer( state );
+
 	return state.container &&
-		typeof state.container.extensions.mix_and_match !== 'undefined' &&
-		typeof state.container.extensions.mix_and_match.min_container_size !==
+		typeof container.extensions.mix_and_match !== 'undefined' &&
+		typeof container.extensions.mix_and_match.min_container_size !==
 			'undefined'
-		? state.container.extensions.mix_and_match.min_container_size
+		? container.extensions.mix_and_match.min_container_size
 		: 0;
 };
 
 export const getMaxContainerSize = ( state ) => {
-	return state.container &&
-		typeof state.container.extensions.mix_and_match !== 'undefined' &&
-		typeof state.container.extensions.mix_and_match.max_container_size !==
+
+	const container = getContainer( state );
+
+	return container &&
+		typeof container.extensions.mix_and_match !== 'undefined' &&
+		typeof container.extensions.mix_and_match.max_container_size !==
 			'undefined'
-		? state.container.extensions.mix_and_match.max_container_size
+		? container.extensions.mix_and_match.max_container_size
 		: '';
 };
 

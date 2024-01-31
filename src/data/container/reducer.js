@@ -9,7 +9,7 @@ import { _x } from '@wordpress/i18n';
 import DEFAULT_STATE from './default-state';
 import TYPES from './action-types';
 
-const { HYDRATE_CONTAINER, RESET_CONFIG, SET_CONTEXT, UPDATE_CONFIG, UPDATE_QTY, VALIDATE } =
+const { SET_CONTAINER_ID, HYDRATE_CONTAINER, RESET_CONFIG, SET_CONTEXT, UPDATE_CONFIG, UPDATE_QTY, VALIDATE } =
 	TYPES;
 
 /**
@@ -52,6 +52,13 @@ const selectedQtyMessage = function ( qty ) {
 
 const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 	switch ( type ) {
+
+		case SET_CONTAINER_ID:
+      		return {
+				...state,
+				containerId: payload.containerId
+			};
+
 		case HYDRATE_CONTAINER: {
 
 			const params = new URLSearchParams( window.location.search );
@@ -59,7 +66,10 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 
 			return {
 				...state,
-				container: payload.container,
+				containers: {
+					...state.containers,
+					[payload.container.id]: payload.container,
+				  },
 		//		context: context,
 			};
 		}
@@ -119,6 +129,7 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 			};
 
 		case VALIDATE:
+		
 			const messages = {
 				status: [],
 				errors: [],
@@ -126,15 +137,16 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 			const totalQty = calcTotalQty( state.config );
 
 			if (
-				state.container &&
-				state.container.type === 'mix-and-match-variation'
+				state.containers.hasOwnProperty( state.containerId ) &&
+				state.containers[state.containerId].hasOwnProperty('type') &&
+				state.containers[state.containerId].type === 'mix-and-match-variation'
 			) {
 				const validationContext = state.context;
 
 				const minContainerSize =
-					state.container.extensions.mix_and_match.min_container_size;
+					state.containers[state.containerId].extensions.mix_and_match.min_container_size;
 				const maxContainerSize =
-					state.container.extensions.mix_and_match.max_container_size;
+					state.containers[state.containerId].extensions.mix_and_match.max_container_size;
 				const qtyMessage = selectedQtyMessage( totalQty ); // "Selected X total".
 				
 				let errorMessage = '';

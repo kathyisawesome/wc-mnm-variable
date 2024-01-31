@@ -1,6 +1,7 @@
 // Initial State
 const DEFAULT_STATE = {
-	container: null,
+	containers: {},
+	containerId: null,
 	selections: [],
 	config: {},
 	totalQty: 0,

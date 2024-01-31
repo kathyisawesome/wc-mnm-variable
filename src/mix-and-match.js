@@ -15,22 +15,12 @@ import ProductUnavailable from '@components/add-to-cart/product-unavailable';
 import { CONTAINER_STORE_KEY } from '@data';
 
 const MixAndMatch = ( { target } ) => {
-	const [ productId, setProductId ] = useState( 0 );
-	const [ variationId, setVariationId ] = useState( 0 );
 
 	// Update the context in the store.
-	const { setContext } = useDispatch( CONTAINER_STORE_KEY );
+	const { setContext, setContainerId } = useDispatch( CONTAINER_STORE_KEY );
 
 	// Check the product ID and validation context on page load.
 	useEffect( () => {
-
-		const productId =  parseInt( 
-			target.getAttribute( 'data-product_id' ),
-			10
-		);
-
-		setProductId( productId );
-
 		const context = target.getAttribute( 'data-validation_context' );
 		setContext( context );
 	}, [] );
@@ -41,34 +31,34 @@ const MixAndMatch = ( { target } ) => {
 		( mutations ) => {
 			for ( const mutation of mutations ) {
 				if ( mutation.type === 'attributes' ) {
-					const newVariationId = parseInt(
+					const variationId = parseInt(
 						mutation.target.getAttribute( 'data-variation_id' ),
 						10
 					);
-					setVariationId( newVariationId );
+
+					setContainerId(variationId);
+
 				}
 			}
 		},
 		{ attributes: true }
 	);
 
-	// Listen for variation ID changes.
-	const { container, isLoading } = useSelect(
+	// Get container from the store.
+	const { container, isLoading , hasValidContainer } = useSelect(
 		( select ) => {
-			return {
-				container: select( CONTAINER_STORE_KEY ).getContainer( productId, variationId ),
-				isLoading: ! select(
-					CONTAINER_STORE_KEY
-				).hasFinishedResolution( 'getContainer', [ productId, variationId ] ),
-			};
-		},
-		[ variationId ]
-	);
 
-	// Quietly return nothing if there's no product ID. Prevents a failed fetch for variable MNM until a variation is selected.
-	if ( ! variationId ) {
-		return;
-	}
+			const { getContainerId, getContainerById, hasValidContainer } = select(CONTAINER_STORE_KEY);
+
+			const containerId = getContainerId();
+
+			return {
+				container: getContainerById( containerId ),
+				isLoading: select(CONTAINER_STORE_KEY).isResolving( 'getContainerById', [ containerId ] ),
+				hasValidContainer: hasValidContainer(),
+			};
+		}
+	);
 
 	// Loading state.
 	if ( isLoading ) {
@@ -76,7 +66,8 @@ const MixAndMatch = ( { target } ) => {
 	}
 
 	// Finally load the app when the container is ready.
-	if ( container ) {
+	if ( hasValidContainer ) {
+
 		if ( container.id && ! container.is_purchasable ) {
 			return <ProductUnavailable />;
 		}
