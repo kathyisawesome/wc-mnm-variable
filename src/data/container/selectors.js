@@ -103,3 +103,19 @@ export const getMaxContainerSize = ( state ) => {
 export const isValid = ( state ) => {
 	return state.isValid;
 };
+
+export const getFormattedStatus = ( state ) => {
+
+	let maxContainerSize = getMaxContainerSize( state ) || _x(
+		'∞',
+		'[Frontend]',
+		'wc-mnm-variable'
+	);
+
+	let formattedTotal = 1 === maxContainerSize ? wc_mnm_params.i18n_quantity_format_counter_single : wc_mnm_params.i18n_quantity_format_counter;
+		
+	formattedTotal = formattedTotal.replace( '%max', maxContainerSize ).replace( '%s', getTotalQty( state ) );
+
+	return wc_mnm_params.i18n_status_format.replace( '%v', wc_mnm_price_format( getSubTotal( state ) ) ).replace( '%s', formattedTotal );
+
+}
