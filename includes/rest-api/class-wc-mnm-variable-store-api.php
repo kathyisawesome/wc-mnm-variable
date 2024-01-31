@@ -53,15 +53,6 @@ class WC_MNM_Variable_Store_API {
 
 	}
 
-
-	/**
-	 * Registers the actual data into each endpoint.
-	 */
-	public static function add_variations_endpoint() {
-
-
-	}
-
 	/**
 	 * Register parent/child product data into cart/items endpoint.
 	 *
