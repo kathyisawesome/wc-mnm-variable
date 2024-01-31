@@ -10,7 +10,6 @@ import TYPES from './action-types';
 const { SET_CONTAINER_ID, HYDRATE_CONTAINER, RESET_CONFIG, SET_CONTEXT, UPDATE_CONFIG, UPDATE_QTY, VALIDATE } =
 	TYPES;
 
-import { CONTAINER_STORE_KEY } from '@data';
 // Set the product ID.
 export const setContainerId =
 	( containerId ) =>
@@ -22,7 +21,7 @@ export const setContainerId =
 // Set the product.
 export const hydrateContainer =
 	( container ) =>
-	( { select, dispatch } ) => {
+	( { dispatch } ) => {
 		dispatch( { type: HYDRATE_CONTAINER, payload: { container } } );
 		dispatch( { type: VALIDATE } );
 	};
@@ -30,7 +29,7 @@ export const hydrateContainer =
 // Clear the config.
 export const resetConfig =
 	() =>
-	( { select, dispatch } ) => {
+	( { dispatch } ) => {
 		dispatch( { type: RESET_CONFIG } );
 		dispatch( { type: VALIDATE } );
 	};
