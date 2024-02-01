@@ -96,7 +96,7 @@ do_action( 'wc_mnm_before_edit_container_order_item_form', $product, $order_item
 		 * Hook: wc_mnm_edit_container_order_item_single_variation. Used to output the cart button and placeholder for variation data.
 		 *
 		 * @hooked woocommerce_single_variation - 10 Empty div for variation data.
-		 * @hooked wc_mnm_template_single_variation - 20 Empty div for mnm variation data.
+		 * @hooked wc_mnm_template_edit_single_variation - 20 Empty div for mnm variation data.
 		 */
 		do_action( 'wc_mnm_edit_container_order_item_single_variation', $product, $order_item, $order, $source );
 

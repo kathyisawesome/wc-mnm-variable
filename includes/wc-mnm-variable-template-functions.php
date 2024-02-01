@@ -100,9 +100,22 @@ if ( ! function_exists( 'wc_mnm_template_single_variation' ) ) {
 
 		if ( $product && $product->is_type( 'variable-mix-and-match' ) ) {
 
-			$context = apply_filters( 'wc_mnm_variable_validation_context', is_admin() || isset( $_GET['update-container'] ) ? 'edit' : 'add-to-cart', $product );
+			$context = apply_filters( 'wc_mnm_variable_validation_context', 'add-to-cart', $product );
 
-			echo '<div class="mix-and-match-root woocommerce-variation single_mnm_variation" data-product_id="' . esc_attr( $product->get_id() ) . '" data-variation_id="0" data-validation_context="' . esc_attr( $context ) .'"></div>';
+			ob_start();
+
+			?>
+
+			<div
+				class="mix-and-match-root woocommerce-variation single_mnm_variation"
+				data-product_id="<?php echo esc_attr( $product->get_id() ); ?>"
+				data-variation_id="0"
+				data-validation_context="<?php echo esc_attr( $context ); ?>"
+			></div>
+
+			<?php
+			echo ob_get_clean();
+
 		}
 	}
 }
@@ -268,4 +281,47 @@ if ( ! function_exists( 'wc_mnm_template_edit_variable_container_order_item' ) )
 
 	}
 
+}
+
+		
+if ( ! function_exists( 'wc_mnm_template_edit_single_variation' ) ) {
+
+	/**
+	 * Output placeholders for editing the single variation.
+	 * 
+	 * @param WC_Product_Variable_Mix_and_Match
+	 * @param WC_Order_Item $order_item
+	 * @param WC_Order $order
+	 */
+	function wc_mnm_template_edit_single_variation( $product, $order_item, $order ) {
+
+		if ( ! $product ) {
+			global $product;
+		}
+
+		if ( $product && $product->is_type( 'variable-mix-and-match' ) ) {
+
+			// Initialize form state based on the actual configuration of the container.
+			$configuration = WC_Mix_and_Match_Order::get_current_container_configuration( $order_item, $order );
+			$configuration = wp_list_pluck( $configuration, 'quantity' );
+
+			$context = apply_filters( 'wc_mnm_container_validation_context', 'edit', $product );
+
+			ob_start();
+
+			?>
+
+			<div
+				class="mix-and-match-root woocommerce-variation single_mnm_variation"
+				data-product_id="<?php echo esc_attr( $product->get_id() ); ?>"
+				data-variation_id="0"
+				data-validation_context="<?php echo esc_attr( $context ); ?>"
+    			data-container_config="<?php echo wc_esc_json( wp_json_encode( $configuration ) ); ?>"
+			></div>
+
+			<?php
+			echo ob_get_clean();
+
+		}
+	}
 }

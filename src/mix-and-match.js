@@ -16,13 +16,19 @@ import { CONTAINER_STORE_KEY } from '@data';
 
 const MixAndMatch = ( { target } ) => {
 
-	// Update the context in the store.
-	const { setContext, setContainerId } = useDispatch( CONTAINER_STORE_KEY );
+	const { setContext, setContainerId, setConfig } = useDispatch( CONTAINER_STORE_KEY );
 
-	// Check the product ID and validation context on page load.
+	// Update some store data on page load.
 	useEffect( () => {
 		const context = target.getAttribute( 'data-validation_context' );
 		setContext( context );
+
+		const config = target.getAttribute( 'data-container_config' );
+
+		if ( config ) {
+			setConfig( config );
+		}
+
 	}, [] );
 
 	// Watch for variation changes.

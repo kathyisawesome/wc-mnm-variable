@@ -89,7 +89,23 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 
 		case SET_CONFIG:
 
-			const updatedConfig = payload.config;
+			let updatedConfig = payload.config;
+
+			// Attempt to parse JSON strings (used by data attributes when editing the container in admin).
+			if (typeof updatedConfig === 'string') {
+	
+					// Parse the JSON string into a JavaScript object
+					let dataObject = JSON.parse(updatedConfig);
+			
+					// Check if parsing was successful
+					if (dataObject && typeof dataObject === 'object') {
+						updatedConfig = dataObject;
+					}
+		
+			}
+			
+			// Cast any null to empty object.
+			updatedConfig = Object(payload.config);
 
 			return {
 				...state,
