@@ -10,7 +10,6 @@
  */
 
 use Automattic\WooCommerce\StoreApi\Schemas\V1\ProductSchema;
-use Automattic\WooCommerce\StoreApi\Utilities\ProductQuery;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
