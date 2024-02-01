@@ -24,17 +24,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $product;
 
 $attribute_keys  = array_keys( $attributes );
-$variations_json = wp_json_encode( $available_variations );
-$variations_attr = function_exists( 'wc_esc_json' ) ? wc_esc_json( $variations_json ) : _wp_specialchars( $variations_json, ENT_QUOTES, 'UTF-8', true );
-$config_attr     = wc_esc_json( wp_json_encode( $config ) );
 
 /**
  * wc_mnm_before_edit_container_form hook.
  */
 do_action( 'wc_mnm_before_edit_container_order_item_form', $product, $order_item, $order, $source );
 ?>
-<form class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" data-product_type="<?php echo esc_attr( $product->get_type() ); ?>" data-validation_context="edit" action="<?php echo esc_url( apply_filters( 'wc_mnm_edit_container_order_item_form_action', '' ) ); ?>" method="post" enctype="multipart/form-data" data-product_id="<?php echo absint( $product->get_id() ); ?>" data-product_config="<?php echo $config_attr; // WPCS: XSS ok. ?>" data-product_variations="<?php echo $variations_attr; // WPCS: XSS ok. ?>">
-
+<form
+    class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"
+    data-product_type="<?php echo esc_attr( $product->get_type() ); ?>"
+    action="<?php echo esc_url( apply_filters( 'wc_mnm_edit_container_order_item_form_action', '' ) ); ?>"
+    method="post"
+    enctype="multipart/form-data"
+    data-product_id="<?php echo absint( $product->get_id() ); ?>"
+    data-product_variations="<?php echo wc_esc_json( wp_json_encode( $available_variations ) ); ?>"
+>
 	<?php do_action( 'wc_mnm_edit_container_order_item_before_variations_form', $product, $order_item, $order, $source ); ?>
 
 	<?php if ( empty( $available_variations ) && false !== $available_variations ) : ?>
