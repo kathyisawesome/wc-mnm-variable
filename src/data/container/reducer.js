@@ -9,7 +9,7 @@ import { _x } from '@wordpress/i18n';
 import DEFAULT_STATE from './default-state';
 import TYPES from './action-types';
 
-const { SET_CONTAINER_ID, HYDRATE_CONTAINER, RESET_CONFIG, SET_CONTEXT, UPDATE_CONFIG, UPDATE_QTY, VALIDATE } =
+const { SET_CONTAINER_ID, HYDRATE_CONTAINER, RESET_CONFIG, SET_CONTEXT, SET_CONFIG, UPDATE_QTY, VALIDATE } =
 	TYPES;
 
 /**
@@ -87,7 +87,8 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 				context: payload.context,
 			};
 
-		case UPDATE_CONFIG:
+		case SET_CONFIG:
+
 			const updatedConfig = payload.config;
 
 			return {

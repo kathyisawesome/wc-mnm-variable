@@ -7,7 +7,7 @@ import { useDispatch } from '@wordpress/data';
  * Internal dependencies
  */
 import TYPES from './action-types';
-const { SET_CONTAINER_ID, HYDRATE_CONTAINER, RESET_CONFIG, SET_CONTEXT, UPDATE_CONFIG, UPDATE_QTY, VALIDATE } =
+const { SET_CONTAINER_ID, HYDRATE_CONTAINER, RESET_CONFIG, SET_CONTEXT, SET_CONFIG, UPDATE_QTY, VALIDATE } =
 	TYPES;
 
 // Set the product ID.
@@ -52,10 +52,10 @@ export const setContext =
 	};
 
 // Update the entire config at once.
-export const updateConfig =
+export const setConfig =
 	( config ) =>
 	( { select, dispatch } ) => {
-		dispatch( { type: UPDATE_CONFIG, payload: { config } } );
+		dispatch( { type: SET_CONFIG, payload: { config } } );
 		dispatch( { type: VALIDATE } );
 	};
 
