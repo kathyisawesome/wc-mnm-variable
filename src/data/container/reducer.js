@@ -296,7 +296,7 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 				isValid: messages.errors.length === 0,
 			};
 
-			const updated = new CustomEvent( 'wc-mnm-updated', {
+			const updated = new CustomEvent( 'wc/mnm/container/container-updated', {
 				detail: validatedState,
 			} );
 
