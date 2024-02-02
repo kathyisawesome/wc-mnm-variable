@@ -46,19 +46,6 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 	}, [ quantity ] );
 
 	/**
-	 * Update data from URL quantity.
-	 */
-	useEffect( () => {
-		const params = new URLSearchParams( window.location.search );
-		if ( params.get( `mnm_quantity[${childItem.child_id}]` ) ) {
-			updateQty( {
-				item: childItem,
-				qty: Number( params.get( `mnm_quantity[${childItem.child_id}]` ) ),
-			} );
-		}
-	}, [] );	
-
-	/**
 	 * Handle the child product quantity change event.
 	 *
 	 * @param qty Get the item quantity.

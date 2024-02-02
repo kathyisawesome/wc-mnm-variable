@@ -20,13 +20,46 @@ const MixAndMatch = ( { target } ) => {
 
 	// Update some store data on page load.
 	useEffect( () => {
+		
 		const context = target.getAttribute( 'data-validation_context' );
-		setContext( context );
+		if ( context ) {
+			setContext( context );
+		}
 
-		const config = target.getAttribute( 'data-container_config' );
+		// Read the config from either the URL or the data-attributes.
+		let initConfig = target.getAttribute( 'data-container_config' );
 
-		if ( config ) {
-			setConfig( config );
+		// If nothing in the data-attributes, check the URL params.
+		if ( ! initConfig ) {
+
+			// Create a URLSearchParams object from the query string
+			const params = new URLSearchParams(window.location.search);
+
+			// Initialize an object to store parsed values
+			initConfig = {};
+
+			// Iterate over the parameters
+			params.forEach((value, key) => {
+
+				if (key.startsWith('mnm_quantity')) { // Currently we only support `mnm_quantity` input names.
+
+					// Using regular expression to extract the number
+					const match = key.match(/\[(\d+)\]/);
+
+					// Check if there is a match and extract the number
+					const productId = match ? parseFloat(match[1], 10) : null;
+
+					// Store the value in the parsed object
+					initConfig[productId] = value;
+
+				}
+
+			});
+
+		}
+
+		if ( initConfig ) {
+			setConfig( initConfig );
 		}
 
 	}, [] );
