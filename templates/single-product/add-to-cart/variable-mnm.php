@@ -83,6 +83,7 @@ do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 				 * Hook: woocommerce_single_variation. Used to output the cart button and placeholder for variation data.
 				 *
 				 * @hooked woocommerce_single_variation - 10 Empty div for variation data.
+				 * @hooked wc_mnm_template_single_variation - 15 Empty div for Mix and Match variation data.
 				 * @hooked woocommerce_single_variation_add_to_cart_button - 20 Qty and cart button.
 				 */
 				do_action( 'woocommerce_single_variation' );
