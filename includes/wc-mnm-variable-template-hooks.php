@@ -29,4 +29,4 @@ add_action( 'wc_mnm_edit_container_order_item_in_shop_subscription', 'wc_mnm_tem
 
 // Port variation add to cart elements.
 add_action( 'wc_mnm_edit_container_order_item_single_variation', 'woocommerce_single_variation', 10 );
-add_action( 'wc_mnm_edit_container_order_item_single_variation', 'wc_mnm_template_edit_single_variation', 20, 3 );
+add_action( 'wc_mnm_edit_container_order_item_single_variation', 'wc_mnm_template_edit_single_variation', 15, 3 );
