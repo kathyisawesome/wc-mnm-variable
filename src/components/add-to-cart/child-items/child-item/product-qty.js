@@ -55,7 +55,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 		const newQty = validateQuantity( qty );
 
 		// Only commit to data store if the value has changed.
-		if ( newQty !== Number( prevQty ) ) {
+		if ( newQty !== parseFloat( prevQty ) ) {
 			// Store the new version locally.
 			setLocalQty( newQty );
 
