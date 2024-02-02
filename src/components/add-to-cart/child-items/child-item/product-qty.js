@@ -70,7 +70,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 	};
 
 	// Individual quantity messages are temporary so don't need to be stored in the data store.
-	const [ validationMessages, setvalidationMessages ] = useState( [] );
+	const [ validationMessages, setValidationMessages ] = useState( [] );
 
 	// Create a ref for a specific DOM element
 	const errorRef = useRef( null );
@@ -88,7 +88,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 			// Show the messages briefly and then clear. Relay the "this" object into the setTimeout anonymous function as "self".
 			setTimeout( function () {
 				errorRef.current.classList.remove( 'show' );
-				setvalidationMessages( [] );
+				setValidationMessages( [] );
 			}, 2000 );
 		}
 	}, [ validationMessages ] );
@@ -201,14 +201,14 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 
 				// If the new quantity is the individual max, re-use the item-specific error message.
 				if ( max === newQty ) {
-					setvalidationMessages( [
+					setValidationMessages( [
 						wc_mnm_params.i18n_child_item_max_qty_message.replace(
 							'%d',
 							max
 						),
 					] );
 				} else {
-					setvalidationMessages( [
+					setValidationMessages( [
 						wc_mnm_params.i18n_child_item_max_container_qty_message.replace(
 							'%d',
 							maxContainerSize
@@ -221,7 +221,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 			// Check the item quantity is not below min.
 			case min >= 0 && currentQty < min:
 				newQty = min;
-				setvalidationMessages( [
+				setValidationMessages( [
 					wc_mnm_params.i18n_child_item_min_qty_message.replace(
 						'%d',
 						min
@@ -233,7 +233,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 			// Check the item quantity it not below it's max.
 			case max > 0 && currentQty > max:
 				newQty = max;
-				setvalidationMessages( [
+				setValidationMessages( [
 					wc_mnm_params.i18n_child_item_max_qty_message.replace(
 						'%d',
 						max
@@ -245,7 +245,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 			// Check the item quantity has correct step.
 			case step > 1 && currentQty % step:
 				newQty = currentQty - ( currentQty % step );
-				setvalidationMessages( [
+				setValidationMessages( [
 					wc_mnm_params.i18n_child_item_step_qty_message.replace(
 						'%d',
 						step
