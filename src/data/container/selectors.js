@@ -1,3 +1,5 @@
+import { price_format } from "./utils";
+
 export const getSelections = ( state ) => {
 	return state.selections;
 };
@@ -116,6 +118,6 @@ export const getFormattedStatus = ( state ) => {
 		
 	formattedTotal = formattedTotal.replace( '%max', maxContainerSize ).replace( '%s', getTotalQty( state ) );
 
-	return WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_status_format.replace( '%v', wc_mnm_price_format( getSubTotal( state ) ) ).replace( '%s', formattedTotal );
+	return WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_status_format.replace( '%v', price_format( getSubTotal( state ) ) ).replace( '%s', formattedTotal );
 
 }
