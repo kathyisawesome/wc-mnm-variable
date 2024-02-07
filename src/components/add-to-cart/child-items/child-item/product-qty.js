@@ -202,14 +202,14 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 				// If the new quantity is the individual max, re-use the item-specific error message.
 				if ( max === newQty ) {
 					setValidationMessages( [
-						wc_mnm_params.i18n_child_item_max_qty_message.replace(
+						WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_child_item_max_qty_message.replace(
 							'%d',
 							max
 						),
 					] );
 				} else {
 					setValidationMessages( [
-						wc_mnm_params.i18n_child_item_max_container_qty_message.replace(
+						WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_child_item_max_container_qty_message.replace(
 							'%d',
 							maxContainerSize
 						),
@@ -222,7 +222,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 			case min >= 0 && currentQty < min:
 				newQty = min;
 				setValidationMessages( [
-					wc_mnm_params.i18n_child_item_min_qty_message.replace(
+					WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_child_item_min_qty_message.replace(
 						'%d',
 						min
 					),
@@ -234,7 +234,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 			case max > 0 && currentQty > max:
 				newQty = max;
 				setValidationMessages( [
-					wc_mnm_params.i18n_child_item_max_qty_message.replace(
+					WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_child_item_max_qty_message.replace(
 						'%d',
 						max
 					),
@@ -246,7 +246,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 			case step > 1 && currentQty % step:
 				newQty = currentQty - ( currentQty % step );
 				setValidationMessages( [
-					wc_mnm_params.i18n_child_item_step_qty_message.replace(
+					WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_child_item_step_qty_message.replace(
 						'%d',
 						step
 					),
@@ -370,7 +370,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 					data-id={ childItem.child_id }
 				/>
 
-				{ WC_MNM_ADD_TO_CART_REACT_PARAMS.display_plus_minus_buttons && (
+				{ WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_plus_minus_buttons && (
 					<button
 						onClick={ handleMinusClick }
 						type="button"
@@ -382,7 +382,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 					</button>
 				) }
 
-				{ WC_MNM_ADD_TO_CART_REACT_PARAMS.display_plus_minus_buttons && (
+				{ WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_plus_minus_buttons && (
 					<button
 						onClick={ handlePlusClick }
 						type="button"

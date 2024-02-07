@@ -17,13 +17,13 @@ const ChildItem = ( { loopClass } ) => {
 			? false
 			: childItem.permalink;
 	const isGridLayout =
-		WC_MNM_ADD_TO_CART_REACT_PARAMS.display_layout === 'grid';
+		WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_layout === 'grid';
 
 	return isGridLayout ? (
 		<li
 			className={ `type-product wc-mnm-child-item product ${ loopClass }` }
 		>
-			{ WC_MNM_ADD_TO_CART_REACT_PARAMS.display_thumbnails && (
+			{ WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_thumbnails && (
 				<ProductImage
 					image={ firstImage }
 					fallbackAlt={ name }
@@ -41,7 +41,7 @@ const ChildItem = ( { loopClass } ) => {
 		<tr
 			className={ `mnm_item child-item product type-product first post-${ childItem.child_id }` }
 		>
-			{ WC_MNM_ADD_TO_CART_REACT_PARAMS.display_thumbnails && (
+			{ WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_thumbnails && (
 				<td className="product-thumbnail">
 					<ProductImage
 						image={ firstImage }

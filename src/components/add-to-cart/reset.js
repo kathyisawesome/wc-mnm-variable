@@ -17,7 +17,7 @@ const Reset = () => {
 	const dispatch = useDispatch();
 
 	const handleReset = () => {
-		if ( window.confirm( wc_mnm_params.i18n_confirm_reset ) ) {
+		if ( window.confirm( WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_confirm_reset ) ) {
 			dispatch( CONTAINER_STORE_KEY ).resetConfig();
 		}
 	};

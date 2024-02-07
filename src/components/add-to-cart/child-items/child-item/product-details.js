@@ -45,7 +45,7 @@ const ProductDetails = () => {
 				</a>
 			) }
 
-			{ WC_MNM_ADD_TO_CART_REACT_PARAMS.display_short_description && (
+			{ WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_short_description && (
 				<ProductDescription shortDescription={ short_description } />
 			) }
 

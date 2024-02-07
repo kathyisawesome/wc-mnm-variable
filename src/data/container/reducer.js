@@ -146,23 +146,23 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 					// Validate a fixed size container.
 					case minContainerSize === maxContainerSize:
 						validMessage =
-							typeof wc_mnm_params[
+							typeof WC_MNM_ADD_TO_CART_VARIATION_PARAMS[
 								'i18n_' +
 									validationContext +
 									'_valid_fixed_message'
 							] !== 'undefined'
-								? wc_mnm_params[
+								? WC_MNM_ADD_TO_CART_VARIATION_PARAMS[
 										'i18n_' +
 											validationContext +
 											'_valid_fixed_message'
 								  ]
-								: wc_mnm_params.i18n_valid_fixed_message;
+								: WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_valid_fixed_message;
 
 						if ( totalQty !== minContainerSize ) {
 							errorMessage =
 								minContainerSize === 1
-									? wc_mnm_params.i18n_qty_error_single
-									: wc_mnm_params.i18n_qty_error;
+									? WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_qty_error_single
+									: WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_qty_error;
 							errorMessage = errorMessage.replace(
 								'%s',
 								minContainerSize
@@ -177,23 +177,23 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 					// Validate that a container has fewer than the maximum number of items.
 					case maxContainerSize > 0 && minContainerSize === 0:
 						validMessage =
-							typeof wc_mnm_params[
+							typeof WC_MNM_ADD_TO_CART_VARIATION_PARAMS[
 								'i18n_' +
 									validationContext +
 									'_valid_max_message'
 							] !== 'undefined'
-								? wc_mnm_params[
+								? WC_MNM_ADD_TO_CART_VARIATION_PARAMS[
 										'i18n_' +
 											validationContext +
 											'_valid_max_message'
 								  ]
-								: wc_mnm_params.i18n_valid_max_message;
+								: WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_valid_max_message;
 
 						if ( totalQty > maxContainerSize ) {
 							errorMessage =
 								maxContainerSize > 1
-									? wc_mnm_params.i18n_max_qty_error
-									: wc_mnm_params.i18n_max_qty_error_singular;
+									? WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_max_qty_error
+									: WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_max_qty_error_singular;
 							errorMessage = errorMessage
 								.replace( '%max', maxContainerSize )
 								.replace( '%v', qtyMessage );
@@ -205,23 +205,23 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 					// Validate a range.
 					case maxContainerSize > 0 && minContainerSize > 0:
 						validMessage =
-							typeof wc_mnm_params[
+							typeof WC_MNM_ADD_TO_CART_VARIATION_PARAMS[
 								'i18n_' +
 									validationContext +
 									'_valid_range_message'
 							] !== 'undefined'
-								? wc_mnm_params[
+								? WC_MNM_ADD_TO_CART_VARIATION_PARAMS[
 										'i18n_' +
 											validationContext +
 											'_valid_range_message'
 								  ]
-								: wc_mnm_params.i18n_valid_range_message;
+								: WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_valid_range_message;
 
 						if (
 							totalQty < minContainerSize ||
 							totalQty > maxContainerSize
 						) {
-							errorMessage = wc_mnm_params.i18n_min_max_qty_error;
+							errorMessage = WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_min_max_qty_error;
 							errorMessage = errorMessage
 								.replace( '%max', maxContainerSize )
 								.replace( '%min', minContainerSize )
@@ -233,23 +233,23 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 					// Validate that a container has minimum number of items.
 					case minContainerSize >= 0:
 						validMessage =
-							typeof wc_mnm_params[
+							typeof WC_MNM_ADD_TO_CART_VARIATION_PARAMS[
 								'i18n_' +
 									validationContext +
 									'_valid_min_message'
 							] !== 'undefined'
-								? wc_mnm_params[
+								? WC_MNM_ADD_TO_CART_VARIATION_PARAMS[
 										'i18n_' +
 											validationContext +
 											'_valid_min_message'
 								  ]
-								: wc_mnm_params.i18n_valid_min_message;
+								: WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_valid_min_message;
 
 						if ( totalQty < minContainerSize ) {
 							errorMessage =
 								minContainerSize > 1
-									? wc_mnm_params.i18n_min_qty_error
-									: wc_mnm_params.i18n_min_qty_error_singular;
+									? WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_min_qty_error
+									: WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_min_qty_error_singular;
 							errorMessage = errorMessage
 								.replace( '%min', minContainerSize )
 								.replace( '%v', qtyMessage );

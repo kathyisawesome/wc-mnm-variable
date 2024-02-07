@@ -10,11 +10,11 @@ import ChildItem from './child-item';
 import { ChildProvider } from '@context';
 
 const ChildItems = ( { childItems, childCategories } ) => {
-	const numColumns = WC_MNM_ADD_TO_CART_REACT_PARAMS.num_columns;
-	const displayLayout = WC_MNM_ADD_TO_CART_REACT_PARAMS.display_layout;
+	const numColumns = WC_MNM_ADD_TO_CART_VARIATION_PARAMS.num_columns;
+	const displayLayout = WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_layout;
 	const hasRows = childItems.length > numColumns ? 'has-multilpe-rows' : '';
 	const mobile_optimized =
-		WC_MNM_ADD_TO_CART_REACT_PARAMS.mobile_optimized_layout
+		WC_MNM_ADD_TO_CART_VARIATION_PARAMS.mobile_optimized_layout
 			? 'mnm-mobile-optimized'
 			: '';
 

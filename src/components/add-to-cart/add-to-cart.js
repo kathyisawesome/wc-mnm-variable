@@ -45,7 +45,7 @@ const AddToCart = () => {
 	 * Encourage users with a prompt to fill in their container.
 	 */
 	useEffect( () => {
-		let promptText = maxContainerSize === 1 ? WC_MNM_ADD_TO_CART_REACT_PARAMS.i18n_selection_prompt_singular : WC_MNM_ADD_TO_CART_REACT_PARAMS.i18n_selection_prompt;
+		let promptText = maxContainerSize === 1 ? WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_selection_prompt_singular : WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_selection_prompt;
 		setPrompt( promptText.replace( '%d', maxContainerSize ) );
 	}, [maxContainerSize] );
 

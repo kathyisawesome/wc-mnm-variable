@@ -23,7 +23,7 @@ export const calcTotalQty = ( config ) => {
 export const selectedQtyMessage = function ( qty ) {
 	const message =
 		qty === 1
-			? wc_mnm_params.i18n_qty_message_single
-			: wc_mnm_params.i18n_qty_message;
+			? WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_qty_message_single
+			: WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_qty_message;
 	return message.replace( '%s', qty );
 };

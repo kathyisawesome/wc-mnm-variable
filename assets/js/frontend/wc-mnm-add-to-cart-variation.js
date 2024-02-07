@@ -296,8 +296,7 @@
 	$.fn.wc_mnm_variation_form = function () {
 		if (
 			typeof WC_MNM_ADD_TO_CART_VARIATION_PARAMS !== 'undefined' &&
-			typeof wc_add_to_cart_variation_params !== 'undefined' &&
-			typeof wc_mnm_params !== 'undefined'
+			typeof wc_add_to_cart_variation_params !== 'undefined'
 		) {
 			$( this ).wc_variation_form();
 			new WC_MNM_Variation_Form( this );

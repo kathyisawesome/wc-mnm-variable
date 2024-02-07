@@ -25,7 +25,7 @@ export const setContainerId =
 			dispatch( { type: RESET_CONFIG } );
 
 			// Notify users.
-			window.alert( WC_MNM_ADD_TO_CART_REACT_PARAMS.i18n_form_cleared );
+			window.alert( WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_form_cleared );
 		}
 
 		dispatch( { type: SET_CONTAINER_ID, payload: { containerId } } );
