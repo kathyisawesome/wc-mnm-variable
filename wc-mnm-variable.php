@@ -535,7 +535,6 @@ class WC_MNM_Variable {
 			'mobile_optimized_layout' => wc_string_to_bool( get_option('wc_mnm_mobile_optimized_layout','no')),
 			'display_visual_status_ui'   => wc_string_to_bool( get_option( 'wc_mnm_visual_status_ui', 'no' ) ),
 			'num_columns'                => (int) apply_filters( 'wc_mnm_grid_layout_columns', get_option( 'wc_mnm_number_columns', 3 ) ),
-            'cart_status_message' => __('You have selected <span class="mnm-selected-item">0</span> items. You may select between <span class="mnm-select-min-item">0</span> and <span class="mnm-select-max-item">0</span> items or add to cart to continue.', 'wc-mnm-variable' ),
 		);
 
 		$params = apply_filters( 'wc_mnm_variable_add_to_cart_script_parameters', wp_parse_args( $params, $mnm_params ) );
