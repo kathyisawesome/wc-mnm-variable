@@ -21,7 +21,8 @@ class WC_Product_Variable_Mix_and_Match extends WC_Product_Variable {
 	 * @var array
 	 */
 	protected $extended_data = array(
-		'share_content' => true,
+		'layout_override' => false,
+		'share_content'   => true,
 	);
 
 

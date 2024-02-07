@@ -61,9 +61,8 @@ class WC_Product_Mix_and_Match_Variation_Data_Store_CPT extends WC_Product_Varia
 	 * @var array
 	 */
 	protected $parent_props_to_meta_keys = array(
-		'layout_override'           => '_mnm_layout_override',
-		'layout'                    => '_mnm_layout_style',
-		'add_to_cart_form_location' => '_mnm_add_to_cart_form_location',
+		'layout'                    => '', // Always globally inherited for variations.
+		'add_to_cart_form_location' => '', // Always globally inherited for variations.
 		'priced_per_product'        => '_mnm_per_product_pricing',
 		'packing_mode'              => '_mnm_packing_mode',
 		'weight_cumulative'         => '_mnm_weight_cumulative',
@@ -101,7 +100,7 @@ class WC_Product_Mix_and_Match_Variation_Data_Store_CPT extends WC_Product_Varia
 
 			if ( is_callable( array( $product, $function ) ) ) {
 
-				// Get a global value for layout/location props (always use global options in customizer).
+				// Get a global value for layout/location props.
 				if ( $this->is_global_prop( $product, $property ) ) {
 					$value = get_option( $this->global_props[$property] );
 				} else {
@@ -144,13 +143,15 @@ class WC_Product_Mix_and_Match_Variation_Data_Store_CPT extends WC_Product_Varia
 		// Need content_source and cat IDs in the parent data.
 		foreach ( $this->parent_props_to_meta_keys as $property => $meta_key ) {
 
-			// Get a global value for layout/location props (always use global options in customizer).
-			if ( $this->is_global_prop( $product, $property ) ) {   
-				$parent_data['global_' . $property ] = get_option( $this->global_props[$property] );
+			// Get a global value for layout/location props .
+			if ( $this->is_global_prop( $product, $property ) ) {  
+				$value = get_option( $this->global_props[$property] );
+			} else {
+				$value = get_post_meta( $parent_id, $meta_key, true );
 			}
 
 			$parent_data[ $property ] = get_post_meta( $parent_id, $meta_key, true );
-			
+
 		}
 
 		$product->set_parent_data( $parent_data );

@@ -74,20 +74,6 @@ trait WC_MNM_Container {
 	private $container_price_cache = array();
 
 	/**
-	 * Layout options data.
-	 * @see 'WC_Product_Mix_and_Match::get_layout_options()'.
-	 * @var array
-	 */
-	private static $layout_options_data = null;
-
-	/**
-	 * Layout locations data.
-	 * @see 'WC_Product_Mix_and_Match::get_add_to_cart_form_location_options()'.
-	 * @var array
-	 */
-	private static $layout_locations_data = null;
-
-	/**
 	 *  Define type-specific properties.
 	 * @var array
 	 */
@@ -314,37 +300,6 @@ trait WC_MNM_Container {
 	| Setters.
 	|--------------------------------------------------------------------------
 	*/
-
-	/**
-	 * "Override template" setter.
-	 *
-	 * @param  string  $value
-	 */
-	public function set_layout_override( $value ) {
-		$this->set_prop( 'layout_override', wc_string_to_bool( $value ) );
-	}
-
-	/**
-	 * "Form Location" setter.
-	 *
-	 * @param  string  $location
-	 */
-	public function set_add_to_cart_form_location( $location ) {
-		$location = $location && array_key_exists( $location, self::get_add_to_cart_form_location_options() ) ? $location : 'default';
-		$this->set_prop( 'add_to_cart_form_location', $location );
-	}
-
-
-	/**
-	 * "Layout" setter.
-	 *
-	 * @param  string  $layout
-	 */
-	public function set_layout( $layout ) {
-		$layout = $layout && array_key_exists( $layout, self::get_layout_options() ) ? $layout : 'tabular';
-		$this->set_prop( 'layout', $layout );
-	}
-
 
 	/**
 	 * Minimum raw price setter.
@@ -663,19 +618,6 @@ trait WC_MNM_Container {
 	 */
 	public function is_synced() {
 		return $this->is_synced;
-	}
-
-
-	/**
-	 *
-	 * Does this product have a layout override
-	 *
-	 * @param  string  $context
-	 *
-	 * @return bool
-	 */
-	public function has_layout_override( $context = 'view' ) {
-		return $this->get_layout_override( $context );
 	}
 
 
@@ -1319,82 +1261,6 @@ trait WC_MNM_Container {
 
 		$this->is_synced = true;
 
-	}
-
-
-	/*
-	|--------------------------------------------------------------------------
-	| Static methods.
-	|--------------------------------------------------------------------------
-	*/
-
-	/**
-	 * Supported "Form Location" options.
-	 * @changed 2.0.0
-	 *
-	 * @return array {
-	 *     @type string       $label        The translatable label for the icon.
-	 *     @type string       $description  Text to display a longer decsription of the icon. Optional.
-	 *     @type string       $image        URL to option icon.
-	 * }
-	 */
-	public static function get_add_to_cart_form_location_options() {
-
-		if ( is_null( self::$layout_locations_data ) ) {
-
-			self::$layout_locations_data = array(
-				'default'      => array(
-					'label'       => __( 'Inline', 'wc-mnm-variable' ),
-					'description' => __( 'The add-to-cart form is displayed inside the single-product summary.', 'wc-mnm-variable' ),
-					'image'       => WC_Mix_and_Match()->plugin_url() . '/assets/images/location-inline.svg',
-				),
-				'after_summary' => array(
-					'label'       => __( 'Full-width', 'wc-mnm-variable' ),
-					'description' => __( 'The add-to-cart form is displayed after the single-product summary. Usually allocates the entire page width for displaying form content. Note that some themes may not support this option.', 'wc-mnm-variable' ),
-					'image'       => WC_Mix_and_Match()->plugin_url() . '/assets/images/location-full.svg',
-				)
-			);
-
-			self::$layout_locations_data = apply_filters( 'wc_mnm_add_to_cart_form_location_options', self::$layout_locations_data );
-
-		}
-
-		return self::$layout_locations_data;
-	}
-
-	/**
-	 * Supported layouts.
-	 * @changed 2.0.0
-	 *
-	 * @return array {
-	 *     @type string       $label        The translatable label for the icon.
-	 *     @type string       $description  Text to display a longer decsription of the icon. Optional.
-	 *     @type string       $image        URL to option icon.
-	 * }
-	 */
-	public static function get_layout_options() {
-
-		if ( is_null( self::$layout_options_data ) ) {
-
-			self::$layout_options_data = array(
-				'tabular' => array(
-					'label'       => esc_html__( 'List', 'wc-mnm-variable' ),
-					'description' => esc_html__( 'The allowed contents are displayed as a list.', 'wc-mnm-variable' ),
-					'image'       => WC_Mix_and_Match()->plugin_url() . '/assets/images/layout-list.svg',
-					'mb_display'  => false, // In the product metabox, this icon is in the admin font. Set to true to print the svg directly.
-				),
-				'grid' => array(
-					'label'       => esc_html__( 'Grid', 'wc-mnm-variable' ),
-					'description' => esc_html__( 'The allowed contents are displayed as a grid.', 'wc-mnm-variable' ),
-					'image'       => WC_Mix_and_Match()->plugin_url() . '/assets/images/layout-grid.svg',
-					'mb_display'  => false,
-				)
-			);
-
-			self::$layout_options_data = apply_filters( 'wc_mnm_supported_layouts', self::$layout_options_data );
-
-		}
-		return self::$layout_options_data;
 	}
 
 }

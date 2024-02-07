@@ -33,7 +33,6 @@ class WC_MNM_Variable_Meta_Box_Variable_Product_Data {
 		add_action( 'woocommerce_product_data_panels', [ __CLASS__, 'product_data_panel' ] );
 
 		// Adds the vmnm product options.
-		add_action( 'wc_mnm_admin_variable_product_options', [ __CLASS__, 'container_layout_options' ], 10, 2 );
 	//	add_action( 'wc_mnm_admin_variable_product_options', [ __CLASS__, 'share_content_options' ], 20, 2 );
 		add_action( 'wc_mnm_admin_variable_product_options', [ __CLASS__, 'allowed_contents_options' ], 30, 2 );
 	//	add_action( 'wc_mnm_admin_variable_product_options', [ __CLASS__, 'pricing_options' ], 40, 2 );
@@ -128,8 +127,7 @@ class WC_MNM_Variable_Meta_Box_Variable_Product_Data {
 				 *
 				 * @param int $post_id
 				 *
-				 * @see self::container_layout_options()   - 10
-				 * @see self::share_content_options()   -20
+				 * @see self::share_content_options() - 20
 				 * @see self::allowed_contents_options() - 30
 				 * @see self::pricing_options() - 40
 				 * 
@@ -141,51 +139,6 @@ class WC_MNM_Variable_Meta_Box_Variable_Product_Data {
 		</div>
 
 		<?php
-	}
-
-
-	/**
-	 * Render Layout options on 'wc_mnm_admin_product_options'.
-	 *
-	 * @param  int $post_id
-	 * @param  WC_Mix_and_Match  $vmnm_product_object
-	 */
-	public static function container_layout_options( $post_id, $vmnm_product_object ) {
-
-		// Override option.
-		wc_mnm_wp_toggle(
-			array(
-				'id'            => 'wc_mnm_variable_layout_override',
-				'wrapper_class' => 'wc_mnm_display_toggle',
-				'value'         => wc_bool_to_string( $vmnm_product_object->get_layout_override( 'edit' ) ),
-				'label'         => esc_html__( 'Override global layout', 'wc-mnm-variable' ),
-			)
-		);
-
-		// Layout option.
-		wc_mnm_wp_radio_images(
-			array(
-				'id'            => 'wc_mnm_variable_layout',
-				'wrapper_class' => 'mnm_container_layout_options show_if_wc_mnm_variable_layout_override_yes hide_if_wc_mnm_variable_layout_override_no hidden',
-				'label'         => esc_html__( 'Layout', 'wc-mnm-variable' ),
-				'value'	        => $vmnm_product_object->get_layout( 'edit' ),
-				'options'       => WC_Product_Mix_and_Match::get_layout_options(),
-			)
-		);
-		?>
-
-		<?php
-
-		// Add to cart form location option.
-		wc_mnm_wp_radio_images(
-			array(
-				'id'            => 'wc_mnm_variable_form_location',
-				'wrapper_class' => 'mnm_container_layout_options show_if_wc_mnm_variable_layout_override_yes hide_if_wc_mnm_variable_layout_override_no hidden',
-				'label'         => esc_html__( 'Add to cart ', 'wc-mnm-variable' ),
-				'value'	        => $vmnm_product_object->get_add_to_cart_form_location( 'edit' ),
-				'options'       => WC_Product_Mix_and_Match::get_add_to_cart_form_location_options(),
-			)
-		);
 	}
 
 
@@ -558,9 +511,6 @@ class WC_MNM_Variable_Meta_Box_Variable_Product_Data {
 		if ( $product->is_type( 'variable-mix-and-match' ) ) {
 
 			$props = array(
-				'layout_override'           => isset( $_POST['wc_mnm_variable_layout_override'] ),
-				'layout'                    => isset( $_POST['wc_mnm_variable_layout'] ) ? wc_clean( $_POST['wc_mnm_variable_layout'] ) : 'tabular',
-				'add_to_cart_form_location' => isset( $_POST['wc_mnm_variable_form_location'] ) ? wc_clean( $_POST['wc_mnm_variable_form_location'] ) : 'default',
 				'share_content'             => true,
 			//	'share_content'             => isset( $_POST['wc_mnm_variable_share_content'] ) && 'yes' === wc_clean( $_POST['wc_mnm_variable_share_content'] ),
 			//	'priced_per_product'        => isset( $_POST['wc_mnm_variable_per_product_pricing'] ) && 'yes' === wc_clean( $_POST['wc_mnm_variable_per_product_pricing'] ),

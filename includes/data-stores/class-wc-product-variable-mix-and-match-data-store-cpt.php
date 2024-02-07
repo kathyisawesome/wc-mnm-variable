@@ -25,7 +25,6 @@ class WC_Product_Variable_Mix_and_Match_Data_Store_CPT extends WC_Product_Variab
 	 * @var array
 	 */
 	protected $extended_internal_meta_keys = array(
-		'_mnm_layout_override',
 		'_mnm_layout_style',
 		'_mnm_add_to_cart_form_location',
 		'_mnm_per_product_pricing',
@@ -40,7 +39,6 @@ class WC_Product_Variable_Mix_and_Match_Data_Store_CPT extends WC_Product_Variab
 	 * @var array
 	 */
 	protected $props_to_meta_keys = array(
-		'layout_override'           => '_mnm_layout_override',
 		'layout'                    => '_mnm_layout_style',
 		'add_to_cart_form_location' => '_mnm_add_to_cart_form_location',
 		'priced_per_product'        => '_mnm_per_product_pricing',
@@ -92,7 +90,7 @@ class WC_Product_Variable_Mix_and_Match_Data_Store_CPT extends WC_Product_Variab
 			if ( is_callable( array( $product, $function ) ) ) {
 
 				// Get a global value for layout/location props (always use global options in customizer).
-				if ( array_key_exists( $property, $this->global_props ) && ( is_customize_preview() || ! $product->has_layout_override() ) ) {
+				if ( array_key_exists( $property, $this->global_props ) ) {
 					$value = get_option( $this->global_props[$property] );
 				} else {
 					$value = get_post_meta( $product->get_id(), $meta_key, true );

@@ -18,26 +18,21 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 
 	/**
 	 * Inherited parent properties.
-	 * 
-	 * @todo - should this be inherited here? Or should we use get_layout() and read from parent_data array? These aren't props we can change at the variation level
 	 *
 	 * @var array
 	 */
 	protected $parent_data = array(
-		'layout_override'                  => false,
-		'layout'                           => 'tabular',
-		'add_to_cart_form_location'        => 'default',
-		'global_layout'                    => 'tabular',
-		'global_add_to_cart_form_location' => 'default',
-		'share_content'                    => true,
-		'priced_per_product'               => false,
-		'discount'                         => 0,
-		'packing_mode'                     => 'together',
-		'weight_cumulative'                => false,
-		'content_source'                   => 'products',
-		'child_category_ids'               => [],
+		'layout_override'           => false,
+		'layout'                    => 'tabular',
+		'add_to_cart_form_location' => 'default',
+		'share_content'             => true,
+		'priced_per_product'        => false,
+		'discount'                  => 0,
+		'packing_mode'              => 'together',
+		'weight_cumulative'         => false,
+		'content_source'            => 'products',
+		'child_category_ids'        => [],
 	);
-
 
 	/**
 	 * __construct function.
@@ -136,42 +131,39 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 
 	/**
 	 * "Form Location" getter.
+	 * 
+	 * NB: This is for parity and API support, but not used for display.
 	 *
 	 * @param  string  $context
 	 * @return string
 	 */
 	public function get_add_to_cart_form_location( $context = 'view' ) {
-		$value = $this->has_layout_override( $context ) ? $this->parent_data['add_to_cart_form_location'] : $this->parent_data['global_add_to_cart_form_location'];
-
-		// Since the global value _can_ be false, we need a fallback for new installs.
-		$value = $value ? $value : $this->get_prop( 'add_to_cart_form_location', 'edit' );
-
+		$value = $this->parent_data['add_to_cart_form_location'];
 		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'add_to_cart_form_location', $value, $this ) : $value;
 	}
+
 
 	/**
 	 * "Override template" getter.
 	 *
-	 * @param  string  $context
-	 * @return string
+	 * Not supported at the variation level.
+	 *
+	 * @return bool
 	 */
-	public function get_layout_override( $context = 'view' ) {
-		$value = wc_string_to_bool( $this->parent_data['layout_override'] );
-		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'layout_override', $value, $this ) : $value;
+	public function get_layout_override() {
+		return false;
 	}
 
 	/**
 	 * "Layout" getter.
+	 * 
+	 * NB: This is for parity and API support, but not used for display.
 	 *
 	 * @param  string  $context
 	 * @return string
 	 */
 	public function get_layout( $context = 'view' ) {
-		$value = $this->has_layout_override( $context ) ? $this->parent_data['layout'] : $this->parent_data['global_layout'];
-
-		// Since the global value _can_ be false, we need a fallback for new installs.
-		$value = $value ? $value : $this->get_prop( 'layout', 'edit' );
-
+		$value = $this->parent_data['layout'];
 		return 'view' === $context ? apply_filters( $this->get_hook_prefix() . 'layout', $value, $this ) : $value;
 	}
 
@@ -234,6 +226,18 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 		} else {
 			return parent::is_type( $type );
 		}
+	}
+
+	/**
+	 *
+	 * Does this product have a layout override
+	 *
+	 * Not supported at the variation level.
+	 *
+	 * @return bool
+	 */
+	public function has_layout_override() {
+		return false;
 	}
 
 	/**

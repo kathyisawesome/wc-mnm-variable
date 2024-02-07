@@ -540,14 +540,6 @@ class WC_MNM_Variable {
             'cart_status_message' => __('You have selected <span class="mnm-selected-item">0</span> items. You may select between <span class="mnm-select-min-item">0</span> and <span class="mnm-select-max-item">0</span> items or add to cart to continue.', 'wc-mnm-variable' ),
 		);
 
-		if( is_product() && is_single() ){
-            $product_id = get_the_ID();
-            $is_override_template = wc_string_to_bool(get_post_meta($product_id,'_mnm_layout_override',true));
-            if( $is_override_template ){
-                $params['display_layout'] = get_post_meta($product_id,'_mnm_layout_style',true);
-            }
-        }
-
 		$params = apply_filters( 'wc_mnm_variable_add_to_cart_script_parameters', wp_parse_args( $params, $mnm_params ) );
 
 		wp_localize_script( 'wc-mnm-add-to-cart-variation', 'WC_MNM_ADD_TO_CART_VARIATION_PARAMS', $params );

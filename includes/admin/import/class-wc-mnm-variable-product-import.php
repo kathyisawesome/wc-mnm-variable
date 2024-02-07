@@ -206,9 +206,6 @@ class WC_MNM_Variable_Product_Import {
 			unset( $props['weight_cumulative'] );
 			unset( $props['priced_per_product'] );
 			unset( $props['discount'] );  
-			unset( $props['layout_override'] );
-			unset( $props['layout'] );                    
-			unset( $props['add_to_cart_form_location'] ); 
 		}
 
 		return $props;
