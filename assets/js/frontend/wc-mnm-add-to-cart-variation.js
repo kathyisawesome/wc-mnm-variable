@@ -236,40 +236,6 @@
 		};
 	};
 
-	/**
-	 * Check if a node is blocked for processing.
-	 *
-	 * @param {JQuery Object} $node
-	 * @return {bool} True if the DOM Element is UI Blocked, false if not.
-	 */
-	WC_MNM_Variation_Form.prototype.is_blocked = function ( $node ) {
-		return (
-			$node.is( '.processing' ) || $node.parents( '.processing' ).length
-		);
-	};
-
-	/**
-	 * Block a node visually for processing.
-	 *
-	 * @param {JQuery Object} $node
-	 */
-	WC_MNM_Variation_Form.prototype.block = function ( $node ) {
-		if ( ! WC_MNM_Variation_Form.prototype.is_blocked( $node ) ) {
-			$node.addClass( 'processing' ).block( {
-				message: null,
-				theme: true,
-			} );
-		}
-	};
-
-	/**
-	 * Unblock a node after processing is complete.
-	 *
-	 * @param {JQuery Object} $node
-	 */
-	WC_MNM_Variation_Form.prototype.unblock = function ( $node ) {
-		$node.removeClass( 'processing' ).unblock();
-	};
 
 	/*-----------------------------------------------------------------*/
 	/*  Helpers.                                                       */

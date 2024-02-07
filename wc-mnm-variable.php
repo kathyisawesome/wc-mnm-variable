@@ -516,7 +516,7 @@ class WC_MNM_Variable {
 		$script_url     = $this->get_plugin_url() . $script_path;
 		$script_version = WC_Mix_and_Match()->get_file_version( $this->get_plugin_path() . $script_path, self::VERSION );
 
-		wp_register_script( 'wc-mnm-add-to-cart-variation', $script_url, [ 'wc-add-to-cart-variation', 'jquery-blockui' ], $script_version, true );	
+		wp_register_script( 'wc-mnm-add-to-cart-variation', $script_url, [ 'wc-add-to-cart-variation' ], $script_version, true );	
 
 		// Grab localization strings from core MNM.
 		$mnm_params = WC_Mix_and_Match()->display::get_add_to_cart_parameters();
