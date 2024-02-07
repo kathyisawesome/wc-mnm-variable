@@ -10,10 +10,24 @@ import TYPES from './action-types';
 const { SET_CONTAINER_ID, HYDRATE_CONTAINER, RESET_CONFIG, SET_CONTEXT, SET_CONFIG, UPDATE_QTY, VALIDATE } =
 	TYPES;
 
-// Set the product ID.
+/**
+ * Set the container ID.
+ * 
+ * Because this happens whenever the variation change is detected in Woo, it's our proxy for variation changed events.
+ */
 export const setContainerId =
 	( containerId ) =>
 	( { select, dispatch } ) => {
+
+		// If we are switching the variation, we will clear the config - except on first load.
+		if ( null !== select.getContainerId() && select.hasConfiguration() ) {
+
+			dispatch( { type: RESET_CONFIG } );
+
+			// Notify users.
+			window.alert( WC_MNM_ADD_TO_CART_REACT_PARAMS.i18n_form_cleared );
+		}
+
 		dispatch( { type: SET_CONTAINER_ID, payload: { containerId } } );
 
 		// Conditionally re-validate if we have already resolved a container.

@@ -551,6 +551,7 @@ class WC_MNM_Variable {
 		$params = array( 
 			'wc_ajax_url'     => \WC_AJAX::get_endpoint( '%%endpoint%%' ),
 			'i18n_form_error' => __( 'Failed to initialize form. If this issue persists, please reload the page and try again.', 'wc-mnm-variable' ),
+			'i18n_form_cleared' => __( 'Your chosen container size has changed so your selections have been reset to 0.', 'wc-mnm-variable' ),
 			'i18n_selection_prompt' => __( 'Choose %d selections', 'wc-mnm-variable' ),
 			'i18n_selection_prompt_singular' => __( 'Choose %d selection', 'wc-mnm-variable' ),
 			'form_nonce'      => wp_create_nonce( 'wc_mnm_container_form' ),
