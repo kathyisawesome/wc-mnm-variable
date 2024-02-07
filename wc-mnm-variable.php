@@ -118,10 +118,6 @@ class WC_MNM_Variable {
 		/**
 		 * Front end
 		 */
-
-		// Include form html in woocommerce_available_variation.
-		add_filter( 'woocommerce_available_variation', [ $this, 'available_variation' ], 10, 3 );
-
 		// Register Scripts and Styles.
 		add_action( 'wp_enqueue_scripts', [ $this, 'frontend_scripts' ], 20 );
 
@@ -160,12 +156,6 @@ class WC_MNM_Variable {
 		
 		// Admin order style tweaks for variable mix and match.
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_inline_styles' ], 20 );
-
-		// Preload the current variation.
-		add_filter( 'woocommerce_available_variation', [ $this, 'preload_order_item_variation' ], 20, 3 );
-
-		// Core MNM preloads the selected children from an order item by merging config into REQUEST. Need to disable that for variations.
-		add_filter( 'wc_mnm_get_posted_container_form_data', [ $this, 'remove_posted_data' ], 10, 3 );
 
 		// Handle change variation.
 		add_filter( 'wc_mnm_get_product_from_edit_order_item', [ $this, 'switch_variation' ], 10, 4 );
@@ -443,35 +433,6 @@ class WC_MNM_Variable {
 			)
 		);
 	}
-
-	/*
-	|--------------------------------------------------------------------------
-	| Front End Display.
-	|--------------------------------------------------------------------------
-	*/
-
-	/**
-	 * Add HTML to variation data.
-	 * 
-	 * @param array $data
-	 * @param WC_Product_Variable_Mix_and_Match
-	 * @param WC_Product_Mix_and_Match_Variation
-	 */
-	public function available_variation( $data, $product, $variation ) {
-
-		if ( $variation->is_type( 'mix-and-match-variation' ) && $product->is_type( 'variable-mix-and-match' ) ) {
-			$data['mix_and_match'] = [
-				'min_container_size' => $variation->get_min_container_size(),
-				'max_container_size' => $variation->get_min_container_size(),
-				'data_attributes'    => $variation->get_data_attributes( [], false ),
-			];
-
-		}
-
-		return $data;
-
-	}
-
 
 	/*
 	|--------------------------------------------------------------------------
@@ -807,48 +768,6 @@ class WC_MNM_Variable {
 		";
 		wp_add_inline_style( 'wc-mnm-admin-order-style', $custom_css );
 
-	}
-	
-	/**
-	 * Pre-load the current order item's variation form.
-	 * 
-	 * @param array $data
-	 * @param WC_Product_Variable_Mix_and_Match
-	 * @param WC_Product_Mix_and_Match_Variation
-	 * @return array
-	 */
-	public function preload_order_item_variation( $data, $product, $variation ) {
-
-		if ( 
-			$variation->is_type( 'mix-and-match-variation' )
-			&& $product->is_type( 'variable-mix-and-match' )
-			&& WC_MNM_Ajax::is_container_edit_request()
-			&& isset( $_REQUEST['container_id'] )
-			&& intval( $_REQUEST['container_id'] ) === $variation->get_id() )
-		{
-				$data[ 'mix_and_match_html' ] = WC_MNM_Variable::get_instance()->get_variation_template_html( $variation );
-		}
-
-		return $data;
-
-	}
-
-	/**
-	 * Filter the rebuilt configuration to an empty array as variations will prefill using JS.
-	 *
-	 * @param array $form_data
-	 * @param array $configuration
-	 * @param WC_Mix_and_Match_Product $container
-	 * @return array
-	 */
-	public static function remove_posted_data( $form_data, $configuration, $container ) {
-
-		if ( $container && $container->is_type( 'mix-and-match-variation' ) ) {
-			//$form_data = [];
-		}
-
-		return $form_data;
-		
 	}
 
 	/**
