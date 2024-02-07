@@ -1,4 +1,4 @@
-// Initial State
+// Initial State.
 const DEFAULT_STATE = {
 	containers: {},
 	containerId: null,

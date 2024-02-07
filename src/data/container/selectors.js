@@ -1,9 +1,21 @@
 import { price_format } from "./utils";
 
+/**
+ * Get the current Selections - an array of all selected child items
+ * 
+ * @param {obj} state The current state.
+ * @return [array] Array of select item objects.
+ */
 export const getSelections = ( state ) => {
 	return state.selections;
 };
 
+/**
+ * Retrieves container configuration from state.
+ *
+ * @param {obj} state The current state.
+ * @return {obj} The object of selected item ids => quantity pairs.
+ */
 export const getConfiguration = ( state ) => {
 	return state.config;
 };
