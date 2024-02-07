@@ -83,8 +83,6 @@ class WC_Product_Mix_and_Match_Variation_Data_Store_CPT extends WC_Product_Varia
 
 	/**
 	 * Always read certain data from parent product.
-	 * 
-	 * NB: This must happen before WC_Product_Variation_Data_Store_CPT::read_product_data as $product->is_on_sale() is called there (Which calls $product->get_priced_per_product() )and the parent_data array won't be set yet.
 	 *
 	 * @param WC_Product_Variation $product Product object.
 	 * @throws WC_Data_Exception If WC_Product::set_tax_status() is called with an invalid tax status.
@@ -93,6 +91,8 @@ class WC_Product_Mix_and_Match_Variation_Data_Store_CPT extends WC_Product_Varia
 
 		$parent_id = $product->get_parent_id();
 
+		// NB: This must happen before WC_Product_Variation_Data_Store_CPT::read_product_data().
+		// $product->is_on_sale() is called there (Which calls $product->get_priced_per_product() ) and the parent_data array won't be set yet.
 		foreach ( $this->parent_props_to_meta_keys as $property => $meta_key ) {
 
 			// Get meta value.
@@ -137,7 +137,7 @@ class WC_Product_Mix_and_Match_Variation_Data_Store_CPT extends WC_Product_Varia
 		}
 
 		// Add content source/category IDs as additional parent data.
-		$parent_data = $product->get_parent_data();
+		$extended_parent_data = [];
 		$parent_id   = $product->get_parent_id();
 
 		// Need content_source and cat IDs in the parent data.
@@ -150,11 +150,12 @@ class WC_Product_Mix_and_Match_Variation_Data_Store_CPT extends WC_Product_Varia
 				$value = get_post_meta( $parent_id, $meta_key, true );
 			}
 
-			$parent_data[ $property ] = get_post_meta( $parent_id, $meta_key, true );
+			$extended_parent_data[ $property ] = get_post_meta( $parent_id, $meta_key, true );
 
 		}
 
-		$product->set_parent_data( $parent_data );
+		// Use our own setter to merge parent_data with defaults.
+		$product->set_extended_parent_data( $extended_parent_data );
 
 		// Base prices are overridden by NYP min price.
 		if ( ! $product->is_priced_per_product() && $product->is_nyp() ) {

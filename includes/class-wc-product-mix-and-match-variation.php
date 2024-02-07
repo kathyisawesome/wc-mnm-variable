@@ -18,10 +18,11 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 
 	/**
 	 * Inherited parent properties.
+	 * NB: Because of how set_parent_data() works in the data store, we use this in our own setter instead.
 	 *
 	 * @var array
 	 */
-	protected $parent_data = array(
+	protected $extended_parent_data = array(
 		'layout_override'           => false,
 		'layout'                    => 'tabular',
 		'add_to_cart_form_location' => 'default',
@@ -194,6 +195,21 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	| Setters.
 	|--------------------------------------------------------------------------
 	*/
+
+	/**
+	 * Set additional parent data array for this variation.
+	 * 
+	 * There's not really a way to merge our defaults with the WC_Product_Variation defaults so let's create our own setter.
+	 *
+	 * @param array $parent_data parent data array for this variation.
+	 */
+	public function set_extended_parent_data( $parent_data ) {
+
+		// Set some of our own custom defaults.
+		$extended_parent_data = wp_parse_args( $parent_data, $this->extended_parent_data );
+
+		$this->parent_data = array_merge( $this->parent_data, $extended_parent_data );
+	}
 
 	/**
 	 * Shared contents setter.
