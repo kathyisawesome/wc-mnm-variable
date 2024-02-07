@@ -101,14 +101,6 @@ trait WC_MNM_Container {
 	*/
 
 	/**
-	 * Get internal type.
-	 * @return string
-	 */
-	public function get_type() {
-		return 'mix-and-match';
-	}
-
-	/**
 	 * Checks if a product is virtual (has no shipping).
 	 *
 	 * @return bool
