@@ -14,9 +14,9 @@ import StatusUI from '@components/status-ui';
 
 const AddToCart = () => {
 	// Get the child Items from the data store.
-	const { items, maxContainerSize } = useSelect( ( select ) => {
+	const { childItems, maxContainerSize } = useSelect( ( select ) => {
 		return {
-			items: select( CONTAINER_STORE_KEY ).getChildItems(),
+			childItems: select( CONTAINER_STORE_KEY ).getChildItems(),
 			maxContainerSize: select( CONTAINER_STORE_KEY ).getMaxContainerSize(),
 		};
 	} );
@@ -51,7 +51,7 @@ const AddToCart = () => {
 	return (
 		<>
 			<h2 className="wc-mnm-block-child-items__select-prompt">{ prompt }</h2>
-			<ChildItems childItems={ items } childCategories={ Categories } />
+			<ChildItems childItems={ childItems } childCategories={ Categories } />
 			{containerKey ? <input type="hidden" name="update-container" value={containerKey} /> : ''}
 			<Reset />
 			<StatusUI />
