@@ -3,7 +3,7 @@
  */
 import { _x } from '@wordpress/i18n';
 
-const ProductUnavailable = ( {
+const Unavailable = ( {
 	reason = _x(
 		'Sorry, this product cannot be purchased.',
 		'[Frontend]',
@@ -17,4 +17,4 @@ const ProductUnavailable = ( {
 	);
 };
 
-export default ProductUnavailable;
+export default Unavailable;

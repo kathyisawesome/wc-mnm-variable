@@ -11,7 +11,7 @@ import { _x } from '@wordpress/i18n';
  */
 import AddToCart from '@components/add-to-cart';
 import Loading from '@components/add-to-cart/loading';
-import ProductUnavailable from '@components/add-to-cart/product-unavailable';
+import Unavailable from '@components/add-to-cart/unavailable';
 import { CONTAINER_STORE_KEY } from '@data';
 
 const MixAndMatch = ( { target } ) => {
@@ -108,12 +108,12 @@ const MixAndMatch = ( { target } ) => {
 	if ( hasContainer ) {
 
 		if ( container.id && ! container.is_purchasable ) {
-			return <ProductUnavailable />;
+			return <Unavailable />;
 		}
 
 		if ( container.id && ! container.is_in_stock ) {
 			return (
-				<ProductUnavailable
+				<Unavailable
 					reason={ _x(
 						'This product is currently out of stock and cannot be purchased.',
 						'[Frontend]',
