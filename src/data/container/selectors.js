@@ -133,3 +133,25 @@ export const getFormattedStatus = ( state ) => {
 	return WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_status_format.replace( '%v', price_format( getSubTotal( state ) ) ).replace( '%s', formattedTotal );
 
 }
+
+/**
+ * Is the container purchasable
+ * 
+ * @param {obj} state The current state.
+ * @return bool
+ */
+export const isPurchasable = ( state ) => {
+	const container = getContainer( state );
+	return container && container.is_purchasable;
+};
+
+/**
+ * Is the container in stock
+ * 
+ * @param {obj} state The current state.
+ * @return bool
+ */
+export const isInStock = ( state ) => {
+	const container = getContainer( state );
+	return container && container.is_in_stock
+};
