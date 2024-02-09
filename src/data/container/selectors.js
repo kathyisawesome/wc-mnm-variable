@@ -151,6 +151,22 @@ export const getFormattedStatus = ( state ) => {
 }
 
 /**
+ * Get the categories for the container
+ * 
+ * @param {obj} state The current state.
+ * @return [array]
+ */
+export const getCategories = ( state ) => {
+
+	const container = getContainer( state );
+
+	return typeof container.extensions.mix_and_match !== 'undefined' &&
+	typeof container.extensions.mix_and_match.child_categories !== 'undefined'
+		? container.extensions.mix_and_match.child_categories
+		: [];
+};
+
+/**
  * Is the container purchasable
  * 
  * @param {obj} state The current state.
