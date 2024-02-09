@@ -4,7 +4,7 @@
 
 const Loading = () => {
 	return (
-		<div className="wc-block-components-product-add-to-cart-loading blockUI blockOverlay"></div>
+		<div className="wc-mix-and-match-variation-loading blockUI blockOverlay"></div>
 	);
 };
 

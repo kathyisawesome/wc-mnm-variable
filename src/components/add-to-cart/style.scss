@@ -105,12 +105,11 @@
         opacity: 50%;
     }
 
-    .single_variation_wrap.processing {
+    .single_variation_wrap {
         position: relative;
     }
 
     .blockUI.blockOverlay {
-        @include loader();
         z-index: 1000;
         border: medium none;
         margin: 0px;
