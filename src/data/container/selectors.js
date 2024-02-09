@@ -20,6 +20,16 @@ export const getConfiguration = ( state ) => {
 	return state.config;
 };
 
+/**
+ * Does the state have any configuration set.
+ *
+ * @param {obj} state The current state.
+ * @return bool
+ */
+export const hasConfiguration = ( state ) => {
+	return Object.entries(state.config).length !== 0;
+};
+
 export const getMessages = ( state, type ) => {
 	if ( type === 'errors' ) {
 		return state.messages.errors;
