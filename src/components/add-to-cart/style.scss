@@ -55,6 +55,10 @@
 
     .product-type-mix-and-match-variation {
 
+        &.insufficientstock, &.outofstock {
+            opacity: 50%;
+        }
+
         flex-basis: calc(25% - 1.5em);
         margin: 0 auto 1.5em auto;
         list-style: none;
@@ -99,10 +103,6 @@
             border-color: var( --wc-primary, #a46497 );
         }
         
-    }
-
-    .wc_mnm_variation_out_of_stock .wc_mnm_variation > *:not(.mnm_cart) {
-        opacity: 50%;
     }
 
     .single_variation_wrap {
