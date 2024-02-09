@@ -14,10 +14,9 @@ import StatusUI from '@components/status-ui';
 
 const AddToCart = () => {
 	// Get the child Items from the data store.
-	const { items, container, maxContainerSize } = useSelect( ( select ) => {
+	const { items, maxContainerSize } = useSelect( ( select ) => {
 		return {
 			items: select( CONTAINER_STORE_KEY ).getChildItems(),
-			container: select( CONTAINER_STORE_KEY ).getContainer(),
 			maxContainerSize: select( CONTAINER_STORE_KEY ).getMaxContainerSize(),
 		};
 	} );
