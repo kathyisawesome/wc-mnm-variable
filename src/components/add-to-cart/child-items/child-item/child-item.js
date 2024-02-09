@@ -3,9 +3,10 @@
  */
 import { useChild } from '@context';
 
-import ProductImage from './product-image';
-import ProductDetails from './product-details';
-import ProductQty from './product-qty';
+
+import { default as GridItem } from '.././grid/child-item';
+import { default as TabularItem } from '.././tabular/child-item';
+
 
 const ChildItem = ( { loopClass } ) => {
 	const { childItem } = useChild();
@@ -21,47 +22,9 @@ const ChildItem = ( { loopClass } ) => {
 		WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_layout === 'grid';
 
 	return isGridLayout ? (
-		<li
-			className={ `type-product child-item wc-mnm-child-item product ${ loopClass } ${ stock_status }` }
-		>
-			{ WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_thumbnails && (
-				<ProductImage
-					image={ firstImage }
-					fallbackAlt={ name }
-					permalink={ permalink }
-				/>
-			) }
-			<ProductDetails />
-			<ProductQty
-				min={ childItem.min_qty }
-				max={ childItem.max_qty }
-				step={ childItem.step_qty }
-			/>
-		</li>
+		<GridItem childItem={childItem} />
 	) : (
-		<tr
-			className={ `mnm_item child-item product type-product first post-${ childItem.child_id } ${ stock_status }` }
-		>
-			{ WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_thumbnails && (
-				<td className="product-thumbnail">
-					<ProductImage
-						image={ firstImage }
-						fallbackAlt={ name }
-						permalink={ permalink }
-					/>
-				</td>
-			) }
-			<td className="product-details">
-				<ProductDetails />
-			</td>
-			<td className="product-quantity">
-				<ProductQty
-					min={ childItem.min_qty }
-					max={ childItem.max_qty }
-					step={ childItem.step_qty }
-				/>
-			</td>
-		</tr>
+		<TabularItem childItem={childItem} />
 	);
 };
 export default ChildItem;

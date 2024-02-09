@@ -1,97 +1,18 @@
 /**
- * External dependencies
- */
-import { _x } from '@wordpress/i18n';
-
-/**
  * Internal dependencies
  */
-import ChildItem from './child-item';
-import { ChildProvider } from '@context';
+import { default as GridItems } from './grid/child-items';
+import { default as TabularItems } from './tabular/child-items';
 
 const ChildItems = ( { childItems, childCategories } ) => {
-	const numColumns = WC_MNM_ADD_TO_CART_VARIATION_PARAMS.num_columns;
 	const displayLayout = WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_layout;
-	const hasRows = childItems.length > numColumns ? 'has-multilpe-rows' : '';
-	const mobile_optimized =
-		WC_MNM_ADD_TO_CART_VARIATION_PARAMS.mobile_optimized_layout
-			? 'mnm-mobile-optimized'
-			: '';
 
-	/**
-	 * Temporary fix to get first|last grid classes.
-	 *
-	 * @param index
-	 */
-	const generateLoopClass = ( index ) => {
-		if ( index % numColumns === 0 || numColumns === 1 ) {
-			return 'first';
-		}
-
-		if ( ( index + 1 ) % numColumns === 0 ) {
-			return 'last';
-		}
-
-		return '';
-	};
-
-	const getItems = ( childProducts, categoryId ) => {
+	const getItems = ( childItems, categoryId ) => {
 
 		return displayLayout === 'grid' ? (
-			<div className="grid" key={categoryId || 0} >
-				<ul
-					className={ `products mnm_child_products grid has-flex columns-${ numColumns }` }
-				>
-					{ childProducts.map( ( childItem, index ) => {
-						return (
-							<ChildProvider
-								key={ childItem.child_id }
-								childItem={ { childItem } }
-							>
-								<ChildItem
-									loopClass={ generateLoopClass( index ) }
-								/>
-							</ChildProvider>
-						);
-					} ) }
-				</ul>
-			</div>
+			<GridItems childItems={childItems} key={categoryId || 0} />
 		) : (
-			<table
-				key={categoryId || 0}
-				cellSpacing="0"
-				className="products mnm_child_products tabular mnm_table shop_table"
-			>
-				<thead>
-					<tr>
-						<th> </th>
-						<th>
-							{ _x(
-								'Product',
-								'[Frontend]',
-								'wc-mnm-variable'
-							) }
-						</th>
-						<th>
-							{ _x(
-								'Quantity',
-								'[Frontend]',
-								'wc-mnm-variable'
-							) }
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					{ childProducts.map( ( childItem, index ) => (
-						<ChildProvider
-							key={ childItem.child_id }
-							childItem={ { childItem } }
-						>
-							<ChildItem />
-						</ChildProvider>
-					) ) }
-				</tbody>
-			</table>
+			<TabularItems childItems={childItems} key={categoryId || 0} />
 		);
 	};
 
@@ -151,7 +72,7 @@ const ChildItems = ( { childItems, childCategories } ) => {
 
 	return (
 		<div
-			className={ `mnm-variable-product mnm_child_products wc-block-${ displayLayout } has-${ numColumns }-columns ${ hasRows } ${ mobile_optimized }` }
+			className={ `mnm-variable-product mnm_child_products wc-block-${ displayLayout }` }
 		>
 			{ Object.keys( childCategories ).length
 				? getCategoryItems( childCategories, childItems )
