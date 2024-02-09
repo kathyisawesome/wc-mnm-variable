@@ -22,7 +22,7 @@ const AddToCart = () => {
 		};
 	} );
 
-	const [prompt, setPrompt] = useState('');
+	const [ prompt, setPrompt ] = useState('');
 	const [ containerKey, setContainerKey ] = useState( '' );
 
 	/**
