@@ -21,6 +21,8 @@ const ProductDetails = () => {
 		};
 	} );
 
+	const isTabular = 'tabular' === WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_layout;
+
 	const { childItem } = useChild();
 
 	const {
@@ -50,7 +52,7 @@ const ProductDetails = () => {
 				<ProductDescription shortDescription={ short_description } />
 			) }
 
-			{ isSelectable && (
+			{ ! isSelectable && ! isTabular && (
 				<ProductStockStatus
 					status={ childItem.availability.class }
 					availability={ childItem.availability.availability }

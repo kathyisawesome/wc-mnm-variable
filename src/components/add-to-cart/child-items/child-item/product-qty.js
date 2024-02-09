@@ -79,6 +79,8 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 	// Should the item show quantity input.
 	const isSelectable = isInStock && childItem.purchasable && childItem.in_stock;
 
+	const isTabular = 'tabular' === WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_layout;
+
 	// Listen for changes to the validation errors and display.
 	useEffect( () => {
 		if ( validationMessages.length ) {
@@ -261,12 +263,17 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 
 	// If out of stock or not purchasable we do not show a quantity input.
 	if ( ! isSelectable ) {
-		return (
-			<ProductStockStatus
-				status={ childItem.availability.class }
-				availability={ childItem.availability.availability }
-			/>
-		);
+		if ( isTabular ) {
+			return (
+				<ProductStockStatus
+					status={ childItem.availability.class }
+					availability={ childItem.availability.availability }
+				/>
+			);
+		} else {
+			return;
+		}
+		
 	}
 
 	// Required Hidden Quantity.
