@@ -17,10 +17,11 @@ import ProductStockStatus from './product-stock-status';
 const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 	const { childItem } = useChild();
 
-	const { containerQty, maxContainerSize, quantity } = useSelect(
+	const { containerQty, isInStock, maxContainerSize, quantity } = useSelect(
 		( select ) => {
 			return {
 				containerQty: select( CONTAINER_STORE_KEY ).getTotalQty(),
+				isInStock: select( CONTAINER_STORE_KEY ).isInStock(),
 				maxContainerSize:
 					select( CONTAINER_STORE_KEY ).getMaxContainerSize(),
 				quantity: select( CONTAINER_STORE_KEY ).getQty(
@@ -76,7 +77,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 	const errorRef = useRef( null );
 
 	// Should the item show quantity input.
-	const isSelectable = childItem.purchasable && childItem.in_stock;
+	const isSelectable = isInStock && childItem.purchasable && childItem.in_stock;
 
 	// Listen for changes to the validation errors and display.
 	useEffect( () => {

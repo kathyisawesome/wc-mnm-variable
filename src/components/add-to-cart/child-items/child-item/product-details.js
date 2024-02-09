@@ -14,9 +14,10 @@ import ProductStockStatus from './product-stock-status';
 import ProductPrice from './product-price';
 
 const ProductDetails = () => {
-	const { container } = useSelect( ( select ) => {
+	const { container, isInStock } = useSelect( ( select ) => {
 		return {
 			container: select( CONTAINER_STORE_KEY ).getContainer(),
+			isInStock: select( CONTAINER_STORE_KEY ).isInStock(),
 		};
 	} );
 
@@ -33,7 +34,7 @@ const ProductDetails = () => {
 	const isProductHiddenFromCatalog =
 		catalog_visibility === 'hidden' || catalog_visibility === 'search'; // @todo: Need a way to toggle this off in admin.
 
-	const isSelectable = childItem.purchasable && childItem.in_stock;
+	const isSelectable = isInStock && childItem.purchasable && childItem.in_stock;
 
 	return (
 		<div className="wc-mnm-block-child-item__product-details">

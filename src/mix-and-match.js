@@ -84,7 +84,7 @@ const MixAndMatch = ( { target } ) => {
 	);
 
 	// Get container from the store.
-	const { container, isLoading , hasContainer } = useSelect(
+	const { container, isLoading , hasContainer, isPurchasable, isInStock } = useSelect(
 		( select ) => {
 
 			const { getContainerId, getContainerById, hasContainer } = select(CONTAINER_STORE_KEY);
@@ -93,7 +93,9 @@ const MixAndMatch = ( { target } ) => {
 
 			return {
 				container: getContainerById( containerId ),
+				isInStock: select( CONTAINER_STORE_KEY ).isInStock(),
 				isLoading: select(CONTAINER_STORE_KEY).isResolving( 'getContainerById', [ containerId ] ),
+				isPurchasable: select( CONTAINER_STORE_KEY ).isPurchasable(),
 				hasContainer: hasContainer(),
 			};
 		}
@@ -107,11 +109,11 @@ const MixAndMatch = ( { target } ) => {
 	// Finally load the app when the container is ready.
 	if ( hasContainer ) {
 
-		if ( container.id && ! container.is_purchasable ) {
+		if ( ! isPurchasable ) {
 			return <Unavailable />;
 		}
 
-		if ( container.id && ! container.is_in_stock ) {
+		if ( ! isInStock ) {
 			return (
 				<Unavailable
 					reason={ _x(
