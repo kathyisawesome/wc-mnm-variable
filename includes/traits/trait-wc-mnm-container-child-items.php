@@ -86,21 +86,6 @@ trait WC_MNM_Container_Child_Items {
 	}
 
 	/**
-	 * Get child items stock status.
-	 *
-	 * @param  string $context
-	 * @return string
-	 */
-	public function get_child_items_stock_status( $context = 'view' ) {
-
-		if ( ! is_admin() ) {
-			$this->sync();
-		}
-
-		return $this->get_prop( 'child_items_stock_status' , $context );
-	}
-
-	/**
 	 * Return array of allowed child product IDs
 	 *
 	 * @return array[] array of child item ID => product|variation ID
@@ -304,20 +289,7 @@ trait WC_MNM_Container_Child_Items {
 		}
 
 	}
-
-
-	/**
-	 * Set child items stock status.
-	 *
-	 * @param string  $status - 'instock' | 'onbackorder' | 'outofstock'
-	 * 	  'instock'     - Child items stock can fill all slots.
-	 *    'onbackorder' - Child items stock must be backordered to fill all slots.
-	 *    'outofstock'  - Child items do not have enough stock to fill all slots.
-	 */
-	public function set_child_items_stock_status( $status = '' ) {
-		$status = in_array( $status, array( 'instock', 'outofstock', 'onbackorder' ) ) ? $status : 'instock';
-		$this->set_prop( 'child_items_stock_status', $status );
-	}
+	
 
 	/*
 	|--------------------------------------------------------------------------

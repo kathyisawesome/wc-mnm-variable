@@ -266,6 +266,14 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 		return $this->get_share_content( $context );
 	}
 
+	/**
+	 * Stock of container is synced to allowed child items.
+	 *
+	 * @return bool
+	 */
+	public function is_synced() {
+		return $this->is_synced;
+	}
 
 	/**
 	 * Checks if this particular variation is visible. Invisible variations are enabled and can be selected, but no price / stock info is displayed.
@@ -276,6 +284,116 @@ class WC_Product_Mix_and_Match_Variation extends WC_Product_Variation {
 	 */
 	public function variation_is_visible() {
 		return apply_filters( 'woocommerce_variation_is_visible', 'publish' === get_post_status( $this->get_id() ) && '' !== $this->get_price() && $this->has_child_items(), $this->get_id(), $this->get_parent_id(), $this );
+	}
+
+
+	/*
+	|--------------------------------------------------------------------------
+	| Sync with children.
+	|--------------------------------------------------------------------------
+	*/
+
+
+	/**
+	 * Sync child data such as price, availability, etc.
+	 */
+	public function sync() {
+
+		if ( $this->is_synced() ) {
+			return false;
+		}
+
+		/**
+		 * Hook: `wc_mnm_before_sync`
+		 *
+		 * @param  obj $product WC_Product_Mix_and_Match_Variation
+		 */
+		do_action( 'wc_mnm_before_sync', $this );
+
+		/*
+		-----------------------------------------------------------------------------------*/
+		/*
+			Sync Availability Data.
+		/*-----------------------------------------------------------------------------------*/
+
+		$child_items_stock_status = 'outofstock';
+
+		$items_in_stock            = 0;
+		$backorders_allowed        = false;
+		$unlimited_stock_available = false;
+
+		$child_items        = $this->get_child_items();
+		$min_container_size = $this->get_min_container_size();
+
+		if ( empty( $child_items ) ) {
+			$this->is_synced = true;
+			return;
+		}
+
+		foreach ( $child_items as $child_item ) {
+
+			$child_product = $child_item->get_product();
+
+			// Skip any product that isn't purchasable.
+			if ( ! $child_product->is_purchasable() ) {
+				continue;
+			}
+
+			$unlimited_child_stock_available = false;
+			$child_stock_available           = 0;
+
+			// If a child is sold-individually, let's force the container to be sold-individually.
+			// @todo - Ideally, the container should only be sold individually IF a sold-individually child is selected.
+			if ( $child_product->is_sold_individually() ) {
+				$this->set_sold_individually( true );
+			}
+
+			// Calculate how many slots this child can fill with backordered / non-backordered items.
+			if ( $child_product->managing_stock() ) {
+
+				$child_stock = $child_product->get_stock_quantity();
+
+				if ( $child_stock > 0 ) {
+
+					$child_stock_available = $child_stock;
+
+					if ( $child_product->backorders_allowed() ) {
+						$backorders_allowed = true; 
+					}
+				} elseif ( $child_product->backorders_allowed() ) {
+					$backorders_allowed = true; 
+				}
+			} elseif ( $child_product->is_in_stock() ) {
+				$unlimited_stock_available = true;
+			}
+
+			$items_in_stock += $child_stock_available;
+
+			// Quit loop early once we have enough. NB: Probably need to remove is we support per item pricing at the variation level.
+			if ( $items_in_stock > $min_container_size ) {
+				break;
+			}
+		}
+
+		// Update data for container availability.
+		if ( $unlimited_stock_available || $backorders_allowed || $items_in_stock >= $min_container_size ) {
+			$child_items_stock_status = 'instock';
+		}
+
+		if ( ! $unlimited_stock_available && $backorders_allowed && $items_in_stock < $min_container_size ) {
+			$child_items_stock_status = 'onbackorder';
+		}
+
+		$this->set_child_items_stock_status( $child_items_stock_status );
+
+		$this->is_synced = true;
+
+		/**
+		 * `wc_mnm_synced` hook.
+		 *
+		 * @param  obj $product WC_Product_Mix_and_Match_Variation
+		 */
+		do_action( 'wc_mnm_synced', $this );
 	}
 
 }

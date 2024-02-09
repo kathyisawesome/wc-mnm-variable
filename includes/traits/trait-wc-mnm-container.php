@@ -396,7 +396,19 @@ trait WC_MNM_Container {
 		$this->set_prop( 'max_container_size', '' !== $value ? absint( $value ) : '' );
 	}
 
-
+	/**
+	 * Set child items stock status.
+	 *
+	 * @param string  $status - 'instock' | 'onbackorder' | 'outofstock'
+	 * 	  'instock'     - Child items stock can fill all slots.
+	 *    'onbackorder' - Child items stock must be backordered to fill all slots.
+	 *    'outofstock'  - Child items do not have enough stock to fill all slots.
+	 */
+	public function set_child_items_stock_status( $status = '' ) {
+		$status = in_array( $status, array( 'instock', 'outofstock', 'onbackorder' ) ) ? $status : 'instock';
+		$this->set_prop( 'child_items_stock_status', $status );
+	}
+	
 	/*
 	|--------------------------------------------------------------------------
 	| Conditionals
@@ -644,6 +656,22 @@ trait WC_MNM_Container {
 	| Non-CRUD Getters
 	|--------------------------------------------------------------------------
 	*/
+
+
+	/**
+	 * Get child items stock status.
+	 *
+	 * @param  string $context
+	 * @return string
+	 */
+	public function get_child_items_stock_status( $context = 'view' ) {
+
+		if ( ! is_admin() ) {
+			$this->sync();
+		}
+
+		return $this->get_prop( 'child_items_stock_status' , $context );
+	}
 
 
 	/**
@@ -1248,7 +1276,6 @@ trait WC_MNM_Container {
 			return false;
 		}
 
-		// @todo - Stock and price syncing to contents is not yet supported.
 		$this->set_child_items_stock_status( 'instock' );
 
 		$this->is_synced = true;
