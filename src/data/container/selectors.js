@@ -80,7 +80,7 @@ export const getChildItems = ( state ) => {
 		: [];
 };
 
-export const hasValidContainer = ( state ) => {
+export const hasContainer = ( state ) => {
 	const container = getContainer( state );
 	return container.hasOwnProperty('id');
 };

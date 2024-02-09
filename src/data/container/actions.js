@@ -31,7 +31,7 @@ export const setContainerId =
 		dispatch( { type: SET_CONTAINER_ID, payload: { containerId } } );
 
 		// Conditionally take actions if we have already resolved a container.
-		if ( select.hasValidContainer() ) {
+		if ( select.hasContainer() ) {
 
 			// The resolver only dispatches HYPDATE (and therefore VALIDATE) on first resolution and we need to re-validate/update messaging on every switch.
 			dispatch( { type: VALIDATE } );

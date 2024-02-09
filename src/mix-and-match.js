@@ -84,17 +84,17 @@ const MixAndMatch = ( { target } ) => {
 	);
 
 	// Get container from the store.
-	const { container, isLoading , hasValidContainer } = useSelect(
+	const { container, isLoading , hasContainer } = useSelect(
 		( select ) => {
 
-			const { getContainerId, getContainerById, hasValidContainer } = select(CONTAINER_STORE_KEY);
+			const { getContainerId, getContainerById, hasContainer } = select(CONTAINER_STORE_KEY);
 
 			const containerId = getContainerId();
 
 			return {
 				container: getContainerById( containerId ),
 				isLoading: select(CONTAINER_STORE_KEY).isResolving( 'getContainerById', [ containerId ] ),
-				hasValidContainer: hasValidContainer(),
+				hasContainer: hasContainer(),
 			};
 		}
 	);
@@ -105,7 +105,7 @@ const MixAndMatch = ( { target } ) => {
 	}
 
 	// Finally load the app when the container is ready.
-	if ( hasValidContainer ) {
+	if ( hasContainer ) {
 
 		if ( container.id && ! container.is_purchasable ) {
 			return <ProductUnavailable />;
