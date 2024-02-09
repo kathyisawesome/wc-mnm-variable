@@ -657,6 +657,30 @@ trait WC_MNM_Container {
 	|--------------------------------------------------------------------------
 	*/
 
+	/**
+	 * Container stock status, taking child item stock limitations into account.
+	 *
+	 * @param  string  $context
+	 * @return string
+	 */
+	public function get_container_stock_status( $context = 'view' ) {
+
+		$stock_status = $this->get_stock_status( $context );
+
+		if ( 'instock' === $stock_status ) {
+
+			$child_status = $this->get_child_items_stock_status( $context );
+
+			if ( 'outofstock' === $child_status ) {
+				$stock_status = 'insufficientstock';
+			} else {
+				$stock_status = $child_status;
+			}
+
+		}
+
+		return $stock_status;
+	}
 
 	/**
 	 * Get child items stock status.
@@ -876,18 +900,18 @@ trait WC_MNM_Container {
 
 		if ( ! is_admin() && parent::is_in_stock() ) {
 
-			$get_child_items_stock_status = $this->get_child_items_stock_status();
+			$container_stock_status = $this->get_container_stock_status();
 
 			// If a child does not have enough stock, let people know.
-			if ( 'outofstock' === $get_child_items_stock_status ) {
+			if ( 'insufficientstock' === $container_stock_status ) {
 
-				$availability['availability'] = _x( 'Insufficient stock', '[Frontend]', 'wc-mnm-variable' );
-				$availability['class']        = 'out-of-stock';
+				$availability['availability'] = esc_html_x( 'Insufficient stock', '[Frontend]', 'wc-mnm-variable' );
+				$availability['class']        = 'insufficientstock out-of-stock';
 
 			// If a child is on backorder, the parent should appear to be on backorder, too.
-			} elseif ( parent::is_in_stock() && 'onbackorder' === $get_child_items_stock_status ) {
+			} elseif ( 'onbackorder' === $container_stock_status ) {
 
-				$availability['availability'] = _x( 'Available on backorder', '[Frontend]', 'wc-mnm-variable' );
+				$availability['availability'] = esc_html_x( 'Available on backorder', '[Frontend]', 'wc-mnm-variable' );
 				$availability['class']        = 'available-on-backorder';
 
 			}

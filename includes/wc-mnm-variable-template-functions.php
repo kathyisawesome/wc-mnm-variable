@@ -168,7 +168,7 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 
 				<?php foreach ( $available_variations as $variation ) : ?>
 					
-					<li class="variation product-type-mix-and-match-variation">
+					<li class="variation product-type-mix-and-match-variation <?php echo esc_attr( $variation->get_container_stock_status() ); ?>">
 
 						<?php
 						
