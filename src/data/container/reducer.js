@@ -281,7 +281,7 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 				...state,
 				totalQty,
 				messages,
-				isValid: messages.errors.length === 0,
+				passesValidation: messages.errors.length === 0,
 			};
 
 			const updated = new CustomEvent( 'wc/mnm/container/container-updated', {

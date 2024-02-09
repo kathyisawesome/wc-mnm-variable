@@ -114,8 +114,14 @@ export const getMaxContainerSize = ( state ) => {
 		: '';
 };
 
-export const isValid = ( state ) => {
-	return state.isValid;
+/**
+ * Does the container have a valid config?
+ * 
+ * @param {obj} state The current state.
+ * @return bool
+ */
+export const passesValidation = ( state ) => {
+	return true === state.passesValidation;
 };
 
 export const getFormattedStatus = ( state ) => {

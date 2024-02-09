@@ -11,18 +11,18 @@ import { Interweave } from 'interweave';
 import { CONTAINER_STORE_KEY } from '@data/container';
 
 const StatusUI = () => {
-	const { messages, isValid, formattedStatus } = useSelect( ( select ) => {
+	const { messages, passesValidation, formattedStatus } = useSelect( ( select ) => {
 		return {
-			messages: select( CONTAINER_STORE_KEY ).isValid()
+			messages: select( CONTAINER_STORE_KEY ).passesValidation()
 				? select( CONTAINER_STORE_KEY ).getMessages( 'status' )
 				: select( CONTAINER_STORE_KEY ).getMessages( 'errors' ),
-			isValid: select( CONTAINER_STORE_KEY ).isValid(),
+			passesValidation: select( CONTAINER_STORE_KEY ).passesValidation(),
 			formattedStatus: select( CONTAINER_STORE_KEY ).getFormattedStatus(),
 		};
 	} );
 
 	return (
-		<div className={`mnm_status ${isValid ? 'passes_validation' : 'fails_validation'}`}>
+		<div className={`mnm_status ${passesValidation ? 'passes_validation' : 'fails_validation'}`}>
 			<p className="mnm_price">
 				<span className="wc-mnm-block-child-item__product-price">
 					<Interweave content={ formattedStatus } />
@@ -32,7 +32,7 @@ const StatusUI = () => {
 			<div
 				aria-live="polite"
 				role="status"
-				className={ `mnm_message woocommerce-message ${ ! isValid ? 'woocommerce-error' : '' }` }
+				className={ `mnm_message woocommerce-message ${ ! passesValidation ? 'woocommerce-error' : '' }` }
 				style={ { display: 'block' } }
 			>
 				<ul className="msg mnm_message_content">

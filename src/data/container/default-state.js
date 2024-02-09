@@ -6,7 +6,7 @@ const DEFAULT_STATE = {
 	config: {},
 	totalQty: 0,
 	messages: { status: [], errors: [] },
-	isValid: false,
+	passesValidation: false,
 	subTotal: 0.0,
 	total: 0.0,
 	context: 'add-to-cart',
