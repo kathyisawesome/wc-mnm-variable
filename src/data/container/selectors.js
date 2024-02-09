@@ -100,6 +100,12 @@ export const hasChildItems = ( state ) => {
 	return getChildItems( state ).length;
 };
 
+/**
+ * Min container size.
+ * 
+ * @param {obj} state The current state.
+ * @return mixed int|string
+ */
 export const getMinContainerSize = ( state ) => {
 
 	const container = getContainer( state );
@@ -112,6 +118,12 @@ export const getMinContainerSize = ( state ) => {
 		: 0;
 };
 
+/**
+ * Max container size
+ * 
+ * @param {obj} state The current state.
+ * @return mixed int|string
+ */
 export const getMaxContainerSize = ( state ) => {
 
 	const container = getContainer( state );
@@ -134,6 +146,12 @@ export const passesValidation = ( state ) => {
 	return true === state.passesValidation;
 };
 
+/**
+ * Format current config status
+ * 
+ * @param {obj} state The current state.
+ * @return string
+ */
 export const getFormattedStatus = ( state ) => {
 
 	let maxContainerSize = getMaxContainerSize( state ) || _x(
