@@ -9,7 +9,8 @@ import ProductQty from './product-qty';
 
 const ChildItem = ( { loopClass } ) => {
 	const { childItem } = useChild();
-	const { name, images, catalog_visibility, purchasable } = childItem;
+
+	const { name, images, catalog_visibility, stock_status } = childItem;
 
 	const firstImage = images.length ? images[ 0 ] : {};
 	const permalink =
@@ -21,7 +22,7 @@ const ChildItem = ( { loopClass } ) => {
 
 	return isGridLayout ? (
 		<li
-			className={ `type-product wc-mnm-child-item product ${ loopClass }` }
+			className={ `type-product child-item wc-mnm-child-item product ${ loopClass } ${ stock_status }` }
 		>
 			{ WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_thumbnails && (
 				<ProductImage
@@ -39,7 +40,7 @@ const ChildItem = ( { loopClass } ) => {
 		</li>
 	) : (
 		<tr
-			className={ `mnm_item child-item product type-product first post-${ childItem.child_id }` }
+			className={ `mnm_item child-item product type-product first post-${ childItem.child_id } ${ stock_status }` }
 		>
 			{ WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_thumbnails && (
 				<td className="product-thumbnail">
