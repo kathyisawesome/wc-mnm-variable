@@ -42,16 +42,12 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 
 		case HYDRATE_CONTAINER: {
 
-			const params = new URLSearchParams( window.location.search );
-			const context = params.get( 'update-container' ) || 'edit' === params.get( 'action' ) ? 'edit' : 'add-to-cart'; // @todo - How can we set this context in the component itself.
-
 			return {
 				...state,
 				containers: {
 					...state.containers,
 					[payload.container.id]: payload.container,
 				  },
-		//		context: context,
 			};
 		}
 
