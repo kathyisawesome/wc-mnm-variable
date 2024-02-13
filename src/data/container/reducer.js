@@ -23,6 +23,15 @@ import { calcTotalQty, selectedQtyMessage } from './utils';
  */
 
 const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
+
+	// Current child items from state.
+	const childItems =	state.containers[state.containerId] && 
+			typeof state.containers[state.containerId].extensions.mix_and_match !== 'undefined' &&
+			typeof state.containers[state.containerId].extensions.mix_and_match.child_items !==
+				'undefined'
+			? state.containers[state.containerId].extensions.mix_and_match.child_items
+			: [];
+
 	switch ( type ) {
 
 		case SET_CONTAINER_ID:
@@ -61,28 +70,50 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 
 		case SET_CONFIG:
 
-			let updatedConfig = payload.config;
+			let payloadConfig = payload.config;
+			let newConfig = {};
+			let newSelections = [];
 
 			// Attempt to parse JSON strings (used by data attributes when editing the container in admin).
-			if (typeof updatedConfig === 'string') {
+			if (typeof payloadConfig === 'string') {
 	
 					// Parse the JSON string into a JavaScript object
-					let dataObject = JSON.parse(updatedConfig);
+					let dataObject = JSON.parse(payloadConfig);
 			
 					// Check if parsing was successful
 					if (dataObject && typeof dataObject === 'object') {
-						updatedConfig = dataObject;
+						payloadConfig = dataObject;
 					}
 		
 			}
 			
 			// Cast any null to empty object.
-			updatedConfig = Object(payload.config);
+			payloadConfig = Object(payloadConfig);
+
+			// Verify each payloadConfig id is a valid child item:
+			for (let item of childItems) {
+
+				// Check if child item is in the config.
+				if (payloadConfig[item.child_id] !== undefined) {
+
+					let newQty = parseFloat(payloadConfig[item.child_id]);
+
+					// Store new qty in config object.
+					newConfig[item.child_id] = newQty;
+
+					// Push child item into selections the required number of times.
+					for (let i = 0; i < newQty; i++) {
+						newSelections.push(item);
+					}
+
+				}		
+
+			}
 
 			return {
 				...state,
-				config: updatedConfig,
-				//selections: updatedSelections, // @todo - need to figure this out somehow.
+				config: newConfig,
+				selections: newSelections,
 			};
 
 		case UPDATE_QTY:
@@ -90,30 +121,37 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 			const currentQty = state.config.hasOwnProperty( child_id )
 				? state.config[ child_id ]
 				: 0;
-			const updatedSelections = state.selections;
 
-			// If increasing.
-			if ( payload.qty > currentQty ) {
-				updatedSelections.push( payload.item );
-			} else if ( payload.qty < currentQty ) {
-				// if decreasing this needs to remove the last instance of this item.
-				for ( let i = updatedSelections.length - 1; i >= 0; i-- ) {
-					if ( updatedSelections[ i ].child_id === child_id ) {
-						const newLocal = 1;
-						updatedSelections.splice( i, newLocal );
-						break; // Stop the loop after removing the last matching object.
+			const updatedSelections = state.selections;
+			const updatedConfig = state.config;
+
+			const payloadQty = parseFloat( payload.qty );
+
+			// Check if the ID is a valid child item ID.
+			if ( childItems.some(obj => obj.child_id === child_id) ) {
+				
+				// If increasing.
+				if ( payloadQty > currentQty ) {
+					updatedSelections.push( payload.item );
+				} else if ( payloadQty < currentQty ) {
+					// if decreasing this needs to remove the last instance of this item.
+					for ( let i = updatedSelections.length - 1; i >= 0; i-- ) {
+						if ( updatedSelections[ i ].child_id === child_id ) {
+							const newLocal = 1;
+							updatedSelections.splice( i, newLocal );
+							break; // Stop the loop after removing the last matching object.
+						}
 					}
 				}
-			}
 
-			const qtyConfig = {
-				...state.config,
-				[ child_id ]: payload.qty,
-			};
+				// Update the quantity in the config object.
+				updatedConfig[ child_id ] = payloadQty;
+
+			}
 
 			return {
 				...state,
-				config: qtyConfig,
+				config: updatedConfig,
 				selections: updatedSelections,
 			};
 
