@@ -37,6 +37,29 @@ const ProductImage = ( {
 
 	if ( permalink ) {
 		return (
+			
+			<div class="product-thumbnail">
+				<div className="mnm_child_product_images mnm_image">
+					<figure className="mnm_child_product_image woocommerce-product-gallery__image">
+						<a
+							href={ imageSrc }
+							className="image zoom"
+							data-rel="photoSwipe"
+						>
+							<img
+								className="wc-block-components-product-image"
+								{ ...imageProps }
+								alt={ imageProps.alt }
+							/>
+						</a>
+					</figure>
+				</div>
+			</div>
+		);
+	}
+
+	return (
+		<div class="product-thumbnail">
 			<div className="mnm_child_product_images mnm_image">
 				<figure className="mnm_child_product_image woocommerce-product-gallery__image">
 					<a
@@ -45,31 +68,13 @@ const ProductImage = ( {
 						data-rel="photoSwipe"
 					>
 						<img
-							className="wc-block-components-product-image"
+							className="wc-block-components-product-image {`wp-image-${image.id}`}"
 							{ ...imageProps }
 							alt={ imageProps.alt }
 						/>
 					</a>
 				</figure>
 			</div>
-		);
-	}
-
-	return (
-		<div className="mnm_child_product_images mnm_image">
-			<figure className="mnm_child_product_image woocommerce-product-gallery__image">
-				<a
-					href={ imageSrc }
-					className="image zoom"
-					data-rel="photoSwipe"
-				>
-					<img
-						className="wc-block-components-product-image {`wp-image-${image.id}`}"
-						{ ...imageProps }
-						alt={ imageProps.alt }
-					/>
-				</a>
-			</figure>
 		</div>
 	);
 };
