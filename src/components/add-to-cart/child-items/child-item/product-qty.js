@@ -182,16 +182,22 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 			max = Math.min( max, maxContainerSize );
 		}
 
+		const isDecreasing   = newQty < prevQty;
+
 		// Validation.
 		switch ( true ) {
 			// Prevent over-filling container.
 			case maxContainerSize > 0 && potentialQty > maxContainerSize:
 				// Handle overfull container.
 				if ( containerQty > maxContainerSize ) {
-					newQty = Math.min(
-						prevQty - ( containerQty - maxContainerSize ),
-						max
-					);
+
+					if ( ! isDecreasing ) {
+						newQty = Math.min(
+							prevQty - ( containerQty - maxContainerSize ),
+							max
+						);
+					}
+					
 					newQty = newQty > 0 ? newQty : 0;
 
 					// Space left to fill.
@@ -236,7 +242,11 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 
 			// Check the item quantity it not below it's max.
 			case max > 0 && currentQty > max:
-				newQty = max;
+
+				if ( ! isDecreasing ) {
+					newQty = max;
+				}
+				
 				setValidationMessages( [
 					WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_child_item_max_qty_message.replace(
 						'%d',
