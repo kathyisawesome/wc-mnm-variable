@@ -342,6 +342,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 						className="qty mnm-quantity wc-mnm-variation__child-item-quantity_input"
 						data-required={ false }
 						data-title={ childItem.name }
+						disabled={ isFull || ( ( max + containerQty) > maxContainerSize ) }
 						type="checkbox"
 						name={ `mnm_quantity[${ childItem.child_id }]` }
 						value={ max }
