@@ -33,7 +33,7 @@ export const hasConfiguration = ( state ) => {
 export const getMessages = ( state, type ) => {
 	if ( type === 'errors' ) {
 		return state.messages.errors;
-	} else if ( 'status' ) {
+	} else if ( type === 'status' ) {
 		return state.messages.status;
 	}
 	return state.messages; // Return all messages.
