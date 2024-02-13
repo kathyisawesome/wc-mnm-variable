@@ -21,7 +21,7 @@ const ChildItem = () => {
 	return (
 
 		<tr
-			className={ `mnm_item child-item product type-product first post-${ childItem.child_id }` }
+			className={ `wc-mnm-variation__child-item mnm_item product type-product first post-${ childItem.child_id }` }
 		>
 			{ WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_thumbnails && (
 				<td className="product-thumbnail">

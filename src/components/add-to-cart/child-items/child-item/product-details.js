@@ -39,7 +39,7 @@ const ProductDetails = () => {
 	const isSelectable = isInStock && childItem.purchasable && childItem.in_stock;
 
 	return (
-		<div className="wc-mnm-block-child-item__product-details">
+		<div className="wc-mnm-variation__child-item-details product-details">
 			{ isProductHiddenFromCatalog ? (
 				<ProductTitle title={ name } />
 			) : (

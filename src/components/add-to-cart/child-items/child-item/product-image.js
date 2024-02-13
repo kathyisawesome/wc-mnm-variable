@@ -38,7 +38,7 @@ const ProductImage = ( {
 	if ( permalink ) {
 		return (
 			
-			<div class="product-thumbnail">
+			<div className="product-thumbnail">
 				<div className="mnm_child_product_images mnm_image">
 					<figure className="mnm_child_product_image woocommerce-product-gallery__image">
 						<a
@@ -59,9 +59,9 @@ const ProductImage = ( {
 	}
 
 	return (
-		<div class="product-thumbnail">
-			<div className="mnm_child_product_images mnm_image">
-				<figure className="mnm_child_product_image woocommerce-product-gallery__image">
+		<div className="product-thumbnail">
+			<div className="wc-mnm-variation__image-wrap mnm_child_product_images mnm_image">
+				<figure className="mwc-mnm-variation__image mnm_child_product_image woocommerce-product-gallery__image">
 					<a
 						href={ imageSrc }
 						className="image zoom"

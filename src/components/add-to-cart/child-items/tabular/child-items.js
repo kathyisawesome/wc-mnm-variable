@@ -14,7 +14,7 @@ const ChildItems = ( { childItems } ) => {
 	return (
 		<table
 			cellSpacing="0"
-			className="products mnm_child_products tabular mnm_table shop_table"
+			className="wc-mnm-variation__child-items products tabular mnm_table shop_table"
 		>
 			<thead>
 				<tr>

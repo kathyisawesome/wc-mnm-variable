@@ -4,7 +4,7 @@ import MixAndMatch from './mix-and-match';
 // Attach the event listener to the desired custom event
 document.addEventListener( 'wc-mnm-initialize.variable-mix-and-match', function(e) {
 
-	const targets = e.target.querySelectorAll( '.mix-and-match-root' );
+	const targets = e.target.querySelectorAll( '.wc-mix-and-match-root' );
 
 	targets.forEach( function ( target ) {
 

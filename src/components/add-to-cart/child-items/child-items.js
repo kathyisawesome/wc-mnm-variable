@@ -6,6 +6,10 @@ import { default as TabularItems } from './tabular/child-items';
 
 const ChildItems = ( { childItems, childCategories } ) => {
 	const displayLayout = WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_layout;
+	const mobile_optimized =
+	WC_MNM_ADD_TO_CART_VARIATION_PARAMS.mobile_optimized_layout
+		? 'mnm-mobile-optimized'
+		: '';
 
 	const getItems = ( childItems, categoryId ) => {
 
@@ -27,9 +31,9 @@ const ChildItems = ( { childItems, childCategories } ) => {
 				return (
 					<div
 						key={ category.term_id }
-						className={ `product-category product-category-${ category.name }` }
+						className={ `wc-mnm-variation__child-category product-category product-category-${ category.name.toLowerCase() }` }
 					>
-						<h3 className="woocommerce-loop-category_xtitle">
+						<h3 className="wc-mnm-variation__category-title woocommerce-loop-category_xtitle">
 							{ category.name }
 						</h3>
 						{ childItems.map( ( childItem, index ) => {
@@ -72,7 +76,7 @@ const ChildItems = ( { childItems, childCategories } ) => {
 
 	return (
 		<div
-			className={ `mnm-variable-product mnm_child_products wc-block-${ displayLayout }` }
+			className={ `wc-mnm-variation__child-items-wrap ${mobile_optimized}` }
 		>
 			{ Object.keys( childCategories ).length
 				? getCategoryItems( childCategories, childItems )

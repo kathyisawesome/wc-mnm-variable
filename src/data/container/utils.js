@@ -78,7 +78,7 @@ export const selectedQtyMessage = function ( qty ) {
 			break;
 	}
 
-	formatted_price = args.html ? '<span class="woocommerce-Price-amount amount">' + formatted_price + '</span>' : formatted_price;
+	formatted_price = args.html ? '<span class="wc-mnm-variation__status-price woocommerce-Price-amount amount">' + formatted_price + '</span>' : formatted_price;
 
 	return formatted_price;
 

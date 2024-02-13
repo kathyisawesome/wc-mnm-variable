@@ -10,7 +10,7 @@
 
 		self.$form = $form;
 		self.$selectors = $form.find( '.wc-mnm-variations :radio' );
-		self.$mnmVariation = $form.find( '.single_mnm_variation' );
+		self.$mnmVariation = $form.find( '.wc-mnm-variation' );
 		self.$addToCart = $form.find( '.single_add_to_cart_button' );
 
 		self.variationData = $form.data( 'product_variations' );
@@ -135,7 +135,7 @@
 			const $target = form.$mnmVariation;
 
 			event.currentTarget
-				.querySelector( '.mix-and-match-root' )
+				.querySelector( '.wc-mix-and-match-root' )
 				.setAttribute( 'data-variation_id', variation.variation_id );
 
 			// Dynamically store variation ID in place that is automatically include in submit data when editing container.
@@ -171,7 +171,7 @@
 		}
 
 		event.currentTarget
-			.querySelector( '.mix-and-match-root' )
+			.querySelector( '.wc-mix-and-match-root' )
 			.setAttribute( 'data-variation_id', '' );
 
 		form.$selectors.prop( 'checked', false );

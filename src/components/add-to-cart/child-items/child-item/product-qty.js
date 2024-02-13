@@ -335,11 +335,11 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 		);
 
 		return (
-			<div className="product-quantity">
-				<div className="quantity mnm-checkbox-qty child_item__quantity">
+			<div className="product-quantity wc-mnm-variation__child-item-quantity">
+				<div className="quantity mnm-checkbox-qty">
 					<input
 						checked={ quantity === max }
-						className="qty mnm-quantity child_item__quantity_input"
+						className="qty mnm-quantity wc-mnm-variation__child-item-quantity_input"
 						data-required={ false }
 						data-title={ childItem.name }
 						type="checkbox"
@@ -364,10 +364,10 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 
 	// Otherwise show the quantity input.
 	return (
-		<div className="child_item__quantity product-quantity">
+		<div className="wc-mnm-variation__child-item-quantity product-quantity">
 			<div className="quantity">
 				<input
-					className="child_item__quantity_input qty mnm-quantity input-text qty text"
+					className="wc-mnm-variation__child-item-quantity_input qty mnm-quantity input-text qty text"
 					type="number"
 					value={ localQty }
 					min={ min }
@@ -415,7 +415,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 					</button>
 				) }
 				<div
-					className="wc_mnm_child_item_error"
+					className="wc-mnm-variation__child-item-error wc_mnm_child_item_error"
 					aria-live="polite"
 					ref={ errorRef }
 				></div>

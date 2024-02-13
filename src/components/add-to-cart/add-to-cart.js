@@ -45,7 +45,7 @@ const AddToCart = () => {
 
 	return (
 		<>
-			<h2 className="wc-mnm-block-child-items__select-prompt">{ prompt }</h2>
+			<h2 className="wc-mnm-variation__select-prompt">{ prompt }</h2>
 			<ChildItems childItems={ childItems } childCategories={ categories } />
 			{containerKey ? <input type="hidden" name="update-container" value={containerKey} /> : ''}
 			<Reset />

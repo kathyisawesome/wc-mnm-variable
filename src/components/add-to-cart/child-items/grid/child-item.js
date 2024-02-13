@@ -20,7 +20,7 @@ const ChildItem = ( { loopClass } ) => {
 
 	return (
 		<li
-			className={ `type-product child-item wc-mnm-child-item product ${ loopClass } ${ in_stock ? 'instock' : 'outofstock' }` }
+			className={ `wc-mnm-variation__child-item mnm_item product type-product ${ loopClass } ${ in_stock ? 'instock' : 'outofstock' } post-${ childItem.child_id }` }
 		>
 			{ WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_thumbnails && (
 				<ProductImage

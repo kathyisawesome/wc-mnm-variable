@@ -22,20 +22,18 @@ const StatusUI = () => {
 	} );
 
 	return (
-		<div className={`mnm_status ${passesValidation ? 'passes_validation' : 'fails_validation'}`}>
-			<p className="mnm_price">
-				<span className="wc-mnm-block-child-item__product-price">
-					<Interweave content={ formattedStatus } />
-				</span>
+		<div className={`wc-mnm-variation__status mnm_status ${passesValidation ? 'passes_validation' : 'fails_validation'}`}>
+			<p className="wc-mnm-variation__status-content mnm_price">
+				<Interweave content={ formattedStatus } />
 			</p>
 
 			<div
 				aria-live="polite"
 				role="status"
-				className={ `mnm_message woocommerce-message ${ ! passesValidation ? 'woocommerce-error' : '' }` }
+				className={ `wc-mnm-variation__message mnm_message woocommerce-message ${ ! passesValidation ? 'woocommerce-error' : '' }` }
 				style={ { display: 'block' } }
 			>
-				<ul className="msg mnm_message_content">
+				<ul className="wc-mnm-variation__message-content msg mnm_message_content">
 					{ messages.map( ( message, index ) => (
 						<li key={ index }>{ message }</li>
 					) ) }

@@ -754,13 +754,13 @@ class WC_MNM_Variable {
 			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .single_variation {
 				padding: 1rem;
 			}
-			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .single_mnm_variation > *:not(.mnm_reset):not(.mnm_status) {
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc-mnm-variation > *:not(.mnm_reset):not(.mnm_status) {
 				padding: 0 1rem 1rem 1rem;
 			}
-			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .single_mnm_variation table.mnm_child_products {
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc-mnm-variation table.mnm_child_products {
 				padding: 0;
 			}
-			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .single_mnm_variation .mnm_reset {
+			.wc-mnm-backbone-modal form.edit_container .single_variation_wrap .wc-mnm-variation .mnm_reset {
 				margin-left: 1rem;
 				margin-right: 1rem;
 			}

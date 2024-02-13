@@ -107,7 +107,7 @@ if ( ! function_exists( 'wc_mnm_template_single_variation' ) ) {
 			?>
 
 			<div
-				class="mix-and-match-root woocommerce-variation single_mnm_variation"
+				class="wc-mnm-variation wc-mix-and-match-root woocommerce-variation"
 				data-product_id="<?php echo esc_attr( $product->get_id() ); ?>"
 				data-variation_id="0"
 				data-validation_context="<?php echo esc_attr( $context ); ?>"
@@ -312,7 +312,7 @@ if ( ! function_exists( 'wc_mnm_template_edit_single_variation' ) ) {
 			?>
 
 			<div
-				class="mix-and-match-root woocommerce-variation single_mnm_variation"
+				class="wc-mnm-variation wc-mix-and-match-root woocommerce-variation single_mnm_variation"
 				data-product_id="<?php echo esc_attr( $product->get_id() ); ?>"
 				data-variation_id="0"
 				data-validation_context="<?php echo esc_attr( $context ); ?>"

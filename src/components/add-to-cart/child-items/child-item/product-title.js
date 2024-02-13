@@ -6,7 +6,7 @@ const ProductTitle = ( { title } ) => {
 			? 'wc-block-grid__product-title'
 			: 'woocommerce-loop-product__title';
 	return (
-		<h4 className={ 'wc-block-components-product-title ' + titleClass }>
+		<h4 className={ 'wc-mnm-variation__child-item-title ' + titleClass }>
 			<Interweave content={ title } />
 		</h4>
 	);
