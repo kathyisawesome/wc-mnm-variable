@@ -17,16 +17,15 @@ import ProductStockStatus from './product-stock-status';
 const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 	const { childItem } = useChild();
 
-	const { containerQty, isInStock, maxContainerSize, quantity } = useSelect(
+	const { containerQty, isInStock, maxContainerSize, quantity, isFull } = useSelect(
 		( select ) => {
 			return {
 				containerQty: select( CONTAINER_STORE_KEY ).getTotalQty(),
 				isInStock: select( CONTAINER_STORE_KEY ).isInStock(),
 				maxContainerSize:
 					select( CONTAINER_STORE_KEY ).getMaxContainerSize(),
-				quantity: select( CONTAINER_STORE_KEY ).getQty(
-					childItem.child_id
-				),
+				quantity: select( CONTAINER_STORE_KEY ).getQty( childItem.child_id ),
+				isFull: select( CONTAINER_STORE_KEY ).getMaxContainerSize() && select( CONTAINER_STORE_KEY ).getTotalQty() >= select( CONTAINER_STORE_KEY ).getMaxContainerSize(),
 			};
 		}
 	);
@@ -124,8 +123,9 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 		// Conditionally disable buttons.
 		e.target.disabled = newQty <= min;
 
-		// Select the next sibling element
-		e.target.nextElementSibling.disabled = newQty >= max;
+		// Select the next sibling element.
+		e.target.nextElementSibling.disabled = (newQty >= max) || isFull;
+
 	};
 
 	/**
@@ -143,10 +143,11 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 		}
 
 		// Conditionally disable buttons.
-		e.target.disabled = max && newQty >= max;
+		e.target.disabled = (max && newQty >= max) || isFull;
 
-		// Select the previous sibling element
+		// Select the previous sibling element.
 		e.target.previousElementSibling.disabled = newQty <= min;
+
 	};
 
 	/**
@@ -381,6 +382,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 				{ WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_plus_minus_buttons && (
 					<button
 						onClick={ handleMinusClick }
+						disabled={ localQty <= min }
 						type="button"
 						tabIndex="-1"
 						aria-label="{ _x( 'Reduce quantity', '[Frontend]', 'wc-mnm-variable' ) }"
@@ -393,6 +395,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 				{ WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_plus_minus_buttons && (
 					<button
 						onClick={ handlePlusClick }
+						disabled={ isFull }
 						type="button"
 						tabIndex="-1"
 						aria-label="{ _x( 'Increase quantity', '[Frontend]', 'wc-mnm-variable' ) }"
