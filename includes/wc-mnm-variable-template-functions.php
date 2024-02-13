@@ -137,7 +137,7 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 				'selected'         => false,
 				'name'             => '',
 				'id'               => '',
-				'class'            => 'wc-mnm-variations-field',
+				'class'            => 'wc-mnm-variations',
 			)
 		);
 
@@ -164,11 +164,11 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 				<?php // translators: %s is an attribute label coming from the taxonomy args, ex: Choose Color. ?>
 				<legend><?php printf( esc_html_x( 'Choose %s', '[Frontend] attribute label', 'wc-mnm-variable' ), wc_attribute_label( $args['attribute'] ) ); ?></legend>
 
-				<ul class="variations wc-mnm-variations <?php echo esc_attr( count( $available_variations ) % 3 === 0 ? 'columns-3' : 'columns-2' ); ?>">
+				<ul class="variations wc-mnm-variations--swatches <?php echo esc_attr( count( $available_variations ) % 3 === 0 ? 'columns-3' : 'columns-2' ); ?>">
 
 				<?php foreach ( $available_variations as $variation ) : ?>
 					
-					<li class="variation product-type-mix-and-match-variation <?php echo esc_attr( $variation->get_container_stock_status() ); ?>">
+					<li class="wc-mnm-variations--variation product-type-mix-and-match-variation <?php echo esc_attr( $variation->get_container_stock_status() ); ?>">
 
 						<?php
 						
@@ -191,9 +191,9 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 								}
 							?>
 
-							<span class="variation-title"><?php echo wp_kses_post( $label ); ?></span>
+							<span class="wc-mnm-variations--variation-title"><?php echo wp_kses_post( $label ); ?></span>
 
-							<span class="variation-price price"><?php echo wp_kses_post( $variation->get_price_html() ); ?></span>
+							<span class="wc-mnm-variations--variation-price price"><?php echo wp_kses_post( $variation->get_price_html() ); ?></span>
 					
 						</label>
 						
