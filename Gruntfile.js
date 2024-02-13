@@ -221,6 +221,7 @@ module.exports = function ( grunt ) {
 				},
 				expand: true,
 				cwd: 'build/',
+				dest: '<%= pkg.name %>',
 				src: [ '**/*' ]
 			},
 		},
