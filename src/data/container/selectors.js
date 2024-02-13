@@ -30,6 +30,13 @@ export const hasConfiguration = ( state ) => {
 	return Object.entries(state.config).length !== 0;
 };
 
+/**
+ * Retrieves all types of container validation messages.
+ *
+ * @param {obj} state The current state.
+ * @param string The type of message to return if you only want some. 'errors'|'status'
+ * @return {obj} The object of selected item ids => quantity pairs.
+ */
 export const getMessages = ( state, type ) => {
 	if ( type === 'errors' ) {
 		return state.messages.errors;
@@ -39,46 +46,108 @@ export const getMessages = ( state, type ) => {
 	return state.messages; // Return all messages.
 };
 
+/**
+ * Retrieves container error messages.
+ *
+ * @param {obj} state The current state.
+ * @return [string] Array of messages.
+ */
 export const getErrorMessages = ( state ) => {
 	return state.messages.errors;
 };
 
+/**
+ * Retrieves container status messages.
+ *
+ * @param {obj} state The current state.
+ * @return [string] Array of messages.
+ */
 export const getStatusMessages = ( state ) => {
 	return state.messages.status;
 };
 
+/**
+ * Retrieves quantity of specific child.
+ *
+ * @param {obj} state The current state.
+ * @param int The child ID
+ * @return int the quantity
+ */
 export const getQty = ( state, childId ) => {
 	const { config } = state;
 	return config.hasOwnProperty( childId ) ? config[ childId ] : '';
 };
 
+/**
+ * Retrieves quantity of total container's configuration.
+ *
+ * @param {obj} state The current state.
+ * @return int the total quantity
+ */
 export const getTotalQty = ( state ) => {
 	return state.totalQty;
 };
 
+/**
+ * Get a current subtotal
+ * 
+ * @param {obj} state The current state.
+ * @return int
+ */
 export const getSubTotal = ( state ) => {
 	const container = getContainer( state );
 	return hasContainer(state) ? container.prices.price / 100 : 0;
 };
 
+/**
+ * Is the app resolving a container?
+ * 
+ * @param {obj} state The current state.
+ * @return int
+ */
 export const isLoading = ( state ) => {
 	return state.loading;
 };
 
+/**
+ * Get a current container's ID
+ * 
+ * @param {obj} state The current state.
+ * @return int
+ */
 export const getContainerId = ( state ) => {
 	return state.containerId;
 };
 
+/**
+ * Get a container object by ID
+ * 
+ * @param {obj} state The current state.
+ * @param int The container ID
+ * @return {obj}
+ */
 export const getContainerById = (state, id) => {
 	return state.containers[id];
 };
 
+/**
+ * Get the current container object
+ * 
+ * @param {obj} state The current state.
+ * @return {obj}
+ */
 export const getContainer = ( state ) => {
 	return state.containers.hasOwnProperty(state.containerId)
     ? state.containers[state.containerId]
     : {};
 };
 
+/**
+ * Get the container's child items
+ * 
+ * @param {obj} state The current state.
+ * @return []{obj} An array of child item objects from the REST response.
+ */
 export const getChildItems = ( state ) => {
 	const container = getContainer( state );
 
@@ -90,14 +159,25 @@ export const getChildItems = ( state ) => {
 		: [];
 };
 
+/**
+ * Is a container resolved yet?
+ * 
+ * @param {obj} state The current state.
+ * @return bool
+ */
 export const hasContainer = ( state ) => {
 	const container = getContainer( state );
 	return container.hasOwnProperty('id');
 };
 
-
+/**
+ * Does the container have child items?
+ * 
+ * @param {obj} state The current state.
+ * @return bool
+ */
 export const hasChildItems = ( state ) => {
-	return getChildItems( state ).length;
+	return getChildItems( state ).length > 0;
 };
 
 /**
