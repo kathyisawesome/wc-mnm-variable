@@ -1,13 +1,19 @@
 import { price_format } from "./utils";
 
 /**
- * Get the current Selections - an array of all selected child items
+ * Get the categories for the container
  * 
  * @param {obj} state The current state.
- * @return [array] Array of select item objects.
+ * @return [array]
  */
-export const getSelections = ( state ) => {
-	return state.selections;
+export const getCategories = ( state ) => {
+
+	const container = getContainer( state );
+
+	return hasContainer(state) && typeof container.extensions.mix_and_match !== 'undefined' &&
+	typeof container.extensions.mix_and_match.child_categories !== 'undefined'
+		? container.extensions.mix_and_match.child_categories
+		: [];
 };
 
 /**
@@ -18,116 +24,6 @@ export const getSelections = ( state ) => {
  */
 export const getConfiguration = ( state ) => {
 	return state.config;
-};
-
-/**
- * Does the state have any configuration set.
- *
- * @param {obj} state The current state.
- * @return bool
- */
-export const hasConfiguration = ( state ) => {
-	return Object.entries(state.config).length !== 0;
-};
-
-/**
- * Retrieves all types of container validation messages.
- *
- * @param {obj} state The current state.
- * @param string The type of message to return if you only want some. 'errors'|'status'
- * @return {obj} The object of selected item ids => quantity pairs.
- */
-export const getMessages = ( state, type ) => {
-	if ( type === 'errors' ) {
-		return state.messages.errors;
-	} else if ( type === 'status' ) {
-		return state.messages.status;
-	}
-	return state.messages; // Return all messages.
-};
-
-/**
- * Retrieves container error messages.
- *
- * @param {obj} state The current state.
- * @return [string] Array of messages.
- */
-export const getErrorMessages = ( state ) => {
-	return state.messages.errors;
-};
-
-/**
- * Retrieves container status messages.
- *
- * @param {obj} state The current state.
- * @return [string] Array of messages.
- */
-export const getStatusMessages = ( state ) => {
-	return state.messages.status;
-};
-
-/**
- * Retrieves quantity of specific child.
- *
- * @param {obj} state The current state.
- * @param int The child ID
- * @return int the quantity
- */
-export const getQty = ( state, childId ) => {
-	const { config } = state;
-	return config.hasOwnProperty( childId ) ? config[ childId ] : '';
-};
-
-/**
- * Retrieves quantity of total container's configuration.
- *
- * @param {obj} state The current state.
- * @return int the total quantity
- */
-export const getTotalQty = ( state ) => {
-	return state.totalQty;
-};
-
-/**
- * Get a current subtotal
- * 
- * @param {obj} state The current state.
- * @return int
- */
-export const getSubTotal = ( state ) => {
-	const container = getContainer( state );
-	return hasContainer(state) ? container.prices.price / 100 : 0;
-};
-
-/**
- * Is the app resolving a container?
- * 
- * @param {obj} state The current state.
- * @return int
- */
-export const isLoading = ( state ) => {
-	return state.loading;
-};
-
-/**
- * Get a current container's ID
- * 
- * @param {obj} state The current state.
- * @return int
- */
-export const getContainerId = ( state ) => {
-	return state.containerId;
-};
-
-/**
- * Get a container object by ID
- * 
- * @param {obj} state The current state.
- * @param int The container ID
- * @return {obj}
- */
-export const getContainerById = (state, id) => {
-	return state.containers[id];
 };
 
 /**
@@ -143,87 +39,24 @@ export const getContainer = ( state ) => {
 };
 
 /**
- * Get the container's child items
+ * Get a container object by ID
  * 
  * @param {obj} state The current state.
- * @return []{obj} An array of child item objects from the REST response.
+ * @param int The container ID
+ * @return {obj}
  */
-export const getChildItems = ( state ) => {
-	const container = getContainer( state );
-
-	return hasContainer(state) &&
-		typeof container.extensions.mix_and_match !== 'undefined' &&
-		typeof container.extensions.mix_and_match.child_items !==
-			'undefined'
-		? container.extensions.mix_and_match.child_items
-		: [];
+export const getContainerById = (state, id) => {
+	return state.containers[id];
 };
 
 /**
- * Is a container resolved yet?
+ * Get a current container's ID
  * 
  * @param {obj} state The current state.
- * @return bool
+ * @return int
  */
-export const hasContainer = ( state ) => {
-	const container = getContainer( state );
-	return container.hasOwnProperty('id');
-};
-
-/**
- * Does the container have child items?
- * 
- * @param {obj} state The current state.
- * @return bool
- */
-export const hasChildItems = ( state ) => {
-	return getChildItems( state ).length > 0;
-};
-
-/**
- * Min container size.
- * 
- * @param {obj} state The current state.
- * @return mixed int|string
- */
-export const getMinContainerSize = ( state ) => {
-
-	const container = getContainer( state );
-
-	return hasContainer(state) &&
-		typeof container.extensions.mix_and_match !== 'undefined' &&
-		typeof container.extensions.mix_and_match.min_container_size !==
-			'undefined'
-		? container.extensions.mix_and_match.min_container_size
-		: 0;
-};
-
-/**
- * Max container size
- * 
- * @param {obj} state The current state.
- * @return mixed int|string
- */
-export const getMaxContainerSize = ( state ) => {
-
-	const container = getContainer( state );
-
-	return hasContainer(state) &&
-		typeof container.extensions.mix_and_match !== 'undefined' &&
-		typeof container.extensions.mix_and_match.max_container_size !==
-			'undefined'
-		? container.extensions.mix_and_match.max_container_size
-		: '';
-};
-
-/**
- * Does the container have a valid config?
- * 
- * @param {obj} state The current state.
- * @return bool
- */
-export const passesValidation = ( state ) => {
-	return true === state.passesValidation;
+export const getContainerId = ( state ) => {
+	return state.containerId;
 };
 
 /**
@@ -249,19 +82,188 @@ export const getFormattedStatus = ( state ) => {
 }
 
 /**
- * Get the categories for the container
+ * Retrieves container error messages.
+ *
+ * @param {obj} state The current state.
+ * @return [string] Array of messages.
+ */
+export const getErrorMessages = ( state ) => {
+	return state.messages.errors;
+};
+
+
+/**
+ * Get the container's child items
  * 
  * @param {obj} state The current state.
- * @return [array]
+ * @return []{obj} An array of child item objects from the REST response.
  */
-export const getCategories = ( state ) => {
+export const getChildItems = ( state ) => {
+	const container = getContainer( state );
+
+	return hasContainer(state) &&
+		typeof container.extensions.mix_and_match !== 'undefined' &&
+		typeof container.extensions.mix_and_match.child_items !==
+			'undefined'
+		? container.extensions.mix_and_match.child_items
+		: [];
+};
+
+/**
+ * Max container size
+ * 
+ * @param {obj} state The current state.
+ * @return mixed int|string
+ */
+export const getMaxContainerSize = ( state ) => {
 
 	const container = getContainer( state );
 
-	return hasContainer(state) && typeof container.extensions.mix_and_match !== 'undefined' &&
-	typeof container.extensions.mix_and_match.child_categories !== 'undefined'
-		? container.extensions.mix_and_match.child_categories
-		: [];
+	return hasContainer(state) &&
+		typeof container.extensions.mix_and_match !== 'undefined' &&
+		typeof container.extensions.mix_and_match.max_container_size !==
+			'undefined'
+		? container.extensions.mix_and_match.max_container_size
+		: '';
+};
+
+/**
+ * Retrieves all types of container validation messages.
+ *
+ * @param {obj} state The current state.
+ * @param string The type of message to return if you only want some. 'errors'|'status'
+ * @return {obj} The object of selected item ids => quantity pairs.
+ */
+export const getMessages = ( state, type ) => {
+	if ( type === 'errors' ) {
+		return state.messages.errors;
+	} else if ( type === 'status' ) {
+		return state.messages.status;
+	}
+	return state.messages; // Return all messages.
+};
+
+/**
+ * Min container size.
+ * 
+ * @param {obj} state The current state.
+ * @return mixed int|string
+ */
+export const getMinContainerSize = ( state ) => {
+
+	const container = getContainer( state );
+
+	return hasContainer(state) &&
+		typeof container.extensions.mix_and_match !== 'undefined' &&
+		typeof container.extensions.mix_and_match.min_container_size !==
+			'undefined'
+		? container.extensions.mix_and_match.min_container_size
+		: 0;
+};
+
+/**
+ * Retrieves quantity of specific child.
+ *
+ * @param {obj} state The current state.
+ * @param int The child ID
+ * @return int the quantity
+ */
+export const getQty = ( state, childId ) => {
+	const { config } = state;
+	return config.hasOwnProperty( childId ) ? config[ childId ] : '';
+};
+
+/**
+ * Get the current Selections - an array of all selected child items
+ * 
+ * @param {obj} state The current state.
+ * @return [array] Array of select item objects.
+ */
+export const getSelections = ( state ) => {
+	return state.selections;
+};
+
+/**
+ * Get a current subtotal
+ * 
+ * @param {obj} state The current state.
+ * @return int
+ */
+export const getSubTotal = ( state ) => {
+	const container = getContainer( state );
+	return hasContainer(state) ? container.prices.price / 100 : 0;
+};
+
+/**
+ * Retrieves container status messages.
+ *
+ * @param {obj} state The current state.
+ * @return [string] Array of messages.
+ */
+export const getStatusMessages = ( state ) => {
+	return state.messages.status;
+};
+
+/**
+ * Retrieves quantity of total container's configuration.
+ *
+ * @param {obj} state The current state.
+ * @return int the total quantity
+ */
+export const getTotalQty = ( state ) => {
+	return state.totalQty;
+};
+
+/**
+ * Does the container have child items?
+ * 
+ * @param {obj} state The current state.
+ * @return bool
+ */
+export const hasChildItems = ( state ) => {
+	return getChildItems( state ).length > 0;
+};
+
+/**
+ * Does the state have any configuration set.
+ *
+ * @param {obj} state The current state.
+ * @return bool
+ */
+export const hasConfiguration = ( state ) => {
+	return Object.entries(state.config).length !== 0;
+};
+
+/**
+ * Is a container resolved yet?
+ * 
+ * @param {obj} state The current state.
+ * @return bool
+ */
+export const hasContainer = ( state ) => {
+	const container = getContainer( state );
+	return container.hasOwnProperty('id');
+};
+
+/**
+ * Is the container in stock
+ * 
+ * @param {obj} state The current state.
+ * @return bool
+ */
+export const isInStock = ( state ) => {
+	const container = getContainer( state );
+	return hasContainer(state) && container.is_in_stock
+};
+
+/**
+ * Is the app resolving a container?
+ * 
+ * @param {obj} state The current state.
+ * @return int
+ */
+export const isLoading = ( state ) => {
+	return state.loading;
 };
 
 /**
@@ -276,12 +278,11 @@ export const isPurchasable = ( state ) => {
 };
 
 /**
- * Is the container in stock
+ * Does the container have a valid config?
  * 
  * @param {obj} state The current state.
  * @return bool
  */
-export const isInStock = ( state ) => {
-	const container = getContainer( state );
-	return hasContainer(state) && container.is_in_stock
+export const passesValidation = ( state ) => {
+	return true === state.passesValidation;
 };
