@@ -58,7 +58,7 @@ export const getTotalQty = ( state ) => {
 
 export const getSubTotal = ( state ) => {
 	const container = getContainer( state );
-	return container.prices.price / 100;
+	return hasContainer(state) ? container.prices.price / 100 : 0;
 };
 
 export const isLoading = ( state ) => {
@@ -82,7 +82,7 @@ export const getContainer = ( state ) => {
 export const getChildItems = ( state ) => {
 	const container = getContainer( state );
 
-	return container &&
+	return hasContainer(state) &&
 		typeof container.extensions.mix_and_match !== 'undefined' &&
 		typeof container.extensions.mix_and_match.child_items !==
 			'undefined'
@@ -110,7 +110,7 @@ export const getMinContainerSize = ( state ) => {
 
 	const container = getContainer( state );
 
-	return state.container &&
+	return hasContainer(state) &&
 		typeof container.extensions.mix_and_match !== 'undefined' &&
 		typeof container.extensions.mix_and_match.min_container_size !==
 			'undefined'
@@ -128,7 +128,7 @@ export const getMaxContainerSize = ( state ) => {
 
 	const container = getContainer( state );
 
-	return container &&
+	return hasContainer(state) &&
 		typeof container.extensions.mix_and_match !== 'undefined' &&
 		typeof container.extensions.mix_and_match.max_container_size !==
 			'undefined'
@@ -178,7 +178,7 @@ export const getCategories = ( state ) => {
 
 	const container = getContainer( state );
 
-	return typeof container.extensions.mix_and_match !== 'undefined' &&
+	return hasContainer(state) && typeof container.extensions.mix_and_match !== 'undefined' &&
 	typeof container.extensions.mix_and_match.child_categories !== 'undefined'
 		? container.extensions.mix_and_match.child_categories
 		: [];
@@ -192,7 +192,7 @@ export const getCategories = ( state ) => {
  */
 export const isPurchasable = ( state ) => {
 	const container = getContainer( state );
-	return container && container.is_purchasable;
+	return hasContainer(state) && container.is_purchasable;
 };
 
 /**
@@ -203,5 +203,5 @@ export const isPurchasable = ( state ) => {
  */
 export const isInStock = ( state ) => {
 	const container = getContainer( state );
-	return container && container.is_in_stock
+	return hasContainer(state) && container.is_in_stock
 };
