@@ -3,28 +3,34 @@
  */
 import { _x } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
-import { Interweave } from 'interweave';
 
 /**
  * Internal dependencies
  */
 import { CONTAINER_STORE_KEY } from '@data/container';
+import ProductPrice from './product-price';
+import Counter from './counter';
 
 const StatusUI = () => {
-	const { messages, passesValidation, formattedStatus } = useSelect( ( select ) => {
+	const { messages, passesValidation } = useSelect( ( select ) => {
 		return {
 			messages: select( CONTAINER_STORE_KEY ).passesValidation()
 				? select( CONTAINER_STORE_KEY ).getMessages( 'status' )
 				: select( CONTAINER_STORE_KEY ).getMessages( 'errors' ),
 			passesValidation: select( CONTAINER_STORE_KEY ).passesValidation(),
-			formattedStatus: select( CONTAINER_STORE_KEY ).getFormattedStatus(),
 		};
 	} );
 
 	return (
 		<div className={`wc-mnm-variation__status mnm_status ${passesValidation ? 'passes_validation' : 'fails_validation'}`}>
 			<p className="wc-mnm-variation__status-content mnm_price">
-				<Interweave content={ formattedStatus } />
+				<span className="price">
+					<span className="total">
+						{ _x( 'Total:', '[Frontend] "Total" price refers to the sum price of the container. Preceeds formatted price in local currency."', 'wc-mnm-mobile-styles' ) }
+					</span>
+					<ProductPrice/>
+				</span>
+				<Counter/>
 			</p>
 
 			<div

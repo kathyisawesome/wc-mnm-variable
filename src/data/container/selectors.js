@@ -1,4 +1,3 @@
-import { price_format } from "./utils";
 /**
  * External dependencies
  */
@@ -68,27 +67,6 @@ export const getContext = ( state ) => {
 	return state.context;
 };
 
-/**
- * Format current config status
- * 
- * @param {obj} state The current state.
- * @return string
- */
-export const getFormattedStatus = ( state ) => {
-
-	let maxContainerSize = getMaxContainerSize( state ) || _x(
-		'∞',
-		'[Frontend]',
-		'wc-mnm-variable'
-	);
-
-	let formattedTotal = 1 === maxContainerSize ? WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_quantity_format_counter_single : WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_quantity_format_counter;
-		
-	formattedTotal = formattedTotal.replace( '%max', maxContainerSize ).replace( '%s', getTotalQty( state ) );
-
-	return WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_status_format.replace( '%v', price_format( getSubTotal( state ) ) ).replace( '%s', formattedTotal );
-
-}
 
 /**
  * Retrieves container error messages.
