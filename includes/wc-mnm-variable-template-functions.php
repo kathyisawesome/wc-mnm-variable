@@ -55,7 +55,7 @@ if ( ! function_exists( 'wc_mnm_variable_template_add_to_cart' ) ) {
 				'available_variations' => $get_variations ? $product->get_available_variations() : false,
 				'attributes'           => $product->get_variation_attributes(),
 				'selected_attributes'  => $product->get_default_attributes(),
-				'classes'              => wc_mnm_get_form_classes( array( 'variable_mnm_form' ), $product ),
+				'classes'              => wc_mnm_get_form_classes( array( 'variations_form', 'variable_mnm_form' ), $product ),
 			),
 			'',
 			WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
@@ -269,7 +269,7 @@ if ( ! function_exists( 'wc_mnm_template_edit_variable_container_order_item' ) )
 			array(
 				'order_item'           => $order_item,
 				'order'                => $order,
-				'classes'              => wc_mnm_get_form_classes( array( 'variable_mnm_form', 'edit_container' ), $product ),
+				'classes'              => wc_mnm_get_form_classes( array( 'variations_form', 'variable_mnm_form', 'edit_container' ), $product ),
 				'available_variations' => $get_variations ? $product->get_available_variations(): false,
 				'attributes'           => $product->get_variation_attributes(),
 				'source'               => $source,

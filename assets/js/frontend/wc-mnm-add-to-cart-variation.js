@@ -22,7 +22,7 @@
 			$form.data( 'validation_context' ) || 'add-to-cart';
 
 		// Add MNM container class.
-		self.$form.addClass( 'mnm_form variations_form' );
+		//self.$form.addClass( 'mnm_form variations_form' );
 
 		// Bind methods.
 		self.shutdown = self.shutdown.bind( self );
