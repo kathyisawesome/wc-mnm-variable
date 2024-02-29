@@ -32,7 +32,7 @@
 		// Listen for Data Store updates.
 		// Disabled add to cart button and stash the config on the form attributes for use when saving in admin.
 		document.addEventListener( 'wc/mnm/container/container-updated', ( e ) => {
-			self.$addToCart.toggleClass( 'disabled', ! e.detail.isValid );
+			self.$addToCart.toggleClass( 'disabled', ! e.detail.passesValidation );
 			self.$form.data( 'config', e.detail.config );
 		} );
 
