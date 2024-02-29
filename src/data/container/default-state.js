@@ -1,6 +1,7 @@
 // Initial State.
 const DEFAULT_STATE = {
 	basePrice: { price: 0, regular_price: 0 },
+	context: 'add-to-cart',
 	containers: {},
 	containerId: null,
 	selections: [],
@@ -8,7 +9,6 @@ const DEFAULT_STATE = {
 	totalQty: 0,
 	messages: { status: [], errors: [] },
 	passesValidation: false,
-	context: 'add-to-cart',
 	subTotal: { price: 0, regular_price: 0 },
 	total: { price: 0, regular_price: 0 },
 };
