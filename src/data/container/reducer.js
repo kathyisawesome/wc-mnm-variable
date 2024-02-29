@@ -326,6 +326,7 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 			const validatedState = {
 				...state,
 				basePrice,
+				container: state.containers[state.containerId],
 				messages,
 				passesValidation: messages.errors.length === 0,
 				subTotal, 
