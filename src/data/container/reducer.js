@@ -42,12 +42,19 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 
 		case HYDRATE_CONTAINER: {
 
+			const formId = payload.container?.parent > 0 ? payload.container.parent : payload.container.id;
+			const form   = document.querySelector(`form.mnm_form[data-product_id = "${formId}"]`);
+
 			return {
 				...state,
-				containers: {
-					...state.containers,
-					[payload.container.id]: payload.container,
-				  },
+				...{
+					addToCartForm: form ?? null,
+					containers: {
+						...state.containers,
+						[payload.container.id]: payload.container,
+					},
+				},
+				
 			};
 		}
 
@@ -331,7 +338,10 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 			} );
 
 			// Dispatch an event.
-			document.dispatchEvent( updated );
+			if ( state.addToCartForm ) {
+				state.addToCartForm.dispatchEvent( updated );
+			}
+			
 			return validatedState;
 
 		default:
