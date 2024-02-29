@@ -7,7 +7,7 @@
  *               }
  * @param config
  */
-export const calcTotalQty = ( config ) => {
+export const calcTotalQuantity = ( config ) => {
 	return Object.values( config ).reduce(
 		( total, qty ) => total + Number( qty ),
 		0
@@ -20,7 +20,7 @@ export const calcTotalQty = ( config ) => {
  * @param int qty
  * @param qty
  */
-export const selectedQtyMessage = function ( qty ) {
+export const selectQuantityMessage = function ( qty ) {
 	const message =
 		qty === 1
 			? WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_qty_message_single

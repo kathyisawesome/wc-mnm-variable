@@ -12,7 +12,7 @@ import TYPES from './action-types';
 const { SET_CONTAINER_ID, HYDRATE_CONTAINER, RESET_CONFIG, SET_CONTEXT, SET_CONFIG, UPDATE_QTY, VALIDATE } =
 	TYPES;
 
-import { calcTotalQty, selectedQtyMessage } from './utils';
+import { calcTotalQuantity, selectQuantityMessage } from './utils';
 
 /**
  * Data store reducer
@@ -157,7 +157,7 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 				status: [],
 				errors: [],
 			};
-			const totalQty = calcTotalQty( state.config );
+			const totalQuantity = calcTotalQuantity( state.config );
 
 			if (
 				state.containers.hasOwnProperty( state.containerId ) &&
@@ -170,7 +170,7 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 					state.containers[state.containerId].extensions.mix_and_match.min_container_size;
 				const maxContainerSize =
 					state.containers[state.containerId].extensions.mix_and_match.max_container_size;
-				const qtyMessage = selectedQtyMessage( totalQty ); // "Selected X total".
+				const qtyMessage = selectQuantityMessage( totalQuantity ); // "Selected X total".
 				
 				let errorMessage = '';
 				let validMessage = '';
@@ -192,7 +192,7 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 								  ]
 								: WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_valid_fixed_message;
 
-						if ( totalQty !== minContainerSize ) {
+						if ( totalQuantity !== minContainerSize ) {
 							errorMessage =
 								minContainerSize === 1
 									? WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_qty_error_single
@@ -223,7 +223,7 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 								  ]
 								: WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_valid_max_message;
 
-						if ( totalQty > maxContainerSize ) {
+						if ( totalQuantity > maxContainerSize ) {
 							errorMessage =
 								maxContainerSize > 1
 									? WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_max_qty_error
@@ -252,8 +252,8 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 								: WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_valid_range_message;
 
 						if (
-							totalQty < minContainerSize ||
-							totalQty > maxContainerSize
+							totalQuantity < minContainerSize ||
+							totalQuantity > maxContainerSize
 						) {
 							errorMessage = WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_min_max_qty_error;
 							errorMessage = errorMessage
@@ -279,7 +279,7 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 								  ]
 								: WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_valid_min_message;
 
-						if ( totalQty < minContainerSize ) {
+						if ( totalQuantity < minContainerSize ) {
 							errorMessage =
 								minContainerSize > 1
 									? WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_min_qty_error
@@ -318,12 +318,12 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 
 			const validatedState = {
 				...state,
-				totalQty,
 				basePrice,
 				messages,
 				passesValidation: messages.errors.length === 0,
 				subTotal, 
 				total,
+				totalQuantity,
 			};
 
 			const updated = new CustomEvent( 'wc/mnm/container/container-updated', {
