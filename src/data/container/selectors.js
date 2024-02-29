@@ -64,6 +64,16 @@ export const getContainerId = ( state ) => {
 };
 
 /**
+ * Get a current container's context
+ * 
+ * @param {obj} state The current state.
+ * @return int
+ */
+export const getContext = ( state ) => {
+	return state.context;
+};
+
+/**
  * Format current config status
  * 
  * @param {obj} state The current state.
