@@ -311,11 +311,19 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 				);
 			}
 
+			// @todo - calculate per-price totals.
+			const basePrice = state.containers[state.containerId].prices;
+			const subTotal = basePrice;
+			const total = basePrice;
+
 			const validatedState = {
 				...state,
 				totalQty,
+				basePrice,
 				messages,
 				passesValidation: messages.errors.length === 0,
+				subTotal, 
+				total,
 			};
 
 			const updated = new CustomEvent( 'wc/mnm/container/container-updated', {

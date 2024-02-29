@@ -175,12 +175,25 @@ export const getSelections = ( state ) => {
 /**
  * Get a current subtotal
  * 
+ * NB: Currently Variable MNM does not support per-item pricing.
+ * 
  * @param {obj} state The current state.
  * @return int
  */
 export const getSubTotal = ( state ) => {
-	const container = getContainer( state );
-	return hasContainer(state) ? container.prices.price / 100 : 0;
+	return state.subTotal;
+};
+
+/**
+ * Get a current Total
+ * 
+ * NB: Currently Variable MNM does not support per-item pricing.
+ * 
+ * @param {obj} state The current state.
+ * @return int
+ */
+export const getTotal = ( state ) => {
+	return state.total;
 };
 
 /**
