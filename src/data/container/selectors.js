@@ -11,13 +11,8 @@ import { _x } from '@wordpress/i18n';
  * @return [array]
  */
 export const getCategories = ( state ) => {
-
 	const container = getContainer( state );
-
-	return hasContainer(state) && typeof container.extensions.mix_and_match !== 'undefined' &&
-	typeof container.extensions.mix_and_match.child_categories !== 'undefined'
-		? container.extensions.mix_and_match.child_categories
-		: [];
+	return container?.extensions?.mix_and_match?.child_categories ?? [];
 };
 
 /**
@@ -114,13 +109,7 @@ export const getErrorMessages = ( state ) => {
  */
 export const getChildItems = ( state ) => {
 	const container = getContainer( state );
-
-	return hasContainer(state) &&
-		typeof container.extensions.mix_and_match !== 'undefined' &&
-		typeof container.extensions.mix_and_match.child_items !==
-			'undefined'
-		? container.extensions.mix_and_match.child_items
-		: [];
+	return container?.extensions?.mix_and_match?.child_items ?? [];
 };
 
 /**
@@ -130,15 +119,8 @@ export const getChildItems = ( state ) => {
  * @return mixed int|string
  */
 export const getMaxContainerSize = ( state ) => {
-
 	const container = getContainer( state );
-
-	return hasContainer(state) &&
-		typeof container.extensions.mix_and_match !== 'undefined' &&
-		typeof container.extensions.mix_and_match.max_container_size !==
-			'undefined'
-		? container.extensions.mix_and_match.max_container_size
-		: '';
+    return container?.extensions?.mix_and_match?.max_container_size ?? '';
 };
 
 /**
@@ -164,15 +146,8 @@ export const getMessages = ( state, type ) => {
  * @return mixed int|string
  */
 export const getMinContainerSize = ( state ) => {
-
 	const container = getContainer( state );
-
-	return hasContainer(state) &&
-		typeof container.extensions.mix_and_match !== 'undefined' &&
-		typeof container.extensions.mix_and_match.min_container_size !==
-			'undefined'
-		? container.extensions.mix_and_match.min_container_size
-		: 0;
+	return container?.extensions?.mix_and_match?.min_container_size ?? 0;
 };
 
 /**
@@ -256,7 +231,7 @@ export const hasConfiguration = ( state ) => {
  */
 export const hasContainer = ( state ) => {
 	const container = getContainer( state );
-	return container.hasOwnProperty('id');
+	return container?.id > 0 ?? false;
 };
 
 /**
