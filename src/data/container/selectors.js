@@ -1,4 +1,8 @@
 import { price_format } from "./utils";
+/**
+ * External dependencies
+ */
+import { _x } from '@wordpress/i18n';
 
 /**
  * Get the categories for the container
