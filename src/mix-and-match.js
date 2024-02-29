@@ -51,7 +51,7 @@ const MixAndMatch = ( { target } ) => {
 			return {
 				container: getContainerById( containerId ),
 				isInStock: select( CONTAINER_STORE_KEY ).isInStock(),
-				isLoading: select(CONTAINER_STORE_KEY).isResolving( 'getContainerById', [ containerId ] ),
+				isLoading: ! select(CONTAINER_STORE_KEY).hasFinishedResolution( 'getContainerById', [ containerId ] ),
 				isPurchasable: select( CONTAINER_STORE_KEY ).isPurchasable(),
 				hasContainer: hasContainer(),
 			};
