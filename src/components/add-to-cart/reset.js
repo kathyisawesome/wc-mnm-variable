@@ -14,18 +14,18 @@ const Reset = () => {
 		};
 	} );
 
-	const dispatch = useDispatch();
+	const { resetConfig } = useDispatch( CONTAINER_STORE_KEY );
 
 	const handleReset = () => {
 		if ( window.confirm( WC_MNM_ADD_TO_CART_VARIATION_PARAMS.i18n_confirm_reset ) ) {
-			dispatch( CONTAINER_STORE_KEY ).resetConfig();
+			resetConfig();
 		}
 	};
 
 	if ( totalQty ) {
 		return (
 			<button
-				type="button"
+				type="reset"
 				className="mnm_reset button wp-element-button"
 				onClick={ handleReset }
 			>
