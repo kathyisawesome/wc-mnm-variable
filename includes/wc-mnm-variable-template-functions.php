@@ -185,7 +185,7 @@ if ( ! function_exists( 'wc_mnm_template_variation_attribute_options' ) ) {
 						<label for="<?php echo esc_attr( $input_id ); ?>">
 						
 							<?php
-								if ( $variation->get_image_id() ) {
+								if ( $variation->get_image_id( 'mnm' ) ) {
 									$image_size = apply_filters( 'single_product_archive_thumbnail_size', 'woocommerce_thumbnail' );
 									echo $variation->get_image( $image_size );
 								}
