@@ -81,6 +81,11 @@
             overflow: hidden;
             text-align: center;
 
+            > span {
+                display: block;
+                margin-bottom: .5em;
+            }
+
             img {
                 margin-bottom: 0;
                 float: left;
@@ -89,10 +94,9 @@
                 height: auto;
             }
 
-            .variation-title {
+            .wc-mnm-variations--variation-title {
                 font-size: 1.25em;
                 font-weight: bold;
-                display: block;
             }
 
         }
