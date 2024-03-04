@@ -6,10 +6,6 @@ import { default as TabularItems } from './tabular/child-items';
 
 const ChildItems = ( { childItems, childCategories } ) => {
 	const displayLayout = WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_layout;
-	const mobile_optimized =
-	WC_MNM_ADD_TO_CART_VARIATION_PARAMS.mobile_optimized_layout
-		? 'mnm-mobile-optimized'
-		: '';
 
 	const getItems = ( childItems, categoryId ) => {
 
@@ -76,7 +72,7 @@ const ChildItems = ( { childItems, childCategories } ) => {
 
 	return (
 		<div
-			className={ `wc-mnm-variation__child-items-wrap ${mobile_optimized}` }
+			className={ `wc-mnm-variation__child-items-wrap` }
 		>
 			{ Object.keys( childCategories ).length
 				? getCategoryItems( childCategories, childItems )
