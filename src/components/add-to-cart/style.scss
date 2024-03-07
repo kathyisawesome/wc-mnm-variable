@@ -40,14 +40,19 @@
 
     .wc-mnm-variations {
         border-color: initial;
-        border-width: 1px 0 0 0;
+        border-width: 1px;
         padding: .5em 0;
+
+        legend {
+            margin-left: 1em;
+        }
     }
 
     .wc-mnm-variations--swatches {
         width: 100%;
         margin: 0 auto;
         padding: 0;
+        margin-bottom: 0 !important;
     }
     .single_variation .woocommerce-variation-availability { display: none; }
 
@@ -57,6 +62,7 @@
             opacity: 50%;
         }
 
+        margin: 0em 1em 1em 1em;
         list-style: none;
 
         // APFS patch.
@@ -75,8 +81,9 @@
         }
         label {
             border: 1px solid;
-            border-color: var( --wc-highligh-text, #ccc );
-            padding: .5em;
+            border-color: var( --wc-primary, rgba(0, 0, 0, 0.25) );
+            font-weight: normal !important;
+            padding: 1em;
             display: block;
             overflow: hidden;
             text-align: center;
@@ -101,11 +108,12 @@
 
         }
         label:hover {
-            background-color: var( --wc-secondary, #ebe9eb );
+            border-color: var( --wc-primary, #a46497 );
             cursor: pointer;
         }
         input:checked + label {
             border-color: var( --wc-primary, #a46497 );
+            background-color: var( --wc-secondary, #ccc );
         }
         
     }
@@ -134,7 +142,7 @@
 /**
  * Not Mobile
  */
- @media screen and (min-width: 568px) {
+@media screen and (min-width: 1080px) {
     .variable_mnm_form {
         .wc-mnm-variations--swatches {
 
@@ -143,7 +151,7 @@
 
             .product-type-mix-and-match-variation {
                 flex-basis: calc(25% - 1.5em);
-                margin: 0 auto 1.5em auto;
+                margin: 0.5em auto;
 
                 label img {
                     float: none;
