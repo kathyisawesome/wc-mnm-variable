@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { useSelect } from '@wordpress/data';
+import { _x, sprintf } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -43,7 +44,7 @@ const ProductDetails = () => {
 			{ isProductHiddenFromCatalog ? (
 				<ProductTitle title={ name } />
 			) : (
-				<a href={ permalink } tabIndex={ -1 }>
+				<a href={ permalink } title={ sprintf( _x( 'View product page for %s', 'wc-mnm-variable' ), name ) } >
 					<ProductTitle title={ name } />
 				</a>
 			) }
