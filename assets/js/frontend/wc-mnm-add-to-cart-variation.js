@@ -21,11 +21,6 @@
 		self.validation_context =
 			$form.data( 'validation_context' ) || 'add-to-cart';
 
-		// Add MNM container class.
-		//self.$form.addClass( 'mnm_form variations_form' );
-
-		// Bind methods.
-		self.shutdown = self.shutdown.bind( self );
 
 		// Events.
 
@@ -46,10 +41,10 @@
 			{ mnmVariationForm: self },
 			self.checkRadioVariation
 		);
-		$form.on( 'update_variation_values', self.shutdown );
 
 		// Catch initial reset and re-run findVariations with data from radio inputs.
 		$form.on( 'reset_data', { mnmVariationForm: self }, self.onReset );
+
 		$form.on(
 			'reload_product_variations',
 			{ mnmVariationForm: self },
@@ -70,15 +65,9 @@
 			{ mnmVariationForm: self },
 			self.addVariationData
 		);
+
 	};
 
-	/**
-	 * Shutdown the mix and match listeners
-	 */
-	WC_MNM_Variation_Form.prototype.shutdown = function () {
-		// Shutdown all MNM listeners. Future self: this cannot be removed or chaging the attribute fires the change event on all child items for an unknown reason.
-		this.$form.find( '*' ).off( '.wc-mnm-form' );
-	};
 
 	/**
 	 * Triggered when an attribute field changes.
@@ -264,7 +253,6 @@
 			typeof WC_MNM_ADD_TO_CART_VARIATION_PARAMS !== 'undefined' &&
 			typeof wc_add_to_cart_variation_params !== 'undefined'
 		) {
-			$( this ).wc_variation_form();
 			new WC_MNM_Variation_Form( this );
 		}
 		return this;
