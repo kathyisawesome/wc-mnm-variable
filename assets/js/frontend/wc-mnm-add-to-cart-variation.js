@@ -152,7 +152,8 @@
 		}
 	};
 
-	// Uncheeck all radio buttons when reset.
+
+	// Uncheck all radio buttons when reset.
 	WC_MNM_Variation_Form.prototype.onReset = function ( event ) {
 		const form = event.data.mnmVariationForm;
 
@@ -160,6 +161,8 @@
 		if ( ! form.initialized ) {
 			form.initialized = true;
 			form.$form.trigger( 'check_radio_variations' );
+			event.preventDefault();
+			event.stopPropagation();
 			return false;
 		}
 
