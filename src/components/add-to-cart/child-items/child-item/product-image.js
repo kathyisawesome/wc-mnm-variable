@@ -45,6 +45,7 @@ const ProductImage = ( {
 							href={ imageSrc }
 							className="image zoom"
 							data-rel="photoSwipe"
+							tabIndex="-1"
 						>
 							<img
 								className="wc-block-components-product-image"
@@ -66,6 +67,7 @@ const ProductImage = ( {
 						href={ imageSrc }
 						className="image zoom"
 						data-rel="photoSwipe"
+						tabIndex="-1"
 					>
 						<img
 							className="wc-block-components-product-image {`wp-image-${image.id}`}"
