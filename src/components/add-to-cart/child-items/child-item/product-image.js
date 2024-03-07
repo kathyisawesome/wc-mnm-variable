@@ -8,8 +8,6 @@ import { PLACEHOLDER_IMG_SRC } from '@woocommerce/settings';
 const ProductImage = ( {
 	image = {},
 	fallbackAlt = '',
-	loaded,
-	showFullSize,
 	permalink,
 } ) => {
 	const imageSrc = image.src ? image.src : PLACEHOLDER_IMG_SRC;
