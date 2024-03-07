@@ -1,10 +1,18 @@
 /**
+ * WordPress dependencies
+ */
+import { SlotFillProvider, Slot, withFilters } from '@wordpress/components';
+
+/**
  * Internal dependencies
  */
 import { default as GridItems } from './grid/child-items';
 import { default as TabularItems } from './tabular/child-items';
 
-const ChildItems = ( { childItems, childCategories } ) => {
+const ChildItems = ( props ) => {
+
+	const { childItems, childCategories, context } = props;
+
 	const displayLayout = WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_layout;
 
 	const getItems = ( childItems, categoryId ) => {
@@ -70,14 +78,34 @@ const ChildItems = ( { childItems, childCategories } ) => {
 			} )
 		};
 
+	/**
+	 * Additional content
+	 * 
+	 * addFilter(
+     * 'wcMNM.ChildItems',
+     * 'wc-mix-and-match-products/child-items',
+     * someComponent
+	 * );
+	 */
+	const AdditionalContent = withFilters(
+		'wcMNM.ChildItems'
+	)( ( props ) => <></> );
+
 	return (
-		<div
-			className={ `wc-mnm-variation__child-items-wrap` }
-		>
-			{ Object.keys( childCategories ).length
-				? getCategoryItems( childCategories, childItems )
-				: getItems( childItems ) }
-		</div>
+		<SlotFillProvider>
+			<AdditionalContent
+                { ...props }
+            />
+			<Slot name="beforeChildItems" fillProps={ context } />
+			<div
+				className={ `wc-mnm-variation__child-items-wrap` }
+			>
+				{ Object.keys( childCategories ).length
+					? getCategoryItems( childCategories, childItems )
+					: getItems( childItems ) }
+			</div>
+			<Slot name="afterChildItems" fillProps={ context } />
+		</SlotFillProvider>
 	);
 };
 export default ChildItems;

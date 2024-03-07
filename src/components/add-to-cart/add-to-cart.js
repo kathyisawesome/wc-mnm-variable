@@ -14,10 +14,11 @@ import StatusUI from '@components/status-ui';
 
 const AddToCart = () => {
 	// Get the child Items from the data store.
-	const { childItems, categories, maxContainerSize } = useSelect( ( select ) => {
+	const { categories, childItems, context, maxContainerSize } = useSelect( ( select ) => {
 		return {
-			childItems: select( CONTAINER_STORE_KEY ).getChildItems(),
-			categories: select( CONTAINER_STORE_KEY ).getCategories(),
+			categories      : select( CONTAINER_STORE_KEY ).getCategories(),
+			childItems      : select( CONTAINER_STORE_KEY ).getChildItems(),
+			context         : select( CONTAINER_STORE_KEY ).getContext(),
 			maxContainerSize: select( CONTAINER_STORE_KEY ).getMaxContainerSize(),
 		};
 	} );
@@ -46,7 +47,7 @@ const AddToCart = () => {
 	return (
 		<>
 			<h2 className="wc-mnm-variation__select-prompt">{ prompt }</h2>
-			<ChildItems childItems={ childItems } childCategories={ categories } />
+			<ChildItems context={context} childItems={ childItems } childCategories={ categories } />
 			{containerKey ? <input type="hidden" name="update-container" value={containerKey} /> : ''}
 			<Reset />
 			<StatusUI />
