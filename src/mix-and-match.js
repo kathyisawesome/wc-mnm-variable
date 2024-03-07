@@ -27,13 +27,9 @@ const MixAndMatch = ( { target } ) => {
 		( mutations ) => {
 			for ( const mutation of mutations ) {
 				if ( mutation.type === 'attributes' ) {
-					const variationId = parseInt(
-						mutation.target.getAttribute( 'data-variation_id' ),
-						10
-					);
-
+					let variationId = mutation.target.getAttribute( 'data-variation_id' );
+					variationId = '' === variationId || isNaN(variationId) ? 0 : parseInt( variationId, 10 );
 					setContainerId(variationId);
-
 				}
 			}
 		},
