@@ -31,7 +31,7 @@ const Counter = () => {
                 _nx(
                     '(%1$s/%2$s) item',
                     '(%1$s/%2$s) items',
-                    totalQuantity, // Number to check for plural
+                    maxContainerSize, // Number to check for plural
                     '[Frontend] Formatted total ex (2/8). %1$s is the current total and %2$s is the container maximum.',
                     'wc-mnm-variable'
                 ),
