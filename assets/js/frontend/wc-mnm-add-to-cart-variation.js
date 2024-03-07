@@ -21,6 +21,10 @@
 		self.validation_context =
 			$form.data( 'validation_context' ) || 'add-to-cart';
 
+		// Methods.
+		self.onFoundVariation    = self.onFoundVariation.bind( self );
+		self.checkRadioVariation = self.checkRadioVariation.bind( self );
+		self.onReload            = self.onReload.bind( self );
 
 		// Events.
 
