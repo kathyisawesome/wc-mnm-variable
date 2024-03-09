@@ -465,10 +465,12 @@ class WC_MNM_Variable {
 				'version'      => WC_Mix_and_Match()->get_file_version( $this->get_plugin_path() . '/' . $script_path ),
 			);
 
+		$dependencies = array_merge( $script_asset[ 'dependencies' ], [ 'wc-price-format' ] );
+
 		wp_register_script(
 			'wc-mnm-add-to-cart-reactified',
 			$script_url,
-			$script_asset[ 'dependencies' ],
+			$dependencies,
 			$script_asset[ 'version' ],
 			true
 		);
