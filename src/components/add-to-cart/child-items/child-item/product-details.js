@@ -14,13 +14,17 @@ import ProductDescription from './product-description';
 import ProductStockStatus from './product-stock-status';
 import ProductPrice from './product-price';
 
-const ProductDetails = () => {
+const ProductDetails = ({
+	element = 'div',
+}) => {
 	const { container, isInStock } = useSelect( ( select ) => {
 		return {
 			container: select( CONTAINER_STORE_KEY ).getContainer(),
 			isInStock: select( CONTAINER_STORE_KEY ).isInStock(),
 		};
 	} );
+
+	const Element = element;
 
 	const isTabular = 'tabular' === WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_layout;
 
@@ -40,11 +44,11 @@ const ProductDetails = () => {
 	const isSelectable = isInStock && childItem.purchasable && childItem.in_stock;
 
 	return (
-		<div className="wc-mnm-variation__child-item-details product-details">
+		<Element className="wc-mnm-variation__child-item-details product-details">
 			{ isProductHiddenFromCatalog ? (
 				<ProductTitle title={ name } />
 			) : (
-				<a href={ permalink } title={ sprintf( _x( 'View product page for %s', 'wc-mnm-variable' ), name ) } >
+				<a href={ permalink } aria-label={ sprintf( _x( 'View product page for %s', 'wc-mnm-variable' ), name ) } >
 					<ProductTitle title={ name } />
 				</a>
 			) }
@@ -63,7 +67,7 @@ const ProductDetails = () => {
 			{ container.priced_per_product && (
 				<ProductPrice priceString={ price_html } />
 			) }
-		</div>
+		</Element>
 	);
 };
 export default ProductDetails;

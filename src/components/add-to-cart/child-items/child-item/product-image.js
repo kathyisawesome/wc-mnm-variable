@@ -9,8 +9,11 @@ const ProductImage = ( {
 	image = {},
 	fallbackAlt = '',
 	permalink,
+	element = 'div',
 } ) => {
 	const imageSrc = image.src ? image.src : PLACEHOLDER_IMG_SRC;
+	
+	const Element = element;
 
 	const imageProps = image.src
 		? {
@@ -36,7 +39,7 @@ const ProductImage = ( {
 	if ( permalink ) {
 		return (
 			
-			<div className="product-thumbnail">
+			<Element className="wc-mnm-variation__child-item-thumbnail product-thumbnail">
 				<div className="mnm_child_product_images mnm_image">
 					<figure className="mnm_child_product_image woocommerce-product-gallery__image">
 						<a
@@ -53,12 +56,12 @@ const ProductImage = ( {
 						</a>
 					</figure>
 				</div>
-			</div>
+			</Element>
 		);
 	}
 
 	return (
-		<div className="product-thumbnail">
+		<Element className="wc-mnm-variation__child-item-thumbnail product-thumbnail">
 			<div className="wc-mnm-variation__image-wrap mnm_child_product_images mnm_image">
 				<figure className="mwc-mnm-variation__image mnm_child_product_image woocommerce-product-gallery__image">
 					<a
@@ -75,7 +78,7 @@ const ProductImage = ( {
 					</a>
 				</figure>
 			</div>
-		</div>
+		</Element>
 	);
 };
 

@@ -24,16 +24,18 @@ const ChildItem = ( { loopClass } ) => {
 		>
 			{ WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_thumbnails && (
 				<ProductImage
+					element={ 'div' }
 					image={ firstImage }
 					fallbackAlt={ name }
 					permalink={ permalink }
 				/>
 			) }
-			<ProductDetails />
+			<ProductDetails element={ 'div' } />
 			<ProductQty
 				min={ childItem.min_qty }
 				max={ childItem.max_qty }
 				step={ childItem.step_qty }
+				element={ 'div' }
 			/>
 		</li>
 

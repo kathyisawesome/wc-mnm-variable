@@ -24,24 +24,20 @@ const ChildItem = () => {
 			className={ `wc-mnm-variation__child-item mnm_item product type-product first post-${ childItem.child_id }` }
 		>
 			{ WC_MNM_ADD_TO_CART_VARIATION_PARAMS.display_thumbnails && (
-				<td className="product-thumbnail">
-					<ProductImage
-						image={ firstImage }
-						fallbackAlt={ name }
-						permalink={ permalink }
-					/>
-				</td>
-			) }
-			<td className="product-details">
-				<ProductDetails />
-			</td>
-			<td className="product-quantity">
-				<ProductQty
-					min={ childItem.min_qty }
-					max={ childItem.max_qty }
-					step={ childItem.step_qty }
+				<ProductImage
+					element={ 'td' }
+					image={ firstImage }
+					fallbackAlt={ name }
+					permalink={ permalink }
 				/>
-			</td>
+			) }
+			<ProductDetails element={ 'td' } />
+			<ProductQty
+				element={ 'td' }
+				min={ childItem.min_qty }
+				max={ childItem.max_qty }
+				step={ childItem.step_qty }
+			/>
 		</tr>
 	);
 };

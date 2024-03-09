@@ -14,8 +14,16 @@ import { CONTAINER_STORE_KEY } from '@data';
 
 import ProductStockStatus from './product-stock-status';
 
-const ProductQty = ( { disabled, min, max, step = 1 } ) => {
+const ProductQty = ({
+	disabled = false,
+	min = 0,
+	max = '',
+	step = 1,
+	element = 'div',
+} ) => {
 	const { childItem } = useChild();
+
+	const Element = element;
 
 	const { containerQty, isInStock, maxContainerSize, quantity, isFull } = useSelect(
 		( select ) => {
@@ -335,7 +343,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 		);
 
 		return (
-			<div className="product-quantity wc-mnm-variation__child-item-quantity">
+			<Element className="wc-mnm-variation__child-item-quantity product-quantity ">
 				<div className="quantity mnm-checkbox-qty">
 					<input
 						checked={ quantity === max }
@@ -359,13 +367,13 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 						aria-live="polite"
 					></div>
 				</div>
-			</div>
+			</Element>
 		);
 	}
 
 	// Otherwise show the quantity input.
 	return (
-		<div className="wc-mnm-variation__child-item-quantity product-quantity">
+		<Element className="wc-mnm-variation__child-item-quantity product-quantity">
 			<div className="quantity">
 				<input
 					className="wc-mnm-variation__child-item-quantity_input qty mnm-quantity input-text qty text"
@@ -421,7 +429,7 @@ const ProductQty = ( { disabled, min, max, step = 1 } ) => {
 					ref={ errorRef }
 				></div>
 			</div>
-		</div>
+		</Element>
 	);
 };
 export default ProductQty;
