@@ -2,9 +2,10 @@
  * External dependencies
  */
 import { useSelect, useDispatch } from '@wordpress/data';
-import { RawHTML, useEffect, useState, useRef } from '@wordpress/element';
+import { useEffect, useState, useRef } from '@wordpress/element';
 import { sprintf, _x } from '@wordpress/i18n';
 import { useDebouncedCallback } from 'use-debounce';
+import { Interweave } from 'interweave';
 
 /**
  * Internal dependencies
@@ -309,9 +310,7 @@ const ProductQty = ({
 		);
 		return (
 			<p className="required-quantity child_item__quantity">
-				<span>
-					<RawHTML>{ requiredText }</RawHTML>
-				</span>
+				<Interweave tagName="span" content={ requiredText } />
 				<input
 					type="hidden"
 					data-required={ true }
@@ -360,7 +359,7 @@ const ProductQty = ({
 						htmlFor={ `mnm_quantity[${ childItem.child_id }]` }
 						className={ 'mnm-checkbox-qty-label' }
 					>
-						<RawHTML>{ checkboxLabel }</RawHTML>
+						<Interweave tagName="span" content={ checkboxLabel } />
 					</label>
 					<div
 						className="wc_mnm_child_item_error"
