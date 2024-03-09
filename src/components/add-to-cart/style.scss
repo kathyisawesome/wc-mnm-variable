@@ -39,7 +39,7 @@
 .variable_mnm_form {
 
     .wc-mnm-variations {
-        border-color: initial;
+        border-color: var(--wc-primary,#999999);
         border-width: 1px;
         padding: .5em 0;
 
@@ -108,12 +108,12 @@
 
         }
         label:hover {
-            border-color: var( --wc-primary, #a46497 );
+            border-color: var( --wc-primary, #999999 );
             cursor: pointer;
         }
         input:checked + label {
-            border-color: var( --wc-primary, #a46497 );
-            background-color: var( --wc-secondary, #ccc );
+            background-color: var(--wc-secondary,#dddddd);
+            border-color: var(--wc-primary,#999999);
         }
         
     }
