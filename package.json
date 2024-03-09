@@ -61,7 +61,7 @@
     "lint:pkg-json": "wp-scripts lint-pkg-json",
     "makepot": "composer run-script makepot",
     "plugin-zip": "wp-scripts plugin-zip",
-    "prerelease": "npm run makepot && npm run build:js && grunt prerelease",
+    "betarelease": "npm run makepot && npm run build:js && grunt prerelease",
     "release": "npm run makepot && npm run build:js && grunt release",
     "start": "wp-scripts start"
   }
