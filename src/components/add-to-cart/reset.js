@@ -8,9 +8,9 @@ import { CONTAINER_STORE_KEY } from '@data';
 
 const Reset = () => {
 	// Get the child Items from the data store.
-	const { totalQty } = useSelect( ( select ) => {
+	const { totalQuantity } = useSelect( ( select ) => {
 		return {
-			totalQty: select( CONTAINER_STORE_KEY ).getTotalQty(),
+			totalQuantity: select( CONTAINER_STORE_KEY ).getTotalQuantity(),
 		};
 	} );
 
@@ -22,21 +22,23 @@ const Reset = () => {
 		}
 	};
 
-	if ( totalQty ) {
-		return (
-			<button
-				type="reset"
-				className="mnm_reset button wp-element-button"
-				onClick={ handleReset }
-			>
-				{ _x(
-					'Clear selections',
-					'[Frontend]',
-					'wc-mnm-variable'
-				) }
-			</button>
-		);
+	if ( ! totalQuantity ) {
+		return null;
 	}
+
+	return (
+		<button
+			type="reset"
+			className="mnm_reset button wp-element-button"
+			onClick={ handleReset }
+		>
+			{ _x(
+				'Clear selections',
+				'[Frontend]',
+				'wc-mnm-variable'
+			) }
+		</button>
+	);
 };
 
 export default Reset;

@@ -7,7 +7,7 @@ const DEFAULT_STATE = {
 	containerId: null,
 	selections: [],
 	config: {},
-	totalQty: 0,
+	totalQuantity: 0,
 	messages: { status: [], errors: [] },
 	passesValidation: false,
 	subTotal: { price: 0, regular_price: 0 },

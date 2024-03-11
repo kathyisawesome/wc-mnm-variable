@@ -29,12 +29,12 @@ const ProductQty = ({
 	const { containerQty, isInStock, maxContainerSize, quantity, isFull } = useSelect(
 		( select ) => {
 			return {
-				containerQty: select( CONTAINER_STORE_KEY ).getTotalQty(),
+				containerQty: select( CONTAINER_STORE_KEY ).getTotalQuantity(),
 				isInStock: select( CONTAINER_STORE_KEY ).isInStock(),
 				maxContainerSize:
 					select( CONTAINER_STORE_KEY ).getMaxContainerSize(),
 				quantity: select( CONTAINER_STORE_KEY ).getQty( childItem.child_id ),
-				isFull: select( CONTAINER_STORE_KEY ).getMaxContainerSize() && select( CONTAINER_STORE_KEY ).getTotalQty() >= select( CONTAINER_STORE_KEY ).getMaxContainerSize(),
+				isFull: select( CONTAINER_STORE_KEY ).getMaxContainerSize() && select( CONTAINER_STORE_KEY ).getTotalQuantity() >= select( CONTAINER_STORE_KEY ).getMaxContainerSize(),
 			};
 		}
 	);

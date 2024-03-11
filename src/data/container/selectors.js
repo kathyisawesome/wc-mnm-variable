@@ -190,8 +190,8 @@ export const getStatusMessages = ( state ) => {
  * @param {obj} state The current state.
  * @return int the total quantity
  */
-export const getTotalQty = ( state ) => {
-	return state.totalQty;
+export const getTotalQuantity = ( state ) => {
+	return state.totalQuantity;
 };
 
 /**

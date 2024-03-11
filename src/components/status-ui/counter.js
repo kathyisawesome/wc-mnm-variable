@@ -17,7 +17,7 @@ const Counter = () => {
 				? select( CONTAINER_STORE_KEY ).getMessages( 'status' )
 				: select( CONTAINER_STORE_KEY ).getMessages( 'errors' ),
 			passesValidation: select( CONTAINER_STORE_KEY ).passesValidation(),
-			totalQuantity: select( CONTAINER_STORE_KEY ).getTotalQty(),
+			totalQuantity: select( CONTAINER_STORE_KEY ).getTotalQuantity(),
 		};
 	} );
 
