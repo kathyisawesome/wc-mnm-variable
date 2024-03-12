@@ -269,7 +269,13 @@
 		$( document ).on(
 			'wc-mnm-initialize.variable-mix-and-match',
 			'.variable_mnm_form',
-			function () {
+			function (e) {
+
+				// If the event is from somwhere other than the main product page, initialize the variation form.
+				if ( 'undefined' !== typeof jQuery.fn.wc_variation_form && 'undefined' !== typeof $(e.target).data( 'source' ) ) {
+					$(this).wc_variation_form();
+				}
+
 				$( this ).wc_mnm_variation_form();
 			}
 		);
