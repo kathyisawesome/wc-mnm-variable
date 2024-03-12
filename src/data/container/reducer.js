@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { _x } from '@wordpress/i18n';
+import { doAction } from '@wordpress/hooks';
 
 /**
  * Internal dependencies
@@ -334,14 +335,13 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 				totalQuantity,
 			};
 
-			const updated = new CustomEvent( 'wc/mnm/container/container-updated', {
-				detail: validatedState,
-			} );
-
-			// Dispatch an event.
-			if ( state.addToCartForm ) {
-				state.addToCartForm.dispatchEvent( updated );
-			}
+			/**
+			 * Dispatch an action when validated.
+			 * 
+			 * @param object validated state
+			 * @param object form element
+			 */
+			doAction( 'wc.mnm.container.container-updated', validatedState, validatedState.addToCartForm );
 			
 			return validatedState;
 

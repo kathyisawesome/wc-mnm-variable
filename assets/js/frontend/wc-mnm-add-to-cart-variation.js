@@ -27,14 +27,6 @@
 		self.onReload            = self.onReload.bind( self );
 
 		// Events.
-
-		// Listen for Data Store updates.
-		// Disabled add to cart button and stash the config on the form attributes for use when saving in admin.
-		document.addEventListener( 'wc/mnm/container/container-updated', ( e ) => {
-			self.$addToCart.toggleClass( 'disabled', ! e.detail.passesValidation );
-			self.$form.data( 'config', e.detail.config );
-		} );
-
 		$form.on(
 			'found_variation.wc-mnm-variable-form',
 			{ mnmVariationForm: self },
@@ -63,12 +55,35 @@
 			self.onChange
 		);
 
+		// Listen for wp.Hooks actions.
+
+		// Disabled add to cart button and stash the config on the form attributes for use when saving in admin.
+		wp.hooks.addAction( 'wc.mnm.container.container-updated', 'wc-mix-and-match', function( updatedState, form ) {
+			self.$addToCart.toggleClass( 'disabled', ! updatedState.passesValidation );
+
+			// Stash the config on the form as a JSON string.
+			form.setAttribute( 'data-config', JSON.stringify(updatedState.config) );
+		} );
+
 		// Add data to ajax submit when editing a container.
-		$( document ).on(
-			'wc_mnm_update_container_order_item_data',
-			{ mnmVariationForm: self },
-			self.addVariationData
-		);
+		wp.hooks.addFilter( 'wc.mnm.container.update_order_item_data', 'wc-mix-and-match', function ( data, form ) {
+			// Parse the JSON back into an object.
+			let config = form.getAttribute( 'data-config' );
+			let parsed = {};
+
+			try {
+				parsed = JSON.parse(config);
+			} catch (e) {
+				window.console.log( 'Configuration is not valid JSON', e );
+			}
+
+			const newData = {
+				variation_id: form.getAttribute( 'data-variation_id' ) || 0,
+				config: parsed,	
+			};
+
+			return { ...data, ...newData };
+		} );
 
 	};
 
@@ -132,7 +147,7 @@
 				.setAttribute( 'data-variation_id', variation.variation_id );
 
 			// Dynamically store variation ID in place that is automatically include in submit data when editing container.
-			$( event.target ).data( 'variation_id', variation.variation_id );
+			event.currentTarget.setAttribute( 'data-variation_id', variation.variation_id );
 
 			if (
 				! $target.wcMNMisInViewport() &&
@@ -217,21 +232,6 @@
 			data,
 		};
 	};
-
-	/**
-	 * Add data to $_POST for editing in admin.
-	 *
-	 * @param event
-	 */
-	WC_MNM_Variation_Form.prototype.addVariationData = function ( event ) {
-		const form = event.data.mnmVariationForm;
-
-		return {
-			variation_id: form.$form.data( 'variation_id' ) || 0,
-			config: form.$form.data( 'config' ) || {}		
-		};
-	};
-
 
 	/*-----------------------------------------------------------------*/
 	/*  Helpers.                                                       */
