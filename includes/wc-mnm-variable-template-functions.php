@@ -100,6 +100,16 @@ if ( ! function_exists( 'wc_mnm_template_single_variation' ) ) {
 
 		if ( $product && $product->is_type( 'variable-mix-and-match' ) ) {
 
+			$variation_id = isset( $_POST['variation_id'] ) ? absint( $_POST['variation_id'] ) : 0;
+			$configuration = [];
+
+			// Initialize form state based on the posted configuration of the container.
+			if ( $variation_id ) {
+				$configuration = WC_Mix_and_Match()->cart->get_posted_container_configuration( $variation_id );
+			}
+
+			$configuration = wp_list_pluck( $configuration, 'quantity' );
+
 			$context = apply_filters( 'wc_mnm_variable_validation_context', 'add-to-cart', $product );
 
 			ob_start();
@@ -110,6 +120,7 @@ if ( ! function_exists( 'wc_mnm_template_single_variation' ) ) {
 				class="wc-mnm-variation wc-mix-and-match-root woocommerce-variation"
 				data-product_id="<?php echo esc_attr( $product->get_id() ); ?>"
 				data-variation_id="0"
+				data-container_config="<?php echo wc_esc_json( wp_json_encode( $configuration ) ); ?>"
 				data-validation_context="<?php echo esc_attr( $context ); ?>"
 			></div>
 
