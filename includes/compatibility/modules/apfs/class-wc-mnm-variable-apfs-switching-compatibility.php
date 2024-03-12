@@ -77,7 +77,9 @@ if ( ! class_exists( 'WC_MNM_Variable_APFS_Switching_Compatibility' ) ) :
 
 			if ( wc_mnm_is_container_order_item( $item, $subscription ) ) {
 
-				if ( $configuration = WC_Mix_and_Match_Order::get_current_container_configuration( $item, $subscription ) ) {
+				$configuration = WC_Mix_and_Match_Order::get_current_container_configuration( $item, $subscription );
+
+				if ( ! empty( $configuration ) ) {
 
 					$variation_id = $item->get_variation_id();
 
