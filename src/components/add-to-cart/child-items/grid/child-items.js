@@ -16,7 +16,7 @@ const ChildItems = ( { childItems } ) => {
 	return (
 
 			<ul
-				className={ `wc-mnm-variation__child-items products grid has-flex columns-${ numColumns }` }
+				className={ `wc-mnm-variation__child-items mnm_child_products products grid has-flex columns-${ numColumns }` }
 			>
 				{ childItems.map( ( childItem, index ) => {
 					return (
