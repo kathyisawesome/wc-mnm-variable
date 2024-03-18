@@ -10,7 +10,7 @@ import { addAction, doAction } from '@wordpress/hooks';
 import MixAndMatch from './mix-and-match';
 
 // Attach the event listener to the init event.
-addAction( 'wc.mnm.initialize.variable-mix-and-match', 'wc-mix-and-match', function( a, b ) {
+addAction( 'wc.mnm.initialize.variable-mix-and-match', 'wc-mix-and-match', function() {
     const targets = document.querySelectorAll( '.wc-mix-and-match-root' );
 
 	targets.forEach( function ( target ) {
