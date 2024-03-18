@@ -71,7 +71,11 @@ export const setConfig =
 	( config ) =>
 	( { select, dispatch } ) => {
 		dispatch( { type: SET_CONFIG, payload: { config } } );
-		dispatch( { type: VALIDATE } );
+
+		// Conditionally take actions if we have already resolved a container.
+		if ( select.hasContainer() ) {
+			dispatch( { type: VALIDATE } );
+		}
 	};
 
 // Update the config when a single quantity is changed.
