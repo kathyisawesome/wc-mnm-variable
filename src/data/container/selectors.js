@@ -15,6 +15,17 @@ export const getCategories = ( state ) => {
 };
 
 /**
+ * Get the container's child items
+ * 
+ * @param {obj} state The current state.
+ * @return []{obj} An array of child item objects from the REST response.
+ */
+export const getChildItems = ( state ) => {
+	const container = getContainer( state );
+	return container?.extensions?.mix_and_match?.child_items ?? [];
+};
+
+/**
  * Retrieves container configuration from state.
  *
  * @param {obj} state The current state.
@@ -75,18 +86,6 @@ export const getContext = ( state ) => {
  */
 export const getErrorMessages = ( state ) => {
 	return state.messages.errors;
-};
-
-
-/**
- * Get the container's child items
- * 
- * @param {obj} state The current state.
- * @return []{obj} An array of child item objects from the REST response.
- */
-export const getChildItems = ( state ) => {
-	const container = getContainer( state );
-	return container?.extensions?.mix_and_match?.child_items ?? [];
 };
 
 /**
