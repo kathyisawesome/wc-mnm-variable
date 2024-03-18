@@ -131,7 +131,7 @@ export const getMinContainerSize = ( state ) => {
  *
  * @param {obj} state The current state.
  * @param int The child ID
- * @return int the quantity
+ * @return string|int the quantity
  */
 export const getQty = ( state, childId ) => {
 	const { config } = state;
