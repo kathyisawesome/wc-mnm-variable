@@ -54,7 +54,8 @@ const MixAndMatch = ( { target } ) => {
 		}
 	);
 
-	// Update some store data one time, but only after container is first loaded
+	// Update some store data one time. We need to check for instance of pre-filled config, ie: editing|$_POST etc.
+	// So this is the best component for that to limit re-renders, but we also need to wait for the container to resolve since setConfig is validated against the allowed child items.
 	useEffect( () => {
 
 		if ( ! runOnce && hasContainer ) {
@@ -73,10 +74,10 @@ const MixAndMatch = ( { target } ) => {
 				// Create a URLSearchParams object from the query string
 				const params = new URLSearchParams(window.location.search);
 
-				// Initialize an object to store parsed values
+				// Initialize an object to store parsed values.
 				initConfig = {};
 
-				// Iterate over the parameters
+				// Iterate over the parameters.
 				params.forEach((value, key) => {
 
 					if (key.startsWith('mnm_quantity')) { // Currently we only support `mnm_quantity` input names.
