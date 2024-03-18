@@ -96,7 +96,7 @@ const MixAndMatch = ( { target } ) => {
 
 			}
 
-			if ( initConfig ) {
+			if ( Object.keys(initConfig).length > 0 ) {
 				setConfig( initConfig );
 			}
 
