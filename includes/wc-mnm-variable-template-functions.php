@@ -48,6 +48,15 @@ if ( ! function_exists( 'wc_mnm_variable_template_add_to_cart' ) ) {
 		// Get Available variations?
 		$get_variations = count( $product->get_children() ) <= apply_filters( 'woocommerce_ajax_variation_threshold', 30, $product );
 
+		// Initialize form state based on the posted configuration of the container.
+		$variation_id = isset( $_POST['variation_id'] ) ? absint( $_POST['variation_id'] ) : 0;
+		$configuration = [];
+
+		if ( $variation_id ) {
+			$configuration = WC_Mix_and_Match()->cart->get_posted_container_configuration( $variation_id );
+			$configuration = wp_list_pluck( $configuration, 'quantity' );
+		}
+
 		// Load the template.
 		wc_get_template(
 			'single-product/add-to-cart/variable-mnm.php',
@@ -56,6 +65,8 @@ if ( ! function_exists( 'wc_mnm_variable_template_add_to_cart' ) ) {
 				'attributes'           => $product->get_variation_attributes(),
 				'selected_attributes'  => $product->get_default_attributes(),
 				'classes'              => wc_mnm_get_form_classes( array( 'variations_form', 'variable_mnm_form' ), $product ),
+				'configuration'        => $configuration,
+				'context'			   => apply_filters( 'wc_mnm_container_validation_context', 'add-to-cart', $product ),
 			),
 			'',
 			WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
@@ -101,16 +112,6 @@ if ( ! function_exists( 'wc_mnm_template_single_variation' ) ) {
 		if ( $product && $product->is_type( 'variable-mix-and-match' ) ) {
 
 			$variation_id = isset( $_POST['variation_id'] ) ? absint( $_POST['variation_id'] ) : 0;
-			$configuration = [];
-
-			// Initialize form state based on the posted configuration of the container.
-			if ( $variation_id ) {
-				$configuration = WC_Mix_and_Match()->cart->get_posted_container_configuration( $variation_id );
-			}
-
-			$configuration = wp_list_pluck( $configuration, 'quantity' );
-
-			$context = apply_filters( 'wc_mnm_variable_validation_context', 'add-to-cart', $product );
 
 			ob_start();
 
@@ -119,9 +120,7 @@ if ( ! function_exists( 'wc_mnm_template_single_variation' ) ) {
 			<div
 				class="wc-mnm-variation wc-mix-and-match-root woocommerce-variation"
 				data-product_id="<?php echo esc_attr( $product->get_id() ); ?>"
-				data-variation_id="0"
-				data-container_config="<?php echo wc_esc_json( wp_json_encode( $configuration ) ); ?>"
-				data-validation_context="<?php echo esc_attr( $context ); ?>"
+				data-variation_id=<?php echo esc_attr( $variation_id ); ?>
 			></div>
 
 			<?php
@@ -264,17 +263,13 @@ if ( ! function_exists( 'wc_mnm_template_edit_variable_container_order_item' ) )
 		// Get Available variations?
 		$get_variations = count( $product->get_children() ) <= apply_filters( 'woocommerce_ajax_variation_threshold', 30, $product );
 
-		$config = [];
-
 		// Input name.
-		$name = wc_mnm_get_child_input_name( $variation->get_id() );
+		$name = wc_mnm_get_child_input_name( $variation->get_id() ); // @todo - do we need this?
 
 		// Initialize form state based on the actual configuration of the container.
 		$configuration = WC_Mix_and_Match_Order::get_current_container_configuration( $order_item, $order );
 
-		// Rebuild config.
-		$config = WC_Mix_and_Match()->cart->rebuild_posted_container_form_data( $configuration );
-
+		// Load the template.
 		wc_get_template(
 			'edit-order-item/edit-variable-container.php',
 			array(
@@ -284,7 +279,8 @@ if ( ! function_exists( 'wc_mnm_template_edit_variable_container_order_item' ) )
 				'available_variations' => $get_variations ? $product->get_available_variations(): false,
 				'attributes'           => $product->get_variation_attributes(),
 				'source'               => $source,
-				'config'               => $config,
+				'configuration'        => $configuration,
+				'context'			   => apply_filters( 'wc_mnm_container_validation_context', 'edit', $product ),
 			),
 			'',
 			WC_MNM_Variable::get_instance()->get_plugin_path() . 'templates/'
@@ -292,47 +288,4 @@ if ( ! function_exists( 'wc_mnm_template_edit_variable_container_order_item' ) )
 
 	}
 
-}
-
-		
-if ( ! function_exists( 'wc_mnm_template_edit_single_variation' ) ) {
-
-	/**
-	 * Output placeholders for editing the single variation.
-	 * 
-	 * @param WC_Product_Variable_Mix_and_Match
-	 * @param WC_Order_Item $order_item
-	 * @param WC_Order $order
-	 */
-	function wc_mnm_template_edit_single_variation( $product, $order_item, $order ) {
-
-		if ( ! $product ) {
-			global $product;
-		}
-
-		if ( $product && $product->is_type( 'variable-mix-and-match' ) ) {
-
-			// Initialize form state based on the actual configuration of the container.
-			$configuration = WC_Mix_and_Match_Order::get_current_container_configuration( $order_item, $order );
-			$configuration = wp_list_pluck( $configuration, 'quantity' );
-
-			$context = apply_filters( 'wc_mnm_container_validation_context', 'edit', $product );
-
-			ob_start();
-
-			?>
-
-			<div
-				class="wc-mnm-variation wc-mix-and-match-root woocommerce-variation single_mnm_variation"
-				data-product_id="<?php echo esc_attr( $product->get_id() ); ?>"
-				data-variation_id="0"
-				data-validation_context="<?php echo esc_attr( $context ); ?>"
-    			data-container_config="<?php echo wc_esc_json( wp_json_encode( $configuration ) ); ?>"
-			></div>
-
-			<?php
-			echo ob_get_clean();
-
-		}
-	}
 }

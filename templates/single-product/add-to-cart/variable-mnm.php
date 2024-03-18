@@ -25,7 +25,16 @@ $variations_attr = wc_esc_json( $variations_json );
 
 do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 
-<form class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype='multipart/form-data' data-product_id="<?php echo absint( $product->get_id() ); ?>" data-product_type="<?php echo esc_attr( $product->get_type() ); ?>" data-product_variations="<?php echo $variations_attr; // WPCS: XSS ok. ?>">
+<form
+	class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"
+	action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>"
+	method="post" enctype='multipart/form-data'
+	data-product_id="<?php echo absint( $product->get_id() ); ?>"
+	data-product_type="<?php echo esc_attr( $product->get_type() ); ?>"
+	data-product_variations="<?php echo $variations_attr; // WPCS: XSS ok. ?>"
+	data-container_config="<?php echo wc_esc_json( wp_json_encode( $configuration ) ); ?>"
+	data-validation_context="<?php echo esc_attr( $context ); ?>"
+>
 	<?php do_action( 'woocommerce_before_variations_form' ); ?>
 
 	<?php if ( empty( $available_variations ) && false !== $available_variations ) : ?>
