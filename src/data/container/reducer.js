@@ -22,7 +22,6 @@ import { calcTotalQuantity, selectQuantityMessage } from './utils';
  * @param object payload
  * @return object the updated state
  */
-
 const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 
 	// Current child items from state.
@@ -43,13 +42,10 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 
 		case HYDRATE_CONTAINER: {
 
-			const formId = payload.container?.parent > 0 ? payload.container.parent : payload.container.id;
-			const form   = document.querySelector(`form.mnm_form[data-product_id = "${formId}"]`);
 
 			return {
 				...state,
 				...{
-					addToCartForm: form ?? null,
 					containers: {
 						...state.containers,
 						[payload.container.id]: payload.container,
@@ -339,9 +335,8 @@ const reducer = ( state = DEFAULT_STATE, { type, payload } ) => {
 			 * Dispatch an action when validated.
 			 * 
 			 * @param object validated state
-			 * @param object form element
 			 */
-			doAction( 'wc.mnm.container.container-updated', validatedState, validatedState.addToCartForm );
+			doAction( 'wc.mnm.container.container-updated', validatedState );
 			
 			return validatedState;
 

@@ -1,6 +1,5 @@
 // Initial State.
 const DEFAULT_STATE = {
-	addToCartForm: null,
 	basePrice: { price: 0, regular_price: 0 },
 	context: 'add-to-cart',
 	containers: {},

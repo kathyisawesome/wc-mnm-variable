@@ -67,7 +67,6 @@ export const getContext = ( state ) => {
 	return state.context;
 };
 
-
 /**
  * Retrieves container error messages.
  *
