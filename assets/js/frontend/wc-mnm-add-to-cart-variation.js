@@ -59,16 +59,17 @@
 
 		// Disabled add to cart button and stash the config on the form attributes for use when saving in admin.
 		wp.hooks.addAction( 'wc.mnm.container.container-updated', 'wc-mix-and-match', function( updatedState ) {
+
 			self.$addToCart.toggleClass( 'disabled', ! updatedState.passesValidation );
 
 			// Stash the config on the form as a JSON string.
-			$form[0].setAttribute( 'data-config', JSON.stringify(updatedState.config) );
+			$form[0].setAttribute( 'data-updated-config', JSON.stringify(updatedState.config) );
 		} );
 
 		// Add data to ajax submit when editing a container.
 		wp.hooks.addFilter( 'wc.mnm.container.update_order_item_data', 'wc-mix-and-match', function ( data ) {
 			// Parse the JSON back into an object.
-			let config = $form[0].getAttribute( 'data-config' );
+			let config = $form[0].getAttribute( 'data-updated-config' );
 			let parsed = {};
 
 			try {
