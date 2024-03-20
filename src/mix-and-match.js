@@ -58,15 +58,17 @@ const MixAndMatch = ( { target } ) => {
 	// So this is the best component for that to limit re-renders, but we also need to wait for the container to resolve since setConfig is validated against the allowed child items.
 	useEffect( () => {
 
-		if ( ! runOnce && hasContainer ) {
+		const Form = target.closest( 'form' );
 
-			const context = target.getAttribute( 'data-validation_context' );
+		if ( ! runOnce && hasContainer && Form ) {
+
+			const context = Form.getAttribute( 'data-validation_context' );
 			if ( context ) {
 				setContext( context );
 			}
 
 			// Read the config from either the URL or the data-attributes.
-			let initConfig = target.getAttribute( 'data-container_config' );
+			let initConfig = Form.getAttribute( 'data-container_config' );
 
 			// If nothing in the data-attributes, check the URL params.
 			if ( ! initConfig ) {
