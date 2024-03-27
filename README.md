@@ -16,16 +16,14 @@ Experimental mini-extension for [WooCommerce Mix and Match Products](https://woo
 
 ### Choosing a Version
 
-Right now you will see a Release Candidate as the latest 1.x version and Beta as the latest 2.x version. 
-
 1.x Uses traditional, PHP templates. It's compatible with just about all our other mini-extensions. Can be slow on some hosts. This approach will *not* received further development.
-2.x Frontend is rendered entirely in React and is much faster than 1.x. But it's not quite as far along with respect to compatibility. It does not work with mini-extensions, nor does it yet support editing orders in the Admin.
+2.x Frontend is rendered entirely in React and is much faster than 1.x. But it's not quite as far along with respect to compatibility. It does not work with most other mini-extensions yet. It's also much more difficult (read currently impossible) to customize the display beyond what is built it.
 
 >**Warning**
 
 1. This is provided _as is_ and does not receive priority support.
 2. Please test thoroughly before using in production.
-3. Requires Mix and Match 2.6.0+
+3. Requires Mix and Match 2.7.0+
 
 ### Automatic plugin updates
 
